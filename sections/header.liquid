@@ -1,3 +1,10 @@
+{% comment %}
+  =============================================================================
+  HEADER SECTION - EXTERNAL DEPENDENCIES & ASSETS
+  =============================================================================
+  Load Swiper.js for mobile navigation and carousel functionality
+  Include best-seller.css for header-specific styling
+{% endcomment %}
 <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 <link
   rel="stylesheet"
@@ -6,6 +13,13 @@
 
 {{ 'best-seller.css' | asset_url | stylesheet_tag }}
 
+{% comment %}
+  =============================================================================
+  ANNOUNCEMENT SYSTEM CONFIGURATION
+  =============================================================================
+  Check if announcement block exists and determine if carousel announcement should be shown
+  This controls the display of promotional messages at the top of the header
+{% endcomment %}
 {% assign announcement_block = section.blocks | where: 'type', 'announcement' | first %}
 {% assign show_new_annoucement = false %}
 {% if announcement_block %}
@@ -13,6 +27,14 @@
     {% assign show_new_annoucement = true %}
   {% endif %}
 {% endif %}
+{% comment %}
+  =============================================================================
+  DYNAMIC LOGO STYLING & RESPONSIVE BEHAVIOR
+  =============================================================================
+  Apply logo dimensions from theme settings with responsive breakpoints
+  If no logo image is set, calculate font size based on logo width settings
+  Mobile: 768px and below, Desktop: 769px and above
+{% endcomment %}
 <style type="text/css">
     {% if section.settings.logo != blank %}
       .logo img { width: {{ section.settings.mobile_logo_width | escape }}px; }
@@ -725,6 +747,15 @@
     {% endif %}
   {%- endcapture -%}
 
+{% comment %}
+  =============================================================================
+  MAIN HEADER CONTAINER & NAVIGATION STRUCTURE
+  =============================================================================
+  Primary header wrapper with schema.org markup for SEO
+  Dynamic CSS classes based on theme settings for navigation behavior
+  Responsive positioning: inline (scrolls with page), sticky, or peek (fixed)
+  Opacity controls: transparent, opaque, or opaque on scroll
+{% endcomment %}
   <div data-section-type="header" itemscope itemtype="http://schema.org/Organization">
     <div
       id="site-control"
@@ -749,6 +780,14 @@
           <ig-volume-progress-bar-widget></ig-volume-progress-bar-widget>
         </div>
       {% endif %}
+{% comment %}
+  =============================================================================
+  NAVIGATION ELEMENTS & HEADER LAYOUT
+  =============================================================================
+  Main navigation container with mobile menu toggle, logo, and right-side elements
+  Mobile menu button opens the page-menu modal navigation
+  Inline links and logo are positioned between menu and right-side elements
+{% endcomment %}
       <div class="links site-control__inner header-custom-color" id="nav-root">
         <a
           class="menu"
@@ -766,6 +805,16 @@
 
         {{ logo_html }}
 
+{% comment %}
+  =============================================================================
+  RIGHT-SIDE NAVIGATION ELEMENTS
+  =============================================================================
+  Localization selectors (language/currency) - only shown with inline desktop navigation
+  Search functionality - disguised as cart icon for mobile optimization
+  Account access - customer account link when accounts are enabled
+  Cart drawer toggle - main shopping cart with item count display
+  Cart icon variations: basket1 or basket2 based on theme settings
+{% endcomment %}
         <div class="nav-right-side">
           {% if section.settings.desktop_navigation == 'inline' %}
             {% if section.settings.show_locale_selector or section.settings.show_currency_selector %}
