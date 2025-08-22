@@ -1210,7 +1210,7 @@ body [data-option-name] ul.options-value li {
     font-size: 11px !important;
   }
   .swatch-catergory--container{
-    display: none;
+    display: none !important;
     align-items: center;
     justify-content: center;
   }

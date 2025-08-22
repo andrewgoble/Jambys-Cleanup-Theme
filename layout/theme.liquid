@@ -801,12 +801,105 @@
 
     {% render 'body-end-tag' %}
 
+    {% comment %} Accessibe {% endcomment %}
+    <script>
+      (function() {
+        var s = document.createElement('script'),
+          e = !document.body
+            ? document.querySelector('head')
+            : document.body;
+        s.src = 'https://acsbapp.com/apps/app/dist/js/app.js';
+        s.async = true;
+        s.onload = function() {
+          acsbJS.init({
+            statementLink: '',
+            footerHtml: '',
+            hideMobile: false,
+            hideTrigger: true,
+            language: 'en',
+            position: 'left',
+            leadColor: '#36409a',
+            triggerColor: '#36409a',
+            triggerRadius: '50%',
+            triggerPositionX: 'right',
+            triggerPositionY: 'bottom',
+            triggerIcon: 'people',
+            triggerSize: 'medium',
+            triggerOffsetX: 20,
+            triggerOffsetY: 20,
+            mobile: {
+              triggerSize: 'small',
+              triggerPositionX: 'right',
+              triggerPositionY: 'center',
+              triggerOffsetX: 10,
+              triggerOffsetY: 0,
+              triggerRadius: '50%'
+            }
+          });
+        };
+        e.appendChild(s);
+      })();
+    </script>
+
     <script>
       (() => {
         window.sessionStorage.setItem('JMBY-48', 'v1');
       })();
     </script>
     {% render 'junip-store-key' %}
+
+    {%- if template.name == 'product' -%}
+      {% comment %}
+        Only load back-in-stock widget on PDPs. Klaviyo Onsite JS is already installed
+        through App embeds menu in Theme Editor
+      {% endcomment %}
+      <script>
+        loadAsyncScript('https://a.klaviyo.com/media/js/onsite/onsite.js', function() {
+          var klaviyo = window.klaviyo || [];
+          klaviyo.init({account: 'NMZKLp', platform: 'shopify'});
+          klaviyo.enable('backinstock', {
+            trigger: {
+              product_page_text: 'Notify Me When Available',
+              product_page_class: 'btn',
+              product_page_text_align: 'center',
+              product_page_margin: '0px',
+              replace_anchor: false
+            },
+            modal: {
+              headline: '{product_name} is Out of Stock',
+              body_content: 'Register to receive a notification when this item comes back in stock.',
+              email_field_label: 'Email',
+              button_label: 'Notify me when available',
+              subscription_success_label: "You're in! We'll let you know when it's back.",
+              footer_content: '',
+              additional_styles: '.btn{font-size: 16px;font-weight: 600;font-family: sofia-pro, Avenir, sans-serif;border-radius: 40px;}.btn:hover{opacity:0.9}.modal-title{text-align: center;color: #36409a;font-family: kansasnew, sans-serif;font-weight: 600;margin-top: 15px;}.input-lg{font-family: sofia-pro, Avenir, sans-serif;font-size: 16px;font-weight: 600;color: #36409a;}.form-control{border-color: #36409a;} #container p{    color: #36409a;font-family: sofia-pro, Avenir, sans-serif;font-size: 18px;font-style: normal;text-align: center;} #container{background-color:#f3f4f9!important;} .input-lg:focus-visible{outline-color: #36409a;}@media(max-width: 768px){#container{margin-top: 25vh;}}.close{color: black;opacity: 0.5;}.close:hover{opacity:1;}',
+              drop_background_color: '#000',
+              background_color: '#fff',
+              text_color: '#222',
+              button_text_color: '#fff',
+              button_background_color: '#36409a',
+              close_button_color: '#ccc',
+              error_background_color: '#fcd6d7',
+              error_text_color: '#C72E2F',
+              success_background_color: '#d3efcd',
+              success_text_color: '#1B9500'
+            }
+          });
+        });
+      </script>
+    {%- endif -%}
+
+    {%- if template.directory == 'customers' or page.handle == 'rewards' -%}
+      <script src="https://cdn-widgetsrepository.yotpo.com/v1/loader/Iu8jRehd6LJUVkSAMldHHw" async></script>
+    {%- else -%}
+      <script>
+        (function loadYotpoAsync() {
+          if (/(sref_id|loyalty|referral_program)/.test(window.location.search)) {
+            loadAsyncScript('https://cdn-widgetsrepository.yotpo.com/v1/loader/Iu8jRehd6LJUVkSAMldHHw');
+          }
+        })();
+      </script>
+    {%- endif -%}
 
     <script type="text/javascript">
       var script = document.createElement('script');
@@ -821,3 +914,11 @@
     {% render 'smart-cart-template' %}
   </body>
 </html>
+
+{% if content_for_header contains 'kimonix_void_script' %}
+  <script
+    async
+    id="kimonix_elements_script"
+    src="https://api.kimonix.com/kimonix_elements.js?shop=jambys-chillwear.myshopify.com"
+  ></script>
+{% endif %}
