@@ -1,8 +1,28 @@
+{% comment %}
+  =============================================================================
+  MAIN COLLECTION SECTION - STYLING & FUNCTIONALITY
+  =============================================================================
+  Collection page with advanced filtering, sorting, and product display
+  Includes quick links, color swatches, and responsive grid layouts
+{% endcomment %}
 <style>
+  {% comment %}
+    Hide Junip review summaries on collection pages to avoid clutter
+    Reviews are still accessible on individual product pages
+  {% endcomment %}
   .junip-product-summary{
     display:none;
   }
 
+{% comment %}
+  =============================================================================
+  COLOR SWATCH FILTER STYLING
+  =============================================================================
+  Custom styling for color swatch filters in the collection sidebar
+  - Desktop: 44px swatches with precise positioning
+  - Mobile: 58px swatches for better touch interaction
+  - Responsive breakpoints: 768px and 950px
+{% endcomment %}
     .is-color span.cc-checkbox__label::before {
         width: 44px;
         height: 44px;
@@ -36,6 +56,15 @@
         }
       }
 </style>
+{% comment %}
+  =============================================================================
+  COLLECTION URL & SORTING CONFIGURATION
+  =============================================================================
+  Set up collection URL and sorting parameters for filtering and pagination
+  - results_url: Clean collection URL without query parameters
+  - current_sort_by: Current sorting method (featured, price, etc.)
+  - quick_links: Collection blocks for quick navigation links
+{% endcomment %}
 {%- liquid
   if collection.url.size == 0
     assign results_url = routes.all_products_collection_url
@@ -51,6 +80,16 @@
 -%}
 {% assign quick_links = section.blocks | where: 'type', 'quick_link' %}
 
+{% comment %}
+  =============================================================================
+  QUICK LINKS STYLING & RESPONSIVE BEHAVIOR
+  =============================================================================
+  Custom styling for quick navigation links above collection products
+  - Horizontal scrolling container for mobile optimization
+  - Circular images with brand colors (rgb(54, 64, 154))
+  - Responsive breakpoints: mobile (768px) and desktop (769px+)
+  - Proteus branding indicates this was developed by the CRO team
+{% endcomment %}
 {% if quick_links.size > 0 %}
   <style>
   .quicklinks_title {
@@ -110,12 +149,33 @@
   }
   </style>
 {% endif %}
+{% comment %}
+  =============================================================================
+  MAIN COLLECTION CONTAINER & DATA ATTRIBUTES
+  =============================================================================
+  Primary collection wrapper with dynamic classes and JavaScript functionality
+  - data-ajax-filtering: Enables AJAX filtering without page reload
+  - data-components: Loads required JavaScript components
+  - Dynamic classes: Header overlap, padding, and responsive spacing
+  - data-cc-animate: Enables CSS animations and transitions
+{% endcomment %}
 <div data-section-type="collection-template"
      data-ajax-filtering="{{ section.settings.ajax_products }}"
      data-components="tabs,product-block,price-range,accordion,sticky-scroll-direction"
      class="pb-medium {% if section.settings.show_collection_image and collection.featured_image %}header-overlap-section{% elsif collection.metafields.collection.video %}{% elsif section.settings.show_collection_content %}pt-medium{% else %}sm:pt-medium{% endif %}" data-cc-animate>
 
   {% paginate collection.products by section.settings.products_per_page %}
+{% comment %}
+  =============================================================================
+  COLLECTION HEADER WITH FEATURED IMAGE
+  =============================================================================
+  Hero section displaying collection featured image with overlay content
+  - image-overlay--bg-full: Full-width background image with overlay
+  - needs-alt-logo: Triggers logo color change for better contrast
+  - rimage-background: Responsive background image with lazy loading
+  - data-cc-animate: CSS animation for fade-in zoom effect
+  - noscript fallback: Static image for users with JavaScript disabled
+{% endcomment %}
     {% if section.settings.show_collection_image and collection.featured_image %}
       <div class="collection-header image-overlay image-overlay--bg-full needs-alt-logo">
         <div class="rimage-outer-wrapper rimage-background lazyload fade-in"
@@ -135,6 +195,16 @@
     {% endif %}
 
 
+{% comment %}
+  =============================================================================
+  COLLECTION VIDEO BACKGROUND
+  =============================================================================
+  Optional video background for collection pages using metafields
+  - collection.metafields.collection.video: Video URL stored in collection metafields
+  - autoplay playsinline muted loop: Video playback settings for background
+  - video-overlay: Centered overlay content positioned over video
+  - Responsive video container with custom positioning
+{% endcomment %}
     {% if collection.metafields.collection.video != blank %}
     <style>
       .collection-video-container {
@@ -160,6 +230,17 @@
         <div class="overlay__content">
     {% endif %}
 
+{% comment %}
+  =============================================================================
+  PRODUCT TYPE COMPARISON & FILTERING SYSTEM
+  =============================================================================
+  Advanced filtering system with custom icons and color swatches
+  - dtc-product-type-compare: DTC Pages CRO component for product comparison
+  - filter_icon blocks: Custom icons for product type filters
+  - filter_swatch blocks: Color swatches for visual filtering
+  - top-search-filter: Main filtering component with all filter types
+  - Dynamic CSS ordering for filter display sequence
+{% endcomment %}
     {% render "dtc-product-type-compare" %}
 
     {% if collection.metafields.collection.video != blank %}
@@ -196,6 +277,16 @@
       quick_links: quick_links
     %}
 
+{% comment %}
+  =============================================================================
+  COLLECTION DESCRIPTION & PAGINATION
+  =============================================================================
+  Collection description display and pagination wrapper
+  - description_position: "bottom" setting shows description after products
+  - show_collection_content: Theme setting to control description visibility
+  - paginate: Wraps entire collection in pagination (12-48 products per page)
+  - rte: Rich text editor content with HTML formatting support
+{% endcomment %}
     {% if collection.description != blank and section.settings.description_position == "bottom" and section.settings.show_collection_content == true %}
       <div class="central footer">
         <div class="content transparent">
