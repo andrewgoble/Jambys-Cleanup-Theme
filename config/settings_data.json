@@ -104,7 +104,7 @@
     "animation_loading": false,
     "animation_loading_image": "shopify://shop_images/wordmark_f2106c6b-e52d-48ea-a2ce-f62a7b74cc0b.png",
     "animation_loading_message": "Performance Inactivewear",
-    "shopify_apps_blocklist": "app.backinstock.org,tatari-shopify,yotpo,ultimatesizechart.com,productreviews.shopifycdn.com,jsstore",
+    "shopify_apps_blocklist": "app.backinstock.org,tatari-shopify,ultimatesizechart.com,productreviews.shopifycdn.com,jsstore",
     "checkout_logo_image": "shopify://shop_images/wordmark_500x_a97ddd12-6e48-4033-b8fc-54d46e30f02c.png",
     "checkout_logo_position": "center",
     "checkout_logo_size": "small",

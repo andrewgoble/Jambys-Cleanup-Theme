@@ -387,52 +387,132 @@
         <span id="shop-pay-icon" style="display: none;">{% render "shop-pay-icon" %}</span>
               
       </div>
-    <div class="flex-new">
-      <div class="left_Section desktop-version">
-        <media-gallery data-desktop-layout="thumbnail_slider" id="MediaGallery-{{ section.id }}">
-          <slider-component id="GalleryViewer-{{ section.id }}" class="product-gallery-viewer">
-            <div id="GalleryViewerButtons-{{ section.id }}" class="product-gallery-viewer__nav">
-              <button type="button" class="slider-button slider-button--prev" name="previous" aria-label="Slide left">
-                {%- render 'svg-chevron-left' -%}
-              </button>
-              <button type="button" class="slider-button slider-button--next" name="next" aria-label="Slide right">
-                {%- render 'svg-chevron-right' -%}
-              </button>
-            </div>
+          # =============================================================================
+      # MAIN PRODUCT LAYOUT CONTAINER
+      # =============================================================================
+      # Flexbox container that separates desktop and mobile layouts
+      <div class="flex-new">
+        # =============================================================================
+        # DESKTOP MEDIA GALLERY SECTION
+        # =============================================================================
+        # Left side contains the main product image gallery with thumbnail navigation
+        <div class="left_Section desktop-version">
+          # =============================================================================
+          # MEDIA GALLERY COMPONENT
+          # =============================================================================
+          # Custom web component for handling product media display
+          # Uses thumbnail slider layout on desktop for better user experience
+          <media-gallery data-desktop-layout="thumbnail_slider" id="MediaGallery-{{ section.id }}">
+            # =============================================================================
+            # GALLERY VIEWER SLIDER
+            # =============================================================================
+            # Main image viewer with navigation controls
+            <slider-component id="GalleryViewer-{{ section.id }}" class="product-gallery-viewer">
+              # =============================================================================
+              # GALLERY NAVIGATION BUTTONS
+              # =============================================================================
+              # Previous/Next buttons for navigating through product images
+              <div id="GalleryViewerButtons-{{ section.id }}" class="product-gallery-viewer__nav">
+                <button type="button" class="slider-button slider-button--prev" name="previous" aria-label="Slide left">
+                  {%- render 'svg-chevron-left' -%}
+                </button>
+                <button type="button" class="slider-button slider-button--next" name="next" aria-label="Slide right">
+                  {%- render 'svg-chevron-right' -%}
+                </button>
+              </div>
+              
+        # =============================================================================
+        # MEDIA GRID CONTAINER
+        # =============================================================================
+        # Main container for all product media items (images, videos, 3D models)
         <ul class="media-grid" id="Slider-Gallery">
+          # =============================================================================
+          # MEDIA CUSTOM INFO PROCESSING
+          # =============================================================================
+          # This complex system handles custom media information from metafields
+          # Allows for model descriptions, guide labels, and custom media ordering
           {%- assign media_custom_info = product.metafields.media.custom_info.value -%}
+          
+          # Only process if custom media info exists
           {%- if media_custom_info != blank -%}
+            # =============================================================================
+            # EXTRACT MEDIA METADATA
+            # =============================================================================
+            # Extract arrays of media indexes, model descriptions, and guide labels
+            # These are stored as structured data in the media.custom_info metafield
             {%- assign media_info_index = media_custom_info | map: 'media_index' -%}
             {%- assign media_info_models = media_custom_info | map: 'model_description' -%}
             {%- assign media_info_labels = media_custom_info | map: 'guide_label' -%}
+            
+            # Flag to track if any media items have guide labels
             {%- assign has_guide_labels = false -%}
+            
+            # =============================================================================
+            # BUILD MEDIA INDEX MAPPING
+            # =============================================================================
+            # Create a mapping between media position and custom info
+            # This allows custom ordering and additional metadata for specific media items
             {%- capture media_indexes -%}
+              # Loop through all media items (1-based index for display)
               {%- for index in (1..product.media.size) -%}
                 {%- assign index_match = -1 -%}
+                
+                # Find matching custom info for this media position
                 {%- for media_index in media_info_index -%}
                   {%- if media_index == forloop.parentloop.index -%}
                     {%- assign index_match = forloop.index0 -%}
+                    
+                    # Check if this media item has guide labels
                     {%- if media_info_labels[forloop.index0] != blank -%}
                       {%- assign has_guide_labels = true -%}
                     {%- endif -%}
+                    
+                    # Found match, exit inner loop
                     {%- break -%} 
                   {%- endif -%}
                 {%- endfor -%}
+                
+                # Output the index match (-1 if no custom info found)
                 {{ index_match }}{%- unless forloop.last -%},{%- endunless -%}
               {%- endfor -%}
             {%- endcapture -%}
+            
+            # Convert the captured string to an array for easy access
             {%- assign media_custom_indexes = media_indexes | split: ',' -%}
           {%- endif -%}
-
           
+          # =============================================================================
+          # SPECIAL IMAGE ORDERING LOGIC
+          # =============================================================================
+          # Some products have a metafield that shows the last image first
+          # This is typically used for lifestyle/hero images that should appear first
           {% assign last = product.media | reverse %}
+          
+          # Check if this product should show last image as first
           {% if product.metafields.custom._show_last_image_as_first == true %}
+            # Loop through reversed media (last image first)
             {% for media in last %}
+              # Only process the first item (which was originally the last)
               {% if forloop.first %}
+                # =============================================================================
+                # FIRST MEDIA ITEM (ORIGINALLY LAST)
+                # =============================================================================
+                # This media item gets special treatment and appears first in the gallery
                 <li 
                   id="Slide-{{ section.id }}-{{ media.id }}-{{product.id}}"
                   data-media-id="{{ section.id }}-{{ media.id }}-last"
+                  
+                  # =============================================================================
+                  # MEDIA ALT TEXT PROCESSING
+                  # =============================================================================
+                  # Extract type information from alt text if it contains 'type:' prefix
+                  # Used for categorizing media items (e.g., "type: lifestyle", "type: product")
                   {%- if media.preview_image.alt contains 'type:'-%}data-image-alt="{{ media.preview_image.alt | split: 'type:' | last | strip }}"{%- endif -%}
+                  
+                  # =============================================================================
+                  # DYNAMIC CSS CLASSES
+                  # =============================================================================
+                  # Apply classes based on media type, zoom settings, and content
                   class="
                     width-new-gallry
                     {% if media.media_type == 'image' and section.settings.enable_zoom == true %} popupme{% endif %}
@@ -443,29 +523,63 @@
                      control-group-test
                      {% endif %}
                   " 
+                  
+                  # =============================================================================
+                  # ZOOM FUNCTIONALITY SETUP
+                  # =============================================================================
+                  # Prepare high-resolution image for zoom functionality
+                  # Limit zoom image width to 2048px for performance
                   {% if media.media_type == 'image' and section.settings.enable_zoom == true %}{% assign zoom_width = media.preview_image.width | at_most: 2048 %}
                   data-img_src="{{ media.preview_image | image_url: width: zoom_width }}"{% endif %}
                 >
+                  # =============================================================================
+                  # MEDIA WRAPPER & CUSTOM INFO DISPLAY
+                  # =============================================================================
                   <div class="media-wrapper">
+                    # =============================================================================
+                    # MEDIA MODEL DESCRIPTION LOOKUP
+                    # =============================================================================
+                    # If custom media info exists, look up the model description for this item
                     {%- if media_custom_info != blank -%}
                       {%- assign media_model_description = blank -%}
+                      
+                      # Get the index from our custom mapping array
                       {%- assign matching_meta = media_custom_indexes[forloop.index0] -%}
+                      
+                      # If we found a match (not -1), get the model description
                       {%- if matching_meta != '-1' -%}
+                        # Convert string to number for array access
                         {%- assign matching_meta = matching_meta | plus: 0 -%}
+                        # Look up the model description from our extracted array
                         {%- assign media_model_description = media_info_models[matching_meta] -%}
                       {%- endif -%}
                     {%- endif -%}
   
+                    # =============================================================================
+                    # SLIDE ANCHOR & MEDIA RENDERING
+                    # =============================================================================
+                    # Create anchor point for this slide (used for deep linking and navigation)
                     <div id="slide-{{ forloop.index }}" class="anchor-offest"></div>
   
+                    # Render the actual media item using the media-product snippet
+                    # This handles all media types (images, videos, 3D models) with proper formatting
                     {% render 'media-product', media: media, animation_type: 'cc-fade-in', prevent_lazyload: forloop.first, class:'', view:'main' %}
   
+                    # =============================================================================
+                    # MODEL DESCRIPTION DISPLAY
+                    # =============================================================================
+                    # Show custom model description if available (e.g., size info, fit details)
                     {%- if media_model_description != blank -%}
                       <div class="product-media__model-description">
                         {{- media_model_description -}}
                       </div>
                     {%- endif -%}
   
+                                        # =============================================================================
+                    # PRODUCT LABEL MARQUEE (FIRST SLIDE ONLY)
+                    # =============================================================================
+                    # Show product labels (sale, new, etc.) as a scrolling marquee on first slide
+                    # Only displays if marquee layout is enabled in theme settings
                     {% if settings.prod_label_layout contains 'marquee' and forloop.first %}
                       <div class="feature-banner-custom">
                         <div class="product-marquee  marquee marquee--hover">
@@ -473,28 +587,43 @@
                         </div>
                       </div>
                     {% endif %}
-  
+
+                    # =============================================================================
+                    # MODEL SIZING INFORMATION DISPLAY
+                    # =============================================================================
+                    # Parse and display model sizing information from media alt text
+                    # Format: "wear | first:model1 | size1:value1 | size2:value2 | modelsizing"
                     {% if media.alt contains "wear" and media.alt contains "modelsizing" %}
                       <div class="product-media__model-sizes">
+                        # Split alt text by pipe separator to extract sizing components
                         {% assign models_sizing = media.alt | split: ' | '  %}
                         {% assign counter = 0 %}
+                        
+                        # Count how many "first" entries we have (these are model identifiers, not sizes)
                         {% for sizing in models_sizing %}
                           {% if sizing contains "first" %}
                             {% assign counter = counter | plus: 1 %}
                           {% endif %}
                         {% endfor %}
+                        
+                        # Calculate actual size count by subtracting model count from total
                         {% assign sizes_length = models_sizing.size | minus:counter %}
+                        
+                        # Loop through sizing components and display them
                         {% for sizing in models_sizing %}
+                          # If only one size available, show as single item
                           {% if sizes_length <= 1 %}
                             {% unless sizing contains "first:" %}
                               <p class="only-sizing-item">{{ sizing | split: ':' | last}}</p>
                             {% endunless %}
+                          # If multiple sizes, show as multiple items
                           {% else %}
                             {% unless sizing contains "first:" %}
+                              # Skip type information, only show actual size values
                               {% if sizing contains 'type' %}
                               {% else %}
                                 <p class="many-sizing-items">{{ sizing | split: ':' | last}}</p>
-                            {% endif %}
+                              {% endif %}
                             {% endunless %}
                           {% endif %}
                         {% endfor %}
@@ -506,10 +635,17 @@
             {% endfor %} 
           {% endif %}
           
-          
-
-
+          # =============================================================================
+          # REGULAR MEDIA LOOP
+          # =============================================================================
+          # Process all media items in their normal order
+          # This handles the standard product images, videos, and other media
           {% for media in product.media %}
+            # =============================================================================
+            # COLLECTION VIDEO INSERTION
+            # =============================================================================
+            # Insert collection-level video at specific position if product has no videos
+            # This allows collections to have shared videos that appear on all products
             {%- if product_video != blank and forloop.index == product_video_index -%}
               <li id="Slide-{{ section.id }}-{{ product_video.id }}" data-media-id="{{ section.id }}-{{ product_video.id }}"
                 class="width-new-gallry video">
@@ -519,22 +655,52 @@
               </li>
             {%- endif -%}
 
+            # =============================================================================
+            # REGULAR MEDIA ITEM
+            # =============================================================================
+            # Standard media item processing for images, videos, and other media types
             <li 
               id="Slide-{{ section.id }}-{{ media.id }}-{{product.id}}"
               data-media-id="{{ section.id }}-{{ media.id }}"
+              
+              # =============================================================================
+              # MEDIA ALT TEXT PROCESSING
+              # =============================================================================
+              # Extract type information from alt text for categorization
               {%- if media.preview_image.alt contains 'type:'-%}data-image-alt="{{ media.preview_image.alt | split: 'type:' | last | strip }}"{%- endif -%}
+              
+              # =============================================================================
+              # DYNAMIC CSS CLASSES FOR REGULAR MEDIA
+              # =============================================================================
+              # Apply classes based on media type, zoom settings, and special ordering logic
               class="
                 width-new-gallry
                 {% if media.media_type == 'image' and section.settings.enable_zoom == true %} popupme{% endif %}
                 {% if media.media_type == 'video' %} video{% else %} {{ media.preview_image.alt | escape }}{% endif %}
                 {% if media.alt != product.title %} md-h-auto{% endif %}
                 {% unless media.alt contains 'wear' and media.alt contains ' | ' %} no-model-sizes{% endunless %}
-                 {% if forloop.first and product.metafields.custom._show_last_image_as_first == true %} control-group-test-hide {% endif %} {% if forloop.last and product.metafields.custom._show_last_image_as_first == true%} control-group-test-hide {% endif %}
+                
+                # =============================================================================
+                # SPECIAL ORDERING CONTROL CLASSES
+                # =============================================================================
+                # Hide first and last items when special ordering is enabled
+                # This prevents duplicate display when last image is shown first
+                {% if forloop.first and product.metafields.custom._show_last_image_as_first == true %} control-group-test-hide {% endif %} 
+                {% if forloop.last and product.metafields.custom._show_last_image_as_first == true%} control-group-test-hide {% endif %}
               " 
+              
+              # =============================================================================
+              # ZOOM FUNCTIONALITY FOR REGULAR MEDIA
+              # =============================================================================
+              # Prepare high-resolution image for zoom functionality
               {% if media.media_type == 'image' and section.settings.enable_zoom == true %}{% assign zoom_width = media.preview_image.width | at_most: 2048 %}
               data-img_src="{{ media.preview_image | image_url: width: zoom_width }}"{% endif %}
             >
               <div class="media-wrapper">
+                # =============================================================================
+                # CUSTOM MEDIA INFO LOOKUP FOR REGULAR MEDIA
+                # =============================================================================
+                # Look up custom information (model descriptions, guide labels) for this media item
                 {%- if media_custom_info != blank -%}
                   {%- assign media_model_description = blank -%}
                   {%- assign matching_meta = media_custom_indexes[forloop.index0] -%}

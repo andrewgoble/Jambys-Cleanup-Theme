@@ -466,8 +466,6 @@
         }
       }
     </script>
-    {%- assign time_now = 'now' | date: '%s' %}
-    <script src="https://cdn-widgetsrepository.yotpo.com/v1/loader/Iu8jRehd6LJUVkSAMldHHw" async></script>
 
     {%- if template contains 'replo' -%}
       <link rel="stylesheet" href="https://use.typekit.net/pmy6wae.css">
@@ -889,17 +887,7 @@
       </script>
     {%- endif -%}
 
-    {%- if template.directory == 'customers' or page.handle == 'rewards' -%}
-      <script src="https://cdn-widgetsrepository.yotpo.com/v1/loader/Iu8jRehd6LJUVkSAMldHHw" async></script>
-    {%- else -%}
-      <script>
-        (function loadYotpoAsync() {
-          if (/(sref_id|loyalty|referral_program)/.test(window.location.search)) {
-            loadAsyncScript('https://cdn-widgetsrepository.yotpo.com/v1/loader/Iu8jRehd6LJUVkSAMldHHw');
-          }
-        })();
-      </script>
-    {%- endif -%}
+
 
     <script type="text/javascript">
       var script = document.createElement('script');
