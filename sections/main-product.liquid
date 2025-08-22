@@ -2,39 +2,17 @@
 {%- assign is_featured_product = false -%}
 
 {%- liquid
-  # =============================================================================
-  # PRODUCT VARIANT & MEDIA SETUP
-  # =============================================================================
-  # Get the currently selected variant or fall back to first available variant
   assign current_variant = product.selected_or_first_available_variant
-  
-  # Set featured media - prioritize variant media, fall back to product media
   assign featured_media = product.selected_or_first_available_variant.featured_media | default: product.featured_media
-  
-  # Default to single column layout for media gallery
   assign media_columns_to_show = 1
-  
-  # Convert swatch option name to lowercase for consistent comparison
   assign swatch_option_name_lowercase = settings.swatch_option_name | downcase
-  
-  # Create unique form ID for this product instance (prevents conflicts when multiple products on page)
   assign product_form_id = 'product-form-' | append: section.id | append: '-' | append: product.id
-  
-  # Flag to control whether app blocks appear in quick buy modal
   assign show_app_blocks_in_quickbuy = false
 
-  # =============================================================================
-  # PREORDER PRODUCT DETECTION
-  # =============================================================================
-  # Check if this is a preorder product based on template suffix
   if product.template_suffix == 'preorder'
     assign is_preorder_product = true
   endif
 
-  # =============================================================================
-  # MEDIA LAYOUT CONFIGURATION
-  # =============================================================================
-  # Determine media gallery layout based on section settings and available media
   if section.settings.media_style != 'one-column' and product.media.size > 1
     if section.settings.media_style == 'two-column'
       assign media_columns_to_show = 2
@@ -43,10 +21,6 @@
     endif
   endif
 
-  # =============================================================================
-  # BUY BUTTONS DETECTION
-  # =============================================================================
-  # Check if this section has buy button blocks configured
   assign has_buy_buttons = false
   for block in section.blocks
     if block.type == 'buy_buttons'
@@ -54,13 +28,7 @@
     endif
   endfor
   
-  # =============================================================================
-  # SALE PRICING DETECTION
-  # =============================================================================
-  # Find the cheapest variant to determine if product is on sale
   assign cheapest_variant = product.variants | sort: 'price' | first
-
-  # Check if any variant has a compare_at_price higher than current price
   assign on_sale = false
   if cheapest_variant.compare_at_price > cheapest_variant.price
     assign on_sale = true
@@ -103,16 +71,16 @@
      */
 </style>
 
-# =============================================================================
-# PRODUCT TYPE HANDLING & SPECIAL CASES
-# =============================================================================
-# Convert product type to URL-friendly handle format
+{% comment %}
+  PRODUCT TYPE HANDLING & SPECIAL CASES
+  Convert product type to URL-friendly handle format
+{% endcomment %}
 {% assign product_type = product.type | handleize %}
 
-# =============================================================================
-# SHOP PAY INTEGRATION
-# =============================================================================
-# Show Shop Pay message if enabled in global metafields
+{% comment %}
+  SHOP PAY INTEGRATION
+  Show Shop Pay message if enabled in global metafields
+{% endcomment %}
 {% if product.metafields.global.shop_pay == true %}
   {% style %}
     .shop-pay-message.display-message {
@@ -121,11 +89,11 @@
   {% endstyle %}
 {% endif %}
 
-# =============================================================================
-# PRODUCT TYPE NORMALIZATION
-# =============================================================================
-# Handle special cases where product types need to be normalized for collection lookup
-# This ensures proper collection association for products with similar types
+{% comment %}
+  PRODUCT TYPE NORMALIZATION
+  Handle special cases where product types need to be normalized for collection lookup
+  This ensures proper collection association for products with similar types
+{% endcomment %}
 {% if product.type == 'House Hoodie' %}
   {% assign product_type = 'House Hoodies' | handleize %}
 {% endif %}
@@ -133,62 +101,38 @@
   {% assign product_type = 'JamTees' | handleize %}
 {% endif %}
 
-# =============================================================================
-# PRODUCT SWITCHER DETECTION
-# =============================================================================
-# Flag to enable product switcher functionality for specific product types
-# Used for products that can switch between different styles/variants
+{% comment %}
+  PRODUCT SWITCHER DETECTION
+  Flag to enable product switcher functionality for specific product types
+  Used for products that can switch between different styles/variants
+{% endcomment %}
 {% assign has_product_switcher = false %}
 {% if product.type == 'Double Cozy Cloak' or product.type == 'Cozy Cloak' %}
   {% assign has_product_switcher = true %}
 {% endif %}
 
-# =============================================================================
-# COLLECTION URL HANDLING
-# =============================================================================
-# Maintain collection context in product URLs for proper navigation
 {%- if collection != blank -%}
   {%- assign product_url = product.url | within: collection -%}
 {%- else -%}
   {%- assign product_url = product.url -%}
 {%- endif -%}
 
-# =============================================================================
-# COLLECTION LOOKUP & PACK VARIATIONS
-# =============================================================================
-# Find the main collection for this product type (used for related products, swatches, etc.)
 {%- assign product_type_collection = collections[product_type] -%}
 
-# Get handles for pack variations (3-pack and 5-pack collections)
-# These are stored in custom metafields on the product type collection
 {% assign handle_pack = collections[product_type].metafields.custom.collection_pack.value.handle %}
 {% assign handle_five_pack = collections[product_type].metafields.custom.five_pack_collection.value.handle %}
 
-# =============================================================================
-# PACK DISCOUNT BANNERS
-# =============================================================================
-# Retrieve discount banner text for pack variations from collection metafields
 {% assign banner_discount_three = collections[handle_pack].metafields.custom.banner_discount_button  %}
 {% assign banner_discount_five = collections[handle_five_pack].metafields.custom.banner_discount_button  %}
 
-# =============================================================================
-# VARIATION TYPE DETECTION
-# =============================================================================
-# Check if this product has special variation handling for single products or 5-pack variants
-# These metafields control how the product switcher and variant selection work
 {% assign has_single_variation = product.metafields.custom.single_product_type %}
 {% assign has_5_pack_variation = product.metafields.custom.parent_single_collection_5_reference_ %}
 
-# =============================================================================
-# COLLECTION SWITCHING LOGIC
-# =============================================================================
-# If this product has special variation handling, switch to the appropriate collection
-# This allows the product to display variants from different collections (3-pack, 5-pack, etc.)
 {% if has_single_variation != blank or has_5_pack_variation != blank %}
-  # Switch to 3-pack collection if this is a single product type
+  {% comment %}Switch to 3-pack collection if this is a single product type{% endcomment %}
   {% if has_single_variation != blank and handle_pack != blank %}
     {%- assign product_type_collection = collections[handle_pack] -%}
-  # Switch to 5-pack collection if this is a 5-pack variant
+  {% comment %}Switch to 5-pack collection if this is a 5-pack variant{% endcomment %}
   {% elsif has_5_pack_variation != blank and handle_five_pack != blank %}
     {%- assign product_type_collection = collections[handle_five_pack] -%}
   {% endif %}
@@ -196,22 +140,11 @@
 
 
 
-# =============================================================================
-# COLOR COLLECTION & MEDIA SETUP
-# =============================================================================
-# Filter products in the collection to only show items of the same type
-# This creates a "color collection" for swatches and variant switching
 {% assign color_collection = product_type_collection.products | where: 'type', product.type %}
 
-# =============================================================================
-# PRODUCT VIDEO HANDLING
-# =============================================================================
-# Check if the current product has videos in its media
 {%- assign product_videos = product.media | where: 'media_type', 'video' -%}
 {%- assign product_video_index = -1 -%}
 
-# If no product-specific videos, fall back to collection-level video from metafields
-# This allows collections to have shared videos that appear on all products
 {%- if product_videos.size == 0 -%}
   {%- assign product_video = product_type_collection.metafields.product.pdp_gallery_video.value -%}
   {%- assign product_video_index = 2 -%}
@@ -254,21 +187,11 @@
 {%- endif -%}
 {%- endstyle -%}
 
-# =============================================================================
-# PRODUCT SLIDER JAVASCRIPT LOADING
-# =============================================================================
-# Load the product image slider functionality
-# This handles the main product image gallery and thumbnail navigation
 <script defer="defer" src="{{ 'product-slider.js' | asset_url }}"></script>
 
-# =============================================================================
-# BREADCRUMB NAVIGATION SETUP
-# =============================================================================
-# Find the breadcrumb block configuration for this section
 {%- assign breadcrumbs_block = section.blocks | where: 'type', 'breadcrumbs' | first -%}
 {%- assign breadcrumbs = blank -%}
 
-# Build breadcrumb navigation if block is configured
 {%- if breadcrumbs_block != blank -%}
   {%- capture breadcrumbs -%}
     # Get breadcrumb configuration from block settings
@@ -311,14 +234,6 @@
   {%- endcapture -%}
 {%- endif -%}
 
-# =============================================================================
-# MAIN PRODUCT SECTION WRAPPER
-# =============================================================================
-# This section contains the entire product display with dynamic classes based on:
-# - Media count (single vs multiple images)
-# - Layout settings (full width, media style)
-# - Product type (featured, preorder)
-# - Cart behavior configuration
 <section class="product-area {% if product.media.size<=1 %} full-width {% endif %} 
                 {% if product.media.size == 1 %}product-area--loner{% endif %}
                 {% unless section.settings.full_width or is_featured_product %} product-area--restrict-width{% endunless %}
