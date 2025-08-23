@@ -59,7 +59,7 @@
             data-parent-fit="cover">
           <noscript>
             <div class="rimage-wrapper" style="padding-top:{{ 1 | divided_by: section.settings.placeholder_image.aspect_ratio | times: 100 }}%">
-              <img src="{{ section.settings.placeholder_image | img_url: '1024x1024' }}" alt="{{ section.settings.placeholder_image.alt | escape }}" class="rimage__image">
+              <img src="{{ section.settings.placeholder_image | image_url: width: 1024, height: 1024 }}" alt="{{ section.settings.placeholder_image.alt | escape }}" class="rimage__image">
             </div>
           </noscript>
         </div>
@@ -104,188 +104,188 @@
 </div>
 
 {% schema %}
-  {
-    "name": "Background video",
-    "class": "section-background-video",
-    "settings": [
-      {
-        "type": "paragraph",
-        "content": "Background videos are designed to autoplay and be silent. If you want a video with sound use the Video section. Please read documentation before using. [Read more](https://cleancanvas.co.uk/support/general/background-video)"
-      },
-      {
-        "id": "video",
-        "type": "text",
-        "label": "Desktop Video link",
-        "info": "Supports mp4, YouTube and Vimeo.",
-        "default": "https:\/\/www.youtube.com\/watch?v=_9VUPq3SxOc"
-      },
-      {
-        "id": "mobile_video",
-        "type": "text",
-        "label": "Mobile Video link",
-        "info": "Only mp4 videos will play on mobile. If left blank the desktop video will load."
-      },
-      {
-        "id": "placeholder_image",
-        "type": "image_picker",
-        "label": "Placeholder image",
-        "info": "Required. Shows while the video is loading, or if it cannot autoplay."
-      },
-      {
-        "type": "text",
-        "id": "subheading",
-        "label": "Subheading",
-        "default": "Subheading"
-      },
-      {
-        "type": "textarea",
-        "id": "title",
-        "label": "Heading",
-        "default": "Tell your story"
-      },
-      {
-        "type": "range",
-        "id": "title_size",
-        "min": 20,
-        "max": 150,
-        "step": 2,
-        "unit": "px",
-        "label": "Heading text size",
-        "default": 60
-      },
-      {
-        "type": "checkbox",
-        "id": "heading_h1",
-        "label": "Set as primary page heading",
-        "info": "Uses <h1> tag. One per page recommended. [Learn more](https://cleancanvas.co.uk/support/showcase/seo#inner-anchor-0)",
-        "default": false
-      },
-      {
-        "type": "richtext",
-        "id": "text",
-        "label": "Text",
-        "default": "<p>with auto-playing, auto-looping videos</p>"
-      },
-      {
-        "type": "checkbox",
-        "id": "enlarge_text",
-        "label": "Enlarge text",
-        "default": false
-      },
-      {
-        "type": "text",
-        "id": "button_label",
-        "label": "Button"
-      },
-      {
-        "type": "url",
-        "id": "button_link",
-        "label": "Button link"
-      },
-      {
-        "type": "select",
-        "id": "overlay_position",
-        "label": "Text alignment",
-        "options": [
-          {
-            "value": "position--left position--top",
-            "label": "Top left"
-          },
-          {
-            "value": "position--hcenter position--top",
-            "label": "Top center"
-          },
-          {
-            "value": "position--right position--top",
-            "label": "Top right"
-          },
-          {
-            "value": "position--left position--vcenter",
-            "label": "Middle left"
-          },
-          {
-            "value": "position--hcenter position--vcenter",
-            "label": "Middle center"
-          },
-          {
-            "value": "position--right position--vcenter",
-            "label": "Middle right"
-          },
-          {
-            "value": "position--left position--bottom",
-            "label": "Bottom left"
-          },
-          {
-            "value": "position--hcenter position--bottom",
-            "label": "Bottom center"
-          },
-          {
-            "value": "position--right position--bottom",
-            "label": "Bottom right"
-          }
-        ],
-        "default": "position--hcenter position--vcenter"
-      },
-      {
-        "type": "header",
-        "content": "Layout"
-      },
-      {
-        "type": "radio",
-        "id": "height",
-        "label": "Video height",
-        "default": "fixed",
-        "options": [
-          {
-            "value": "full",
-            "label": "Full screen"
-          },
-          {
-            "value": "fixed",
-            "label": "Fixed height"
-          }
-        ]
-      },
-      {
-        "type": "range",
-        "id": "height_desktop",
-        "min": 200,
-        "max": 1000,
-        "step": 20,
-        "unit": "px",
-        "label": "Desktop fixed height",
-        "default": 600
-      },
-      {
-        "type": "range",
-        "id": "height_mobile",
-        "min": 100,
-        "max": 1000,
-        "step": 20,
-        "unit": "px",
-        "label": "Mobile fixed height",
-        "default": 500
-      },
-      {
-        "id": "full_width",
-        "type": "checkbox",
-        "label": "Full page width",
-        "default": true
-      },
-      {
-        "id": "overlay_style_tint",
-        "type": "checkbox",
-        "label": "Show overlay tint",
-        "default": true
-      }
-    ],
-    "presets": [
-      {
-        "name": "Background video",
-        "settings": {
-          "video": "https:\/\/www.youtube.com\/watch?v=_9VUPq3SxOc"
+{
+  "name": "Background video",
+  "class": "section-background-video",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Background videos are designed to autoplay and be silent. If you want a video with sound use the Video section. Please read documentation before using. [Read more](https://cleancanvas.co.uk/support/general/background-video)"
+    },
+    {
+      "id": "video",
+      "type": "text",
+      "label": "Desktop Video link",
+      "info": "Supports mp4, YouTube and Vimeo.",
+      "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
+    },
+    {
+      "id": "mobile_video",
+      "type": "text",
+      "label": "Mobile Video link",
+      "info": "Only mp4 videos will play on mobile. If left blank the desktop video will load."
+    },
+    {
+      "id": "placeholder_image",
+      "type": "image_picker",
+      "label": "Placeholder image",
+      "info": "Required. Shows while the video is loading, or if it cannot autoplay."
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Subheading"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Heading",
+      "default": "Tell your story"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 20,
+      "max": 150,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading text size",
+      "default": 60
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_h1",
+      "label": "Set as primary page heading",
+      "info": "Uses <h1> tag. One per page recommended. [Learn more](https://cleancanvas.co.uk/support/showcase/seo#inner-anchor-0)",
+      "default": false
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>with auto-playing, auto-looping videos</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "enlarge_text",
+      "label": "Enlarge text",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "overlay_position",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "position--left position--top",
+          "label": "Top left"
+        },
+        {
+          "value": "position--hcenter position--top",
+          "label": "Top center"
+        },
+        {
+          "value": "position--right position--top",
+          "label": "Top right"
+        },
+        {
+          "value": "position--left position--vcenter",
+          "label": "Middle left"
+        },
+        {
+          "value": "position--hcenter position--vcenter",
+          "label": "Middle center"
+        },
+        {
+          "value": "position--right position--vcenter",
+          "label": "Middle right"
+        },
+        {
+          "value": "position--left position--bottom",
+          "label": "Bottom left"
+        },
+        {
+          "value": "position--hcenter position--bottom",
+          "label": "Bottom center"
+        },
+        {
+          "value": "position--right position--bottom",
+          "label": "Bottom right"
         }
+      ],
+      "default": "position--hcenter position--vcenter"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "radio",
+      "id": "height",
+      "label": "Video height",
+      "default": "fixed",
+      "options": [
+        {
+          "value": "full",
+          "label": "Full screen"
+        },
+        {
+          "value": "fixed",
+          "label": "Fixed height"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "height_desktop",
+      "min": 200,
+      "max": 1000,
+      "step": 20,
+      "unit": "px",
+      "label": "Desktop fixed height",
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "height_mobile",
+      "min": 100,
+      "max": 1000,
+      "step": 20,
+      "unit": "px",
+      "label": "Mobile fixed height",
+      "default": 500
+    },
+    {
+      "id": "full_width",
+      "type": "checkbox",
+      "label": "Full page width",
+      "default": true
+    },
+    {
+      "id": "overlay_style_tint",
+      "type": "checkbox",
+      "label": "Show overlay tint",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Background video",
+      "settings": {
+        "video": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
       }
-    ]
-  }
+    }
+  ]
+}
 {% endschema %}

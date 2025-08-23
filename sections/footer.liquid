@@ -57,7 +57,7 @@
                   {% for link in linklists[block.settings.menu].links %}
                     <li>
 
-                      <a{% if link.title == 'Accessibility' %} data-acsb-custom-trigger="true"{%endif%} data-cc-animate-click href="{{ link.url }}" {% if link.title.size < 25 %}class="no-wrap"{% endif %}>
+                      <a{% if link.title == 'Accessibility' %} data-acsb-custom-trigger="true"{% endif %} data-cc-animate-click href="{{ link.url }}" {% if link.title.size < 25 %}class="no-wrap"{% endif %}>
                         {{- link.title -}}
                       </a>
                     </li>
@@ -236,7 +236,7 @@
 
             {% if section.settings.custom_payment_icon %}
               <img class="section-footer__payment-icon payment-icon--custom"
-                   src="{{ section.settings.custom_payment_icon | img_url: '120x' }}"
+                   src="{{ section.settings.custom_payment_icon | image_url: width: 120 }}"
                    alt="{{ section.settings.custom_payment_icon.alt }}"
                    width="{{ section.settings.custom_payment_icon.width }}"
                    height="{{ section.settings.custom_payment_icon.height }}"
@@ -299,176 +299,176 @@
 
 
 {% schema %}
-  {
-    "name": "Footer",
-    "class": "section-footer",
-    "max_blocks": 4,
-    "settings": [
-      {
-        "type": "link_list",
-        "id": "lower_menu",
-        "label": "Lower footer menu"
-      },
-      {
-        "type": "header",
-        "content": "Payment methods"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_payment_icons",
-        "label": "Show payment icons",
-        "default": true,
-        "info": "Payment icons are pulled directly from Shopify based on your [payment settings](https://help.shopify.com/manual/payments)"
-      },
-      {
-        "type": "image_picker",
-        "id": "custom_payment_icon",
-        "label": "Custom payment icon",
-        "info": "40 x 25px recommended"
-      },
-      {
-        "type": "header",
-        "content": "Language selector",
-        "info": "To add a language, go to your [language settings.](/admin/settings/languages)"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_locale_selector",
-        "label": "Show language selector",
-        "default": true
-      },
-      {
-        "type": "header",
-        "content": "Currency selector",
-        "info": "To add a currency, go to your [payment settings.](/admin/settings/payments) Note, standard currency conversion only works with Shopify Payments [Learn more](https://somewhere.com)."
-      },
-      {
-        "type": "checkbox",
-        "id": "show_currency_selector",
-        "label": "Show currency selector",
-        "default": true
-      },
-      {
-        "type": "select",
-        "id": "wave",
-        "label": "Wave",
-        "options": [
-          {
-            "value": "none",
-            "label": "None"
-          },
-          {
-            "value": "top",
-            "label": "Top"
-          },
-          {
-            "value": "bottom",
-            "label": "Bottom"
-          },
-          {
-            "value": "both",
-            "label": "Both"
-          }
-        ],
-        "default": "none"
-      },
-      {
-        "id": "color_bg",
-        "type": "color",
-        "label": "Background color",
-        "default": "#22356a"
-      }
-    ],
-    "blocks": [
-      {
-        "type": "menu",
-        "name": "Links",
-        "settings": [
-          {
-            "type": "text",
-            "id": "title",
-            "label": "Heading",
-            "default": "Quick links"
-          },
-          {
-            "type": "link_list",
-            "id": "menu",
-            "label": "Menu",
-            "info": "This menu won't show dropdown items",
-            "default": "footer"
-          }
-        ]
-      },
-      {
-        "type": "text",
-        "name": "Text/Social",
-        "settings": [
-          {
-            "type": "text",
-            "id": "title",
-            "label": "Heading",
-            "default": "Talk about your store"
-          },
-          {
-            "type": "richtext",
-            "id": "text",
-            "label": "Text",
-            "default": "<p>Share store details, promotions, or brand content with your customers.</p>"
-          },
-          {
-            "type": "image_picker",
-            "id": "image",
-            "label": "Image"
-          },
-          {
-            "type": "range",
-            "id": "image_width",
-            "min": 30,
-            "max": 200,
-            "step": 5,
-            "unit": "px",
-            "label": "Footer image width",
-            "default": 100
-          },
-          {
-            "type": "checkbox",
-            "id": "show_social_icons",
-            "label": "Show social media links",
-            "default": true,
-            "info": "Add your social media links in Theme Settings > Social media"
-          }
-        ]
-      },
-      {
-        "type": "newsletter",
-        "limit": 1,
-        "name": "Newsletter",
-        "settings": [
-          {
-            "type": "text",
-            "id": "title",
-            "label": "Heading",
-            "default": "Newsletter"
-          },
-          {
-            "type": "richtext",
-            "id": "text",
-            "label": "Text",
-            "default": "<p>Sign up for exclusive offers, original stories, activism awareness, events and more.</p>"
-          },
-          {
-            "type": "checkbox",
-            "id": "show_social_icons_newsletter",
-            "label": "Show social media links",
-            "default": false,
-            "info": "Add your social media links in Theme Settings > Social media"
-          },
-          {
-            "type": "paragraph",
-            "content": "Customers who subscribe will have their email address added to the 'accepts marketing' [customer list](/admin/customers?query=&accepts_marketing=1)"
-          }
-        ]
-      }
-    ]
-  }
+{
+  "name": "Footer",
+  "class": "section-footer",
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "lower_menu",
+      "label": "Lower footer menu"
+    },
+    {
+      "type": "header",
+      "content": "Payment methods"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "Show payment icons",
+      "default": true,
+      "info": "Payment icons are pulled directly from Shopify based on your [payment settings](https://help.shopify.com/manual/payments)"
+    },
+    {
+      "type": "image_picker",
+      "id": "custom_payment_icon",
+      "label": "Custom payment icon",
+      "info": "40 x 25px recommended"
+    },
+    {
+      "type": "header",
+      "content": "Language selector",
+      "info": "To add a language, go to your [language settings.](/admin/settings/languages)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_locale_selector",
+      "label": "Show language selector",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Currency selector",
+      "info": "To add a currency, go to your [payment settings.](/admin/settings/payments) Note, standard currency conversion only works with Shopify Payments [Learn more](https://somewhere.com)."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_currency_selector",
+      "label": "Show currency selector",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "wave",
+      "label": "Wave",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "id": "color_bg",
+      "type": "color",
+      "label": "Background color",
+      "default": "#22356a"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Links",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Quick links"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu",
+          "info": "This menu won't show dropdown items",
+          "default": "footer"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text/Social",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Talk about your store"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Share store details, promotions, or brand content with your customers.</p>"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "range",
+          "id": "image_width",
+          "min": 30,
+          "max": 200,
+          "step": 5,
+          "unit": "px",
+          "label": "Footer image width",
+          "default": 100
+        },
+        {
+          "type": "checkbox",
+          "id": "show_social_icons",
+          "label": "Show social media links",
+          "default": true,
+          "info": "Add your social media links in Theme Settings > Social media"
+        }
+      ]
+    },
+    {
+      "type": "newsletter",
+      "limit": 1,
+      "name": "Newsletter",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Newsletter"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Sign up for exclusive offers, original stories, activism awareness, events and more.</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_social_icons_newsletter",
+          "label": "Show social media links",
+          "default": false,
+          "info": "Add your social media links in Theme Settings > Social media"
+        },
+        {
+          "type": "paragraph",
+          "content": "Customers who subscribe will have their email address added to the 'accepts marketing' [customer list](/admin/customers?query=&accepts_marketing=1)"
+        }
+      ]
+    }
+  ]
+}
 {% endschema %}

@@ -99,144 +99,151 @@
 {% if section.settings.layout == 'carousel' %}</div>{% endif %}
 
 {% schema %}
-  {
-    "name": "Collection list",
-    "class": "section-collection-list",
-    "max_blocks": 20,
-    "settings": [
-      {
-        "type": "text",
-        "id": "title",
-        "label": "Heading",
-        "default": "Collection list"
-      },
 {
-        "id": "header_color",
-        "type": "color",
-        "label": "Heading text color",
-        "default": "#ffffff"
+  "name": "Collection list",
+  "class": "section-collection-list",
+  "max_blocks": 20,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Collection list"
+    },
+    {
+      "id": "header_color",
+      "type": "color",
+      "label": "Heading text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "columns",
+          "label": "Collage"
+        },
+        {
+          "value": "rows",
+          "label": "Grid"
+        },
+        {
+          "value": "carousel",
+          "label": "Carousel"
+        }
+      ],
+      "default": "rows",
+      "info": "Collage will only work when the 'Image shape'  is set to Natural - in Collections / Image shape"
+    },
+    {
+      "type": "range",
+      "id": "grid",
+      "label": "Desktop collections per row",
+      "min": 2,
+      "max": 4,
+      "default": 3
+    },
+    {
+      "type": "select",
+      "id": "grid_mobile",
+      "label": "Mobile collections per row",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show 'View all' link",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "alternate_bg_color",
+      "label": "Use alternate section color",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "wave",
+      "label": "Wave",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "id": "color_bg",
+      "type": "color",
+      "label": "Background color",
+      "default": "#ffffff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "color",
+          "id": "block_bg_color",
+          "label": "Block Background color"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection list",
+      "settings": {
       },
-      {
-        "type": "select",
-        "id": "layout",
-        "label": "Layout",
-        "options": [
-          {
-            "value": "columns",
-            "label": "Collage"
-          },
-          {
-            "value": "rows",
-            "label": "Grid"
-          },
-          {
-            "value": "carousel",
-            "label": "Carousel"
-          }
-        ],
-        "default": "rows",
-        "info": "Collage will only work when the 'Image shape'  is set to Natural - in Collections / Image shape"
-      },
-      {
-        "type": "range",
-        "id": "grid",
-        "label": "Desktop collections per row",
-        "min": 2,
-        "max": 4,
-        "default": 3
-      },
-      {
-        "type": "select",
-        "id": "grid_mobile",
-        "label": "Mobile collections per row",
-        "options": [
-          {
-            "value": "1",
-            "label": "1"
-          },
-          {
-            "value": "2",
-            "label": "2"
-          }
-        ],
-        "default": "2"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_view_all",
-        "label": "Show 'View all' link",
-        "default": true
-      },
-      {
-        "type": "checkbox",
-        "id": "alternate_bg_color",
-        "label": "Use alternate section color",
-        "default": false
-      },
-      {
-        "type": "select",
-        "id": "wave",
-        "label": "Wave",
-        "options": [
-          {
-            "value": "none",
-            "label": "None"
-          },
-          {
-            "value": "top",
-            "label": "Top"
-          },
-          {
-            "value": "bottom",
-            "label": "Bottom"
-          },
-          {
-            "value": "both",
-            "label": "Both"
-          }
-        ],
-        "default": "none"
-      },
-      {
-        "id": "color_bg",
-        "type": "color",
-        "label": "Background color",
-        "default": "#ffffff"
-      }
-    ],
-    "blocks": [
-      {
-        "type": "collection",
-        "name": "Collection",
-        "settings": [
-          {
-              "type": "collection",
-              "id": "collection",
-              "label": "Collection"
-          },
-          {
-              "type": "image_picker",
-              "id": "image",
-              "label": "Image"
-          },
-          {
-            "type": "color",
-            "id": "block_bg_color",
-            "label": "Block Background color"
-          }
-        ]
-      }
-    ],
-    "presets": [
-      {
-        "name": "Collection list",
-        "settings": {},
-        "blocks": [
-            { "type": "collection" },
-            { "type": "collection" },
-            { "type": "collection" }
-        ]
-      }
-    ]
-  }
+      "blocks": [
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        },
+        {
+          "type": "collection"
+        }
+      ]
+    }
+  ]
+}
 {% endschema %}

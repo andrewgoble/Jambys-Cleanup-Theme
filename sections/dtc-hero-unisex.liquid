@@ -24,12 +24,12 @@
 <div class="swiper-wrapper">
   {% assign total_slides = 0 %}
 {%- for block in section.blocks -%}
-  {% assign total_slides = total_slides |  plus: 1 %}
+  {% assign total_slides = total_slides | plus: 1 %}
   <div class="swiper-slide">
     <div class="slide-content">
       {%- case block.type -%}
         {%- when 'slide' -%}
-          {% render 'dtc-hero-slide', block:block %}
+          {% render 'dtc-hero-slide', block: block %}
       {%- endcase -%}
     </div>
   </div>
@@ -45,7 +45,7 @@
   {% endif %}
 </div>
 {% schema %}
-  {
+{
   "name": "dtc hero unisex slider",
   "class": "dtc-hero-slider-unisex",
   "tag": "section",
@@ -133,7 +133,7 @@
           "id": "second_button_link",
           "label": "Second Button link"
         },
-                {
+        {
           "type": "color",
           "id": "btn2_bg_color",
           "label": "Second Button Background"
@@ -153,12 +153,11 @@
           "id": "btn2_hover_color",
           "label": "Second Hover Color"
         },
-                {
+        {
           "type": "color",
           "id": "btn2_hover_text_color",
           "label": "Second Hover Text Color"
         }
-        
       ]
     }
   ],
@@ -167,5 +166,5 @@
       "name": "dtc hero image/video"
     }
   ]
-}  
+}
 {% endschema %}

@@ -1,4 +1,4 @@
-{%- assign video_desktop_breakpoint = 480 -%}
+
 {%- if section.settings.video == blank -%}
   {%- assign desktop_video = section.settings.video_file | default: section.settings.mobile_video_file -%}
   {%- assign mobile_video = section.settings.mobile_video_file | default: section.settings.video_file -%}
@@ -132,7 +132,7 @@
         top: 0;
         height: 100%;
         width: 9rem;
-        background-image: url("data:image/svg+xml,%3Csvg width='58' height='600' viewBox='0 0 58 600' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='58' height='600' fill='none'/%3E%3Cpath d='M26.1895 301.977C4.20142 214.498 -22.3442 97.8583 38.6472 0H-676V600H38.6495C78.3374 485.832 48.1776 389.456 26.1895 301.977Z' fill='%23{{ section.settings.bottom_bg | remove: '#'}}'/%3E%3C/svg%3E ");
+        background-image: url("data:image/svg+xml,%3Csvg width='58' height='600' viewBox='0 0 58 600' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='58' height='600' fill='none'/%3E%3Cpath d='M26.1895 301.977C4.20142 214.498 -22.3442 97.8583 38.6472 0H-676V600H38.6495C78.3374 485.832 48.1776 389.456 26.1895 301.977Z' fill='%23{{ section.settings.bottom_bg | remove: '#' }}'/%3E%3C/svg%3E ");
         background-repeat: no-repeat;
         background-size: 100% 100%;
         background-color: transparent;
@@ -313,12 +313,12 @@
   {%- endif -%}
 
   {%- if mobile_video == desktop_video -%}
-    {%- assign same_video = true -%}
+    
   {%- endif -%}
   {%- if mobile_image == desktop_image -%}
-    {%- assign same_image = true -%}
+    
   {%- endif -%}
-  {% if section.settings.video != blank or desktop_video != blank or section.settings.image_file !=blank or section.settings.mobile_image_file != blank %}
+  {% if section.settings.video != blank or desktop_video != blank or section.settings.image_file != blank or section.settings.mobile_image_file != blank %}
     {% comment %}
       If a video file is present, we play it immediately in the script tag below.
       Otherwise, we let theme.js handle the video setup
@@ -353,10 +353,10 @@
             >
             {%- for source in mobile_video.sources -%}
               <source type="{{ source.mime_type }}" src="{{ source.url }}">
-            {% endfor  %}
+            {% endfor %}
             </video>
           {% else %}
-            <img class="dtc-image-alt" src="{{ mobile_image | img_url:'master'}}" alt="{{ mobile_image.alt | escape }}"  loading="eager" fetchpriority="high" />
+            <img class="dtc-image-alt" src="{{ mobile_image | image_url }}" alt="{{ mobile_image.alt | escape }}"  loading="eager" fetchpriority="high" />
           {% endif %}
         </div>
         <div class="video-container__video-element dtc-desktop-only">
@@ -373,11 +373,11 @@
             >
             {%- for source in desktop_video.sources -%}
               <source type="{{ source.mime_type }}" src="{{ source.url }}">
-            {% endfor  %}
+            {% endfor %}
             </video>
             {% else %}
-            <img class="dtc-image-alt" src="{{ desktop_image | img_url:'master'}}" alt="{{ desktop_image.alt | escape }}"  loading="eager" fetchpriority="high"/>
-            {% endif  %}
+            <img class="dtc-image-alt" src="{{ desktop_image | image_url }}" alt="{{ desktop_image.alt | escape }}"  loading="eager" fetchpriority="high"/>
+            {% endif %}
         </div>
         
       </div>
@@ -391,7 +391,6 @@
             assign placeholder_image = section.settings.placeholder_image
             assign max_width = max_width | default: placeholder_image.width
             assign image_widths = '360,540,600,768,900,1080' | split: ','
-            assign widths = ''
           -%}
           {%- capture image_widths -%}
               {%- for width in image_widths -%}
@@ -533,7 +532,7 @@
       "type": "text",
       "label": "Desktop Video link",
       "info": "Supports mp4, YouTube and Vimeo.",
-      "default": "https:\/\/www.youtube.com\/watch?v=_9VUPq3SxOc"
+      "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
     },
     {
       "id": "video_file",
@@ -566,10 +565,10 @@
       "info": "Shopify-hosted image"
     },
     {
-        "type": "checkbox",
-        "id": "show_overlay_text",
-        "label": "Show overlay text.",
-        "default": false
+      "type": "checkbox",
+      "id": "show_overlay_text",
+      "label": "Show overlay text.",
+      "default": false
     },
     {
       "type": "text",
@@ -895,7 +894,8 @@
   "presets": [
     {
       "name": "DTC Hero video",
-      "settings": {}
+      "settings": {
+      }
     }
   ]
 }

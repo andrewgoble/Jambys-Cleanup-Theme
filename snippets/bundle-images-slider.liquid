@@ -18,7 +18,7 @@
                     {%- assign width_num = width | plus: 0 | round -%}
                     {%- if image.width > width_num -%}
                       {%- assign url_param = width | append: 'x' -%}
-                      {{image | img_url: url_param}} {{width}}w,
+                      {{ image | img_url: url_param }} {{ width }}w,
                     {%- endif -%}
                   {%- endfor -%}
                 {%- endcapture -%}
@@ -26,7 +26,7 @@
                 {%- assign max_width_img = image | img_url: max_width_param -%}
                 {% capture image_attr %}
                   src="{{ max_width_img }}" style="color: transparent;"
-                  srcset="{{srcset}} {{max_width_img}} {{image.width}}w"
+                  srcset="{{srcset}} {{ max_width_img }} {{ image.width }}w"
                   sizes="
                   (max-width: 639px) calc(100vw - 48px),
                   (max-width: 1000px) calc(100vw - 344px),
@@ -68,13 +68,13 @@
         {% for image in product.images %}
           <div class="embla__slide embla__slide--thumb px-1">
             <button
-              aria-label="Go to product image {{forloop.index}}"
+              aria-label="Go to product image {{ forloop.index }}"
               class="embla__slide__inner embla__slide__inner--thumb"
               type="button"
             >
               <img class='embla__slide__thumbnail lazyload w-full'
                 alt="Thumbnail of {{ image.alt | escape }}"
-                data-src='{{image | img_url: "92x92"}}'/>
+                data-src='{{ image | image_url: width: 92, height: 92 }}'/>
             </button>
           </div>
         {% endfor %}

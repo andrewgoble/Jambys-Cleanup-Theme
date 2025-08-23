@@ -1,4 +1,4 @@
-{% if render_li  %}
+{% if render_li %}
 <li class="nav-ctas__cta">
 {% else %}
 <div class="nav-ctas__cta">
@@ -18,7 +18,7 @@
          data-parent-fit="cover">
       <noscript>
         <div class="rimage-wrapper" style="padding-top:{{ 1 | divided_by: cta.settings.image1.aspect_ratio | times: 100 }}%">
-          <img src="{{ cta.settings.image1 | img_url: '125x' }}" alt="{{ cta.settings.image1.alt | escape }}" class="rimage__image">
+          <img src="{{ cta.settings.image1 | image_url: width: 125 }}" alt="{{ cta.settings.image1.alt | escape }}" class="rimage__image">
         </div>
       </noscript>
     </div>
@@ -57,14 +57,14 @@
     </div>
   </div>
     {%- unless cta.settings.cta_link1 == blank or cta.settings.text contains '</a>' -%}</a>{% else %}</div>{%- endunless -%}
-{% if render_li  %}
+{% if render_li %}
 </li>
 {% else %}
 </div>
 {% endif %}
 
 {% if cta.settings.image2 != blank %}
-  {% if render_li  %}
+  {% if render_li %}
   <li class="nav-ctas__cta">
   {% else %}
   <div class="nav-ctas__cta">
@@ -79,7 +79,7 @@
          data-parent-fit="cover">
       <noscript>
         <div class="rimage-wrapper" style="padding-top:{{ 1 | divided_by: cta.settings.image2.aspect_ratio | times: 100 }}%">
-          <img src="{{ cta.settings.image2 | img_url: '125x' }}" alt="{{ cta.settings.image2.alt | escape }}" class="rimage__image">
+          <img src="{{ cta.settings.image2 | image_url: width: 125 }}" alt="{{ cta.settings.image2.alt | escape }}" class="rimage__image">
         </div>
       </noscript>
     </div>
@@ -118,7 +118,7 @@
     </div>
   {%- unless cta.settings.cta_link2 == blank or cta.settings.text contains '</a>' -%}</a>{% else %}</div>{%- endunless -%}
 
-  {% if render_li  %}
+  {% if render_li %}
     </li>
   {% else %}
     </div>

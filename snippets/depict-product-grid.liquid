@@ -50,7 +50,6 @@
     endfor
   endfor
 
-  assign zero_indexed_current_page = paginate.current_page | minus: 1
   comment
     To be able to have a metafield that is storefront accessible in a custom namespace one needs to use `$app: namespace` and this is the way to access it from liquid, see https: //shopify.dev/docs/apps/build/custom-data/reserved-prefixes#create-a-metafield-definition-under-a-reserved-namespace
   endcomment
@@ -141,8 +140,8 @@
   {% assign image_config_metafield = collection.metafields[namespace][key].value %}
 
   {%- for product in collection.products -%}
-    {% assign default_image = product.featured_media %}
-    {% assign hover_image = product.media[1] %}
+    
+    
 
     {%- for product_image_config in image_config_metafield -%}
       {% assign config_product_gid = product_image_config.product | split: "/" %}
@@ -156,7 +155,7 @@
         {% assign default_image_file = default_image_file | split: "/" %}
         {% assign default_image_file = default_image_file[-1] %}
 
-        {% assign default_image = images[default_image_file] %}
+        
 
         {% if product_image_config.hover_image %}
           {% assign hover_image_file = product_image_config.hover_image | file_url %}
@@ -165,7 +164,7 @@
           {% assign hover_image_file = hover_image_file | split: "/" %}
           {% assign hover_image_file = hover_image_file[-1] %}
 
-          {% assign hover_image = images[hover_image_file] %}
+          
         {% endif %}
       {% endif %}
     {% endfor %}
@@ -173,7 +172,6 @@
     {% render "depict-render-product-card", product: product, forloop: forloop, paginate: paginate %}
 
     {%- liquid
-      assign show_duplicate = false
       assign namespace = "app--93504864257--product-duplicate"
       assign key = "product_duplicate"
       assign product_id_string = product.id | append: ""
@@ -189,7 +187,6 @@
           assign default_image_file = default_image_file | split: "/"
           assign default_image_file = default_image_file[-1]
 
-          assign default_image_duplicate = images[default_image_file]
 
           if duplicated_product.hover_image
             assign hover_image_file = duplicated_product.hover_image | file_url
@@ -198,10 +195,8 @@
             assign hover_image_file = hover_image_file | split: "/"
             assign hover_image_file = hover_image_file[-1]
 
-            assign hover_image_duplicate = images[hover_image_file]
           endif
 
-          assign show_duplicate = true
         endif
       endfor
     -%}

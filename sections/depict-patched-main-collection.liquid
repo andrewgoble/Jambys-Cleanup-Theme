@@ -141,7 +141,7 @@
               style='padding-top:{{ 1 | divided_by: collection.featured_image.aspect_ratio | times: 100 }}%'
             >
               <img
-                src='{{ collection.featured_image | img_url: '1024x1024' }}'
+                src='{{ collection.featured_image | image_url: width: 1024, height: 1024 }}'
                 alt='{{ collection.featured_image.alt | escape }}'
                 class='rimage__image'
               >
@@ -193,13 +193,13 @@
     {% endif %}
 
     {% assign icon_blocks = section.blocks | where: 'type', 'filter_icon' %}
-    {% assign swatch_blocks = section.blocks | where: 'type', 'filter_swatch' %}
+    
     <style>
       {% for product_type_block in icon_blocks %}
-        .{{ product_type_block.settings.product_type | downcase | escape | replace: " ", "-"| replace:"+","\\+" }} {
-          order: {{forloop.index0}}
+        .{{ product_type_block.settings.product_type | downcase | escape | replace: " ", "-" | replace: "+", "\\+" }} {
+          order: {{ forloop.index0 }}
         }
-      {% endfor%}
+      {% endfor %}
     </style>
 
     {% comment %}
@@ -390,7 +390,7 @@
                   {%- endcapture -%}
                   {{ filter_content }}
 
-                  {{current_sort_by }}
+                  {{ current_sort_by }}
 
                 {{ form_hidden_fields }}
 
@@ -584,7 +584,7 @@
 
                       {%- if value.count > 0 or section.settings.show_filter_deadends %}
                         {%- assign num_available_options = num_available_options | plus: 1 -%}
-                        <label class="cc-checkbox{% if product_type_icon != '' %} has-icon{% endif %}{% if is_color %} is-color{% endif %} {{ value.label | downcase | escape | replace: " ", "-"}}">
+                        <label class="cc-checkbox{% if product_type_icon != '' %} has-icon{% endif %}{% if is_color %} is-color{% endif %} {{ value.label | downcase | escape | replace: " ", "-" }}">
 
                           {% if is_color %}
                           {% comment %}
@@ -601,7 +601,7 @@
 
                           <span class="cc-checkbox__label">
                             {% if product_type_icon != '' %}
-                              <img class="product-type-filter-icon" src="{{ product_type_icon | img_url }}" loading="lazy">
+                              <img class="product-type-filter-icon" src="{{ product_type_icon | image_url: width: 100, height: 100 }}" loading="lazy">
                             {% endif %}
                             {{ value.label | escape }} 
                           </span>
@@ -723,7 +723,7 @@
 
             {%- capture filter_content2 -%}
         {%- for option in collection.sort_options -%}
-          {%- if option.value == "title-ascending" or  option.value == "title-descending" or option.value == "created-ascending" or option.value == "best-selling"-%}
+          {%- if option.value == "title-ascending" or  option.value == "title-descending" or option.value == "created-ascending" or option.value == "best-selling" -%}
             {% continue %}
           {%- elsif option.value == "manual" -%}
             <div class="item-radio-sorting">
@@ -777,7 +777,7 @@
           <div class='dtc-collection-collection'>
             {%- capture filter_content2 -%} 
           {%- for option in collection.sort_options -%}
-            {%- if option.value == "title-ascending" or  option.value == "title-descending" or option.value == "created-ascending" or option.value == "best-selling"-%}
+            {%- if option.value == "title-ascending" or  option.value == "title-descending" or option.value == "created-ascending" or option.value == "best-selling" -%}
               {% continue %}
             {%- elsif option.value == "manual" -%}
               <div class="item-radio-sorting">
@@ -859,7 +859,7 @@
                 {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
                   <li>
                     <a href="{{ filter.url_to_remove }}" class="active-filter-controls__tag" data-active-tag="{{ filter | escape }}">
-                      {%-if filter.min_value.value %}{%- render "price", price: filter.min_value.value -%}{%- else -%}{%- render "price", price: 0 -%}{%- endif -%}&nbsp;-&nbsp;{%- if filter.max_value.value -%}{%- render "price", price: filter.max_value.value -%}{%- else -%}{%- render "price", price: filter.range_max -%}{% endif %}
+                      {%- if filter.min_value.value %}{%- render "price", price: filter.min_value.value -%}{%- else -%}{%- render "price", price: 0 -%}{%- endif -%}&nbsp;-&nbsp;{%- if filter.max_value.value -%}{%- render "price", price: filter.max_value.value -%}{%- else -%}{%- render "price", price: filter.range_max -%}{% endif %}
                     </a>
                   </li>
                 {%- endif -%}
@@ -1245,7 +1245,7 @@
     },
     {
       "type": "paragraph",
-      "content": "To create the collection filters, go to your [navigation](\/admin\/menus) page."
+      "content": "To create the collection filters, go to your [navigation](/admin/menus) page."
     },
     {
       "type": "checkbox",

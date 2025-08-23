@@ -40,14 +40,14 @@
 <link rel="preload" href="{{ 'vendor.js' | asset_url }}" as="script">
 <link rel="preload" href="{{ 'theme.js' | asset_url }}" as="script">
 
-{%- if canonical_url != blank  -%}
+{%- if canonical_url != blank -%}
   <link rel="canonical" href="{{ canonical_url }}" />
 {%- endif -%}
 
 {%- if settings.favicon != blank and settings.favicon contains '.png' -%}
-  <link rel="shortcut icon" href="{{ settings.favicon | img_url: 'master' }}" type="image/png" />
+  <link rel="shortcut icon" href="{{ settings.favicon | image_url }}" type="image/png" />
 {%- elsif settings.favicon != blank and settings.favicon contains '.ico' -%}
-  <link rel="shortcut icon" href="{{ settings.favicon | img_url: 'master' }}" type="image/x-icon" />
+  <link rel="shortcut icon" href="{{ settings.favicon | image_url }}" type="image/x-icon" />
 {%- endif -%}
 
 {%- if page_description -%}

@@ -2,7 +2,7 @@
   <div id="admin_header">
     <div class="action_link action_return note" id='return_to_store' data-cc-animate>
       <a data-cc-animate-click href="{{ routes.account_logout_url }}">
-        {{ 'layout.customer.log_out' | t  }}
+        {{ 'layout.customer.log_out' | t }}
       </a>
 
       <a data-cc-animate-click href="{{ routes.root_url }}">
@@ -22,8 +22,8 @@
         {% if customer.default_address.address2 != "" %}
         <p>{{ customer.default_address.address2 }}</p>
         {% endif %}
-        <p>{{ customer.default_address.city}}, {% if address.province_code %}{{customer.default_address.province_code}}, {% endif %}{{customer.default_address.country}}</p>
-        <p>{{ customer.default_address.zip}}</p>
+        <p>{{ customer.default_address.city }}, {% if address.province_code %}{{ customer.default_address.province_code }}, {% endif %}{{ customer.default_address.country }}</p>
+        <p>{{ customer.default_address.zip }}</p>
         <p>{{ customer.default_address.phone }}</p>
         {% endif %}
         <a data-cc-animate-click id="view_address" href="{{ routes.account_addresses_url }}">{{ 'customer.account.view_addresses' | t }} ({{ customer.addresses_count }})</a>

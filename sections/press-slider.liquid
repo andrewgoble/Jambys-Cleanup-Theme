@@ -17,12 +17,12 @@
   {% for block in section.blocks %}
   <details class="press-slide"{% if forloop.first %} open{% endif %}>
     <summary data-show-quote>
-      <img src="{{ block.settings.image | img_url: '240x' }}"
+      <img src="{{ block.settings.image | image_url: width: 240 }}"
           alt="{{ block.settings.image.alt | escape }}"
           loading="lazy"
           class="press-img" />
     </summary>
-    <span class="press-text">{{block.settings.text}}</span>
+    <span class="press-text">{{ block.settings.text }}</span>
   </details>
   {% endfor %}
 </div>
@@ -92,7 +92,7 @@
         {
           "id": "link",
           "type": "url",
-       		"label": "url"
+          "label": "url"
         },
         {
           "id": "collection",
@@ -105,8 +105,8 @@
   ],
   "presets": [
     {
-        "name": "Press Slideshow",
-        "category": "Press"
+      "name": "Press Slideshow",
+      "category": "Press"
     }
   ]
 }

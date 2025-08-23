@@ -19,7 +19,7 @@
             <div class="favorites__content favorite-products-a swiper-slide {% if section.settings.toggler-left == blank %} hidden-favorite__products {% endif %}">
               <div class="favorites-carousel-content">
                 <div class="swiper-wrapper">
-                  {% assign product_only_images = product.media | where:'media_type', 'image' %}
+                  {% assign product_only_images = product.media | where: 'media_type', 'image' %}
                   {% for itemImage in product_only_images limit: 5 %}
                     {% assign collection_handle = collection.handle %}
                     {% assign alt_tags = itemImage.alt | split: "|" %}
@@ -98,7 +98,7 @@
           <div class="favorites__content favorite-products-b hidden-favorite__products-favorite__products swiper-slide {% if section.settings.toggler-left == blank %} shown-favorite__products {% endif %} {% if section.settings.toggler-right == blank or section.settings.toggler-left != blank %} hidden-favorite__products {% endif %}">
             <div class="favorites-carousel-content">
               <div class="swiper-wrapper">
-                {% assign product_only_images = product.media | where:'media_type', 'image' %}
+                {% assign product_only_images = product.media | where: 'media_type', 'image' %}
                 {% for itemImage in product_only_images limit: 5 %}
                   {% assign collection_handle = collection.handle %}
                   {% assign alt_tags = itemImage.alt | split: "|" %}
@@ -176,7 +176,7 @@
           <div class="favorites__content favorite-products-c hidden-favorite__products-favorite__products swiper-slide {% if section.settings.toggler-left == blank %} shown-favorite__products {% endif %} {% if section.settings.toggler-right == blank or section.settings.toggler-left != blank %} hidden-favorite__products {% endif %}">
             <div class="favorites-carousel-content">
               <div class="swiper-wrapper">
-                {% assign product_only_images = product.media | where:'media_type', 'image' %}
+                {% assign product_only_images = product.media | where: 'media_type', 'image' %}
                 {% for itemImage in product_only_images limit: 5 %}
                   {% assign collection_handle = collection.handle %}
                   {% assign alt_tags = itemImage.alt | split: "|" %}
@@ -271,102 +271,101 @@
 
 
 {% schema %}
-  {
-    "name": "Favorites",
-    "limit": 1,
-    "settings": [
-      {
-        "type": "text",
-        "id": "title",
-        "label": "Title"
-      },
-      {
-        "type": "text",
-        "id": "toggler-left",
-        "label": "Switcher Left Text"
-      },
-      {
-        "type": "text",
-        "id": "toggler-center",
-        "label": "Switcher Center Text"
-      },
-      {
-        "type": "text",
-        "id": "toggler-right",
-        "label": "Switcher Right Text"
-      },
-      {
-        "type": "url",
-        "id": "cta-url-a",
-        "label": "CTA Url A"
-      },
-      {
-        "type": "url",
-        "id": "cta-url-b",
-        "label": "CTA Url B"
-      },
-      {
-        "type": "url",
-        "id": "cta-url-c",
-        "label": "CTA Url C"
-      },
-      {
-        "type": "text",
-        "id": "cta-text-a",
-        "label": "CTA Text A"
-      },
-      {
-        "type": "text",
-        "id": "cta-text-b",
-        "label": "CTA Text B"
-      },
-      {
-        "type": "text",
-        "id": "cta-text-c",
-        "label": "CTA Text C"
-      }
-    ],
-    "blocks": [
-       {
-         "name": "Favorite A",
-         "type": "favorite-a",
-         "settings": [
-          {
-            "type": "product",
-            "id": "product",
-            "label": "Product"
-          }
-         ]
-       },
-       {
-         "name": "Favorite B",
-         "type": "favorite-b",
-         "settings": [
-          {
-            "type": "product",
-            "id": "product",
-            "label": "Product"
-          }
-         ]
-       }
-       ,
-       {
-         "name": "Favorite C",
-         "type": "favorite-c",
-         "settings": [
-          {
-            "type": "product",
-            "id": "product",
-            "label": "Product"
-          }
-         ]
-       }
-    ],
-    "presets": [
-      {
-        "name": "Favorites"
-      }
-    ]
-  }
-  {% endschema %} 
+{
+  "name": "Favorites",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "text",
+      "id": "toggler-left",
+      "label": "Switcher Left Text"
+    },
+    {
+      "type": "text",
+      "id": "toggler-center",
+      "label": "Switcher Center Text"
+    },
+    {
+      "type": "text",
+      "id": "toggler-right",
+      "label": "Switcher Right Text"
+    },
+    {
+      "type": "url",
+      "id": "cta-url-a",
+      "label": "CTA Url A"
+    },
+    {
+      "type": "url",
+      "id": "cta-url-b",
+      "label": "CTA Url B"
+    },
+    {
+      "type": "url",
+      "id": "cta-url-c",
+      "label": "CTA Url C"
+    },
+    {
+      "type": "text",
+      "id": "cta-text-a",
+      "label": "CTA Text A"
+    },
+    {
+      "type": "text",
+      "id": "cta-text-b",
+      "label": "CTA Text B"
+    },
+    {
+      "type": "text",
+      "id": "cta-text-c",
+      "label": "CTA Text C"
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Favorite A",
+      "type": "favorite-a",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    },
+    {
+      "name": "Favorite B",
+      "type": "favorite-b",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    },
+    {
+      "name": "Favorite C",
+      "type": "favorite-c",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Favorites"
+    }
+  ]
+}
+{% endschema %} 
   

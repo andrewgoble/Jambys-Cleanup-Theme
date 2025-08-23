@@ -349,7 +349,6 @@
             assign placeholder_image = section.settings.placeholder_image
             assign max_width = max_width | default: placeholder_image.width
             assign image_widths = '360,540,600,768,900,1080' | split: ','
-            assign widths = ''
           -%}
           {%- capture image_widths -%}
               {%- for width in image_widths -%}
@@ -465,7 +464,7 @@
       "type": "text",
       "label": "Desktop Video link",
       "info": "Supports mp4, YouTube and Vimeo.",
-      "default": "https:\/\/www.youtube.com\/watch?v=_9VUPq3SxOc"
+      "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
     },
     {
       "id": "video_file",
@@ -809,7 +808,8 @@
   "presets": [
     {
       "name": "Hero video",
-      "settings": {}
+      "settings": {
+      }
     }
   ]
 }

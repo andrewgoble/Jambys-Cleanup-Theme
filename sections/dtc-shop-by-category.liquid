@@ -1,5 +1,5 @@
 <style>
-#shopify-section-{{section.id}} .shop-by-category {
+#shopify-section-{{ section.id }} .shop-by-category {
   overflow-x:hidden;
   padding: 50px 0;
   background-color:{{ section.settings.section_background }};
@@ -96,7 +96,7 @@
 
 
 
-<div class="shop-by-category {{section.settings.section_custom_class}}">
+<div class="shop-by-category {{ section.settings.section_custom_class }}">
   <div class="wide-container">
     <div class="shop-by-title-wrapper">
       <h2 class="shop-by-title">{{ section.settings.section_title }}</h2>
@@ -121,7 +121,7 @@
   </div>
 </div>
 {% schema %}
-  {
+{
   "name": "Dtc shop by category",
   "class": "shop-by-category-section",
   "settings": [
@@ -178,5 +178,5 @@
       "name": "dtc Shop By Category"
     }
   ]
-}  
+}
 {% endschema %}

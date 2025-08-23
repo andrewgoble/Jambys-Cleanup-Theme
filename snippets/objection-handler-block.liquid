@@ -22,7 +22,7 @@ handler = Objection Handler
 <style>
 .dtc-objection-handler__container.dtc-objection-handler__{{ handler.heading | handleize }}:after {
     content: '';
-    background-image: url({{ handler.background | img_url: '696x890' }});
+    background-image: url({{ handler.background | image_url: width: 696, height: 890 }});
 }
 </style>
 
@@ -35,7 +35,7 @@ handler = Objection Handler
         {% if handler.icon %}
             <div class="dtc-objection-handler__icon">
                 <img 
-                    src="{{ handler.icon | img_url: '128x' }}" 
+                    src="{{ handler.icon | image_url: width: 128 }}" 
                     alt="{{ handler.title }}"
                     width="64"
                     height="64"

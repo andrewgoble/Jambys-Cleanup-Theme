@@ -94,11 +94,30 @@
   {% endpaginate %}
 </div>
 
-
+{% comment %}
+  =============================================================================
+  BLOG SECTION SCHEMA - CONFIGURATION & CUSTOMIZATION
+  =============================================================================
+  Theme editor configuration for blog functionality and appearance
+  - Layout settings: Grid vs collage display options
+  - Content settings: Posts per page and mobile layout
+  - Display settings: Title, filters, and RSS link visibility
+  - Responsive design: Mobile-specific column configurations
+{% endcomment %}
 {% schema %}
   {
     "name": "Blog pages",
     "settings": [
+      {% comment %}
+        =============================================================================
+        BLOG LAYOUT CONFIGURATION
+        =============================================================================
+        Controls how blog articles are displayed
+        - collage: Varied article heights for visual interest
+        - rows: Uniform grid layout with consistent spacing
+        - Default: collage (more visually appealing)
+        - Info: Collage applies to larger screens only
+      {% endcomment %}
       {
         "type": "select",
         "id": "blog_layout",
@@ -116,6 +135,16 @@
         "default": "collage",
         "info": "Collage applies to larger screens only"
       },
+      {% comment %}
+        =============================================================================
+        POSTS PER PAGE CONFIGURATION
+        =============================================================================
+        Controls number of blog posts displayed per page
+        - Range: 6-24 posts per page
+        - Step: 1 post (fine-grained control)
+        - Default: 10 posts (balanced performance and UX)
+        - Affects pagination and page load performance
+      {% endcomment %}
       {
         "type": "range",
         "id": "blog_posts_per_page",
@@ -125,6 +154,16 @@
         "step": 1,
         "default": 10
       },
+      {% comment %}
+        =============================================================================
+        MOBILE LAYOUT CONFIGURATION
+        =============================================================================
+        Controls number of posts per row on mobile devices
+        - Options: 1 or 2 posts per row
+        - Default: 2 posts (optimized for mobile viewing)
+        - mob-two-col: CSS class for mobile-specific styling
+        - Ensures proper touch target sizes on small screens
+      {% endcomment %}
       {
         "type": "select",
         "id": "blog_posts_per_row_mobile",
@@ -141,18 +180,49 @@
         ],
         "default": "2"
       },
+      {% comment %}
+        =============================================================================
+        BLOG TITLE DISPLAY
+        =============================================================================
+        Controls whether the blog title is shown
+        - blog_show_title: Toggle for title visibility
+        - Default: true (shows blog name as page heading)
+        - Affects page spacing and visual hierarchy
+        - Conditional padding adjustments when hidden
+      {% endcomment %}
       {
         "type": "checkbox",
         "id": "blog_show_title",
         "label": "Show page title",
         "default": true
       },
+      {% comment %}
+        =============================================================================
+        TAG FILTERING SYSTEM
+        =============================================================================
+        Enables tag-based filtering of blog posts
+        - blog_show_filter: Toggle for filter dropdown
+        - Default: false (no filtering by default)
+        - Requires blog.all_tags.size > 0 to function
+        - Provides navigation between tagged content
+      {% endcomment %}
       {
         "type": "checkbox",
         "id": "blog_show_filter",
         "label": "Show tag filter",
         "default": false
       },
+      {% comment %}
+        =============================================================================
+        RSS FEED INTEGRATION
+        =============================================================================
+        Enables RSS feed link for content syndication
+        - blog_show_rss_link: Toggle for RSS link visibility
+        - Default: false (no RSS link by default)
+        - blog.url.atom: Standard RSS feed URL format
+        - Conditional display based on filter settings
+        - Important for content distribution and SEO
+      {% endcomment %}
       {
         "type": "checkbox",
         "id": "blog_show_rss_link",

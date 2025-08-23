@@ -1,4 +1,4 @@
-<div class="dtc-hero-slider" data-loop-slider={{section.settings.loop_slider}}>
+<div class="dtc-hero-slider" data-loop-slider={{ section.settings.loop_slider }}>
 <div class="swiper-wrapper">
 {%- for block in section.blocks -%}
   <div class="swiper-slide">
@@ -12,7 +12,7 @@
           </div>
           {%- assign image = block.settings.image -%}
           <div class="slide-content__image" style="">
-            <img src="{{ image | img_url: 'master' }}" alt="{{ block.settings.title }}">
+            <img src="{{ image | image_url }}" alt="{{ block.settings.title }}">
           </div>
       {%- endcase -%}
     </div>
@@ -27,12 +27,12 @@
   <div class="swiper-button-next"></div>
 </div>
 {% schema %}
-  {
+{
   "name": "dtc hero image slider",
   "class": "dtc-hero-image-slider",
   "tag": "section",
   "settings": [
-{
+    {
       "type": "checkbox",
       "id": "loop_slider",
       "label": "Loop slider",
@@ -77,5 +77,5 @@
       "name": "dtc hero image slider"
     }
   ]
-}  
+}
 {% endschema %}

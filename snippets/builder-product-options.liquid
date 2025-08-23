@@ -5,7 +5,7 @@
       <div class='fieldset flex'>
         <div class='legend flex'>
             <div class='legend-label'>
-              {{option.name}}
+              {{ option.name }}
             </div>
         </div>
         <div class='flex flex-col'>
@@ -21,7 +21,7 @@
                 {% when 'large' %}L
                 {% when 'extra large' %}XL
                 {% when 'extra extra large' %}XXL
-                {% else %}{{value}}
+                {% else %}{{ value }}
               {% endcase %}
             {% endcapture %}
 
@@ -53,7 +53,7 @@
 
         </div>
         {% if option.name == 'Size' and sizing_info != blank %}
-            <div class="text-xs">{{sizing_info}}</div>
+            <div class="text-xs">{{ sizing_info }}</div>
           {% endif %}
         </div>
       </div>

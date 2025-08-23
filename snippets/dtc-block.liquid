@@ -22,7 +22,7 @@ endfor
   </h3>
   {% if related_product.featured_image != blank %}
     <div class="dtc-product-image-wrapper">
-      <img src="{{ related_product.featured_image | img_url:'800x' }}" alt="{{ related_product.featured_image.alt | escape }}" />
+      <img src="{{ related_product.featured_image | image_url: width: 800 }}" alt="{{ related_product.featured_image.alt | escape }}" />
     </div>
   {% endif %}
   <div class="dtc-product-content-wrapper">

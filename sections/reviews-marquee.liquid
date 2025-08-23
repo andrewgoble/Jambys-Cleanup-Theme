@@ -131,13 +131,13 @@
     </a>
   </div>
   <div
-    id="reviews-marquee-{{section.id}}"
+    id="reviews-marquee-{{ section.id }}"
     class="marquee__container w-full flex relative {% if request.design_mode %}overflow-scroll{% else %}overflow-hidden{% endif %}"
     data-component="marquee"
   >
     <div
       class="marquee__row marquee__row--left-offset max-w-none flex"
-      data-js-duration="{{section.settings.animation_duration}}"
+      data-js-duration="{{ section.settings.animation_duration }}"
     >
       {% capture grid_content %}
       <div class="reviews-grid max-w-none overflow-visible" style="
@@ -147,71 +147,71 @@
         grid-template-columns: repeat(36, 60px);
         grid-template-rows: repeat(20, 25px);">
         {% for block in section.blocks %}
-          <div class="quote {{block.settings.justified_1}} {{block.settings.alignment_1}}
+          <div class="quote {{ block.settings.justified_1 }} {{ block.settings.alignment_1 }}
             {% if block.settings.points_right_1 %}quote--points-right{% endif %}
-            {{block.settings.classname_1}}"
-            {{block.settings.attributes_1}}>
-            <div class="quote__bubble {{block.settings.bubble_classname_1}} relative overflow-visible rounded-full
+            {{ block.settings.classname_1 }}"
+            {{ block.settings.attributes_1 }}>
+            <div class="quote__bubble {{ block.settings.bubble_classname_1 }} relative overflow-visible rounded-full
               bg-white {% if block.settings.is_blank_1 %}w-32 h-16 opacity-50{% endif %}"
               style="padding: 18px 18px 12px 18px;
                 {% comment %} max-width: {% if block.settings.title.size < 25 %}140px{% elsif block.settings.title.size < 45 %}160px;{% else %}80%{% endif %}; {% endcomment %}
               ">
               {% unless block.settings.is_blank_1 %}
                 <div class="text-center mx-auto">
-                  <div class="text-xl">{{block.settings.title_1}}</div>
-                  <div class="text-sm opacity-50">{{block.settings.name_1}}</div>
+                  <div class="text-xl">{{ block.settings.title_1 }}</div>
+                  <div class="text-sm opacity-50">{{ block.settings.name_1 }}</div>
                 </div>
               {% endunless %}
             </div>
           </div>
-          <div class="quote {{block.settings.justified_1}} {{block.settings.alignment_1}}
+          <div class="quote {{ block.settings.justified_1 }} {{ block.settings.alignment_1 }}
             {% if block.settings.points_right_1 %}quote--points-right{% endif %}
-            {{block.settings.classname_1}}"
-            {{block.settings.attributes_1}}>
-            <div class="quote__bubble {{block.settings.bubble_classname_1}} relative overflow-visible rounded-full
+            {{ block.settings.classname_1 }}"
+            {{ block.settings.attributes_1 }}>
+            <div class="quote__bubble {{ block.settings.bubble_classname_1 }} relative overflow-visible rounded-full
               bg-white {% if block.settings.is_blank_1 %}w-32 h-16 opacity-50{% endif %}"
               style="padding: 18px 18px 12px 18px;
                 {% comment %} max-width: {% if block.settings.title.size < 25 %}140px{% elsif block.settings.title.size < 45 %}160px;{% else %}80%{% endif %}; {% endcomment %}
               ">
               {% unless block.settings.is_blank_1 %}
                 <div class="text-center mx-auto">
-                  <div class="text-xl">{{block.settings.title_1}}</div>
-                  <div class="text-sm opacity-50">{{block.settings.name_1}}</div>
+                  <div class="text-xl">{{ block.settings.title_1 }}</div>
+                  <div class="text-sm opacity-50">{{ block.settings.name_1 }}</div>
                 </div>
               {% endunless %}
             </div>
           </div>
           {% unless forloop.last %}
-          <div class="quote {{block.settings.justified_2}} {{block.settings.alignment_2}}
+          <div class="quote {{ block.settings.justified_2 }} {{ block.settings.alignment_2 }}
             {% if block.settings.points_right_2 %}quote--points-right{% endif %}
-            {{block.settings.classname_2}}"
-            {{block.settings.attributes_2}}>
-            <div class="quote__bubble {{block.settings.bubble_classname_2}} relative overflow-visible rounded-full
+            {{ block.settings.classname_2 }}"
+            {{ block.settings.attributes_2 }}>
+            <div class="quote__bubble {{ block.settings.bubble_classname_2 }} relative overflow-visible rounded-full
               bg-white {% if block.settings.is_blank_2 %}w-32 h-16 opacity-50{% endif %}"
               style="padding: 18px 18px 12px 18px;
                 {% comment %} max-width: {% if block.settings.title.size < 25 %}140px{% elsif block.settings.title.size < 45 %}160px;{% else %}80%{% endif %}; {% endcomment %}
               ">
               {% unless block.settings.is_blank_2 %}
                 <div class="text-center mx-auto">
-                  <div class="text-xl">{{block.settings.title_2}}</div>
-                  <div class="text-sm opacity-50">{{block.settings.name_2}}</div>
+                  <div class="text-xl">{{ block.settings.title_2 }}</div>
+                  <div class="text-sm opacity-50">{{ block.settings.name_2 }}</div>
                 </div>
               {% endunless %}
             </div>
           </div>
-          <div class="quote {{block.settings.justified_2}} {{block.settings.alignment_2}}
+          <div class="quote {{ block.settings.justified_2 }} {{ block.settings.alignment_2 }}
             {% if block.settings.points_right_2 %}quote--points-right{% endif %}
-            {{block.settings.classname_2}}"
-            {{block.settings.attributes_2}}>
-            <div class="quote__bubble {{block.settings.bubble_classname_2}} relative overflow-visible rounded-full
+            {{ block.settings.classname_2 }}"
+            {{ block.settings.attributes_2 }}>
+            <div class="quote__bubble {{ block.settings.bubble_classname_2 }} relative overflow-visible rounded-full
               bg-white {% if block.settings.is_blank_2 %}w-32 h-16 opacity-50{% endif %}"
               style="padding: 18px 18px 12px 18px;
                 {% comment %} max-width: {% if block.settings.title.size < 25 %}140px{% elsif block.settings.title.size < 45 %}160px;{% else %}80%{% endif %}; {% endcomment %}
               ">
               {% unless block.settings.is_blank__2 %}
                 <div class="text-center mx-auto">
-                  <div class="text-xl">{{block.settings.title_2}}</div>
-                  <div class="text-sm opacity-50">{{block.settings.name_2}}</div>
+                  <div class="text-xl">{{ block.settings.title_2 }}</div>
+                  <div class="text-sm opacity-50">{{ block.settings.name_2 }}</div>
                 </div>
               {% endunless %}
             </div>
@@ -232,9 +232,9 @@
 {% endif %}
 {% assign animDuration = animDuration | append: 's' %}
 <style>
-  #reviews-marquee-{{section.id}} .marquee__row {
-    -webkit-animation-duration: {{animDuration}};
-    animation-duration: {{animDuration}};
+  #reviews-marquee-{{ section.id }} .marquee__row {
+    -webkit-animation-duration: {{ animDuration }};
+    animation-duration: {{ animDuration }};
   }
   .quote {
     padding-left: 25px;
@@ -415,7 +415,6 @@
           "type": "header",
           "content": "Review 2"
         },
-
         {
           "id": "is_blank_2",
           "type": "checkbox",

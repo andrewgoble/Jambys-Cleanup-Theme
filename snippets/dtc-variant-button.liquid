@@ -11,7 +11,7 @@
           class="dtc-variant{% unless variant.available %} dtc-unavailable{% endunless %}{% if variant.id == current_variant.id %} dtc-selected{% endif %}"
           data-id="{{ variant.id }}"
           data-price="{{ variant.price }}"
-          data-compare-at-price="{{ variant.compare_at_price | default:variant.price }}"
+          data-compare-at-price="{{ variant.compare_at_price | default: variant.price }}"
           data-value="XXS">{% render 'dtc-done-icon' %}XXS</button>
         {% when 'extra small' %}
         <button
@@ -19,7 +19,7 @@
           class="dtc-variant{% unless variant.available %} dtc-unavailable{% endunless %}{% if variant.id == current_variant.id %} dtc-selected{% endif %}"
           data-id="{{ variant.id }}"
           data-price="{{ variant.price }}"
-          data-compare-at-price="{{ variant.compare_at_price | default:variant.price }}"
+          data-compare-at-price="{{ variant.compare_at_price | default: variant.price }}"
           data-value="XS">{% render 'dtc-done-icon' %}XS</button>
 
         {% when 'small' %}
@@ -28,7 +28,7 @@
           class="dtc-variant{% unless variant.available %} dtc-unavailable{% endunless %}{% if variant.id == current_variant.id %} dtc-selected{% endif %}"
           data-id="{{ variant.id }}"
           data-price="{{ variant.price }}"
-          data-compare-at-price="{{ variant.compare_at_price | default:variant.price }}"
+          data-compare-at-price="{{ variant.compare_at_price | default: variant.price }}"
           data-value="S">{% render 'dtc-done-icon' %}S</button>
 
         {% when 'medium' %}
@@ -37,7 +37,7 @@
           class="dtc-variant{% unless variant.available %} dtc-unavailable{% endunless %}{% if variant.id == current_variant.id %} dtc-selected{% endif %}"
           data-id="{{ variant.id }}"
           data-price="{{ variant.price }}"
-          data-compare-at-price="{{ variant.compare_at_price | default:variant.price }}"
+          data-compare-at-price="{{ variant.compare_at_price | default: variant.price }}"
           data-value="M">{% render 'dtc-done-icon' %}M</button>
 
         {% when 'large' %}
@@ -46,7 +46,7 @@
           class="dtc-variant{% unless variant.available %} dtc-unavailable{% endunless %}{% if variant.id == current_variant.id %} dtc-selected{% endif %}"
           data-id="{{ variant.id }}"
           data-price="{{ variant.price }}"
-          data-compare-at-price="{{ variant.compare_at_price | default:variant.price }}"
+          data-compare-at-price="{{ variant.compare_at_price | default: variant.price }}"
           data-value="L">{% render 'dtc-done-icon' %}L</button>
 
         {% when 'extra large' %}
@@ -55,7 +55,7 @@
           class="dtc-variant{% unless variant.available %} dtc-unavailable{% endunless %}{% if variant.id == current_variant.id %} dtc-selected{% endif %}"
           data-id="{{ variant.id }}"
           data-price="{{ variant.price }}"
-          data-compare-at-price="{{ variant.compare_at_price | default:variant.price }}"
+          data-compare-at-price="{{ variant.compare_at_price | default: variant.price }}"
           data-value="XL">{% render 'dtc-done-icon' %}XL</button>
 
         {% when 'extra extra large' %}
@@ -64,7 +64,7 @@
           class="dtc-variant{% unless variant.available %} dtc-unavailable{% endunless %}{% if variant.id == current_variant.id %} dtc-selected{% endif %}"
           data-id="{{ variant.id }}"
           data-price="{{ variant.price }}"
-          data-compare-at-price="{{ variant.compare_at_price | default:variant.price }}"
+          data-compare-at-price="{{ variant.compare_at_price | default: variant.price }}"
           data-value="XXL">{% render 'dtc-done-icon' %}XXL</button>
 
       {% else %}
@@ -73,7 +73,7 @@
           class="dtc-variant{% unless variant.available %} dtc-unavailable{% endunless %}{% if variant.id == current_variant.id %} dtc-selected{% endif %}"
           data-id="{{ variant.id }}"
           data-price="{{ variant.price }}"
-          data-compare-at-price="{{ variant.compare_at_price | default:variant.price }}"
+          data-compare-at-price="{{ variant.compare_at_price | default: variant.price }}"
           data-value="{{ variant.title }}">{% render 'dtc-done-icon' %}{{ variant.title }}</button>
       {% endcase %}
     {% endif %}

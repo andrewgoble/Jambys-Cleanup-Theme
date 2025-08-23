@@ -99,118 +99,118 @@
 {% endif %}
 
 {% schema %}
-  {
-    "name": "Popup",
-    "class": "section-popup",
-    "settings": [
-      {
-        "type": "select",
-        "id": "mode",
-        "label": "Display mode",
-        "default": "disabled",
-        "options": [
-          {
-            "value": "enabled",
-            "label": "Enabled"
-          },
-          {
-            "value": "testing",
-            "label": "Test mode"
-          },
-          {
-            "value": "disabled",
-            "label": "Disabled"
-          }
-        ],
-        "info": "Test mode displays your popup each time even after dismissing it. Switch to Enabled once you are happy with how your popup looks."
-      },
-      {
-        "type": "range",
-        "id": "popup_delay_seconds",
-        "label": "Delay",
-        "info": "Delay is disabled in theme editor for visibility",
-        "default": 5,
-        "min": 2,
-        "max": 60,
-        "step": 1,
-        "unit": "sec"
-      },
-      {
-        "type": "range",
-        "id": "popup_dismiss_for_days",
-        "label": "Frequency",
-        "default": 30,
-        "info": "Number of days before a dismissed popup reappears",
-        "min": 2,
-        "max": 30,
-        "step": 1,
-        "unit": "day"
-      },
-      {
-        "type": "select",
-        "id": "position",
-        "label": "Position",
-        "default": "center",
-        "options": [
-          {
-            "value": "center",
-            "label": "Center"
-          },
-          {
-            "value": "bottom-left",
-            "label": "Bottom left"
-          },
-          {
-            "value": "bottom-right",
-            "label": "Bottom right"
-          }
-        ]
-      },
-      {
-        "type": "header",
-        "content": "Content"
-      },
-      {
-        "type": "text",
-        "id": "title",
-        "label": "Heading",
-        "default": "Sign up and save"
-      },
-      {
-        "type": "richtext",
-        "id": "text",
-        "label": "Text",
-        "default": "<p>Entice customers to sign up for your mailing list with discounts or exclusive offers.</p>"
-      },
-      {
-        "type": "image_picker",
-        "id": "image",
-        "label": "Image"
-      },
-      {
-        "type": "header",
-        "content": "Newsletter"
-      },
-      {
-        "type": "paragraph",
-        "content": "Customers who subscribe will have their email address added to the 'accepts marketing' [customer list](/admin/customers?query=&accepts_marketing=1)."
-      },
-      {
-        "type": "checkbox",
-        "id": "show_newsletter",
-        "label": "Show newsletter signup",
-        "default": true
-      },
-      {
-        "type": "header",
-        "content": "Social media"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_social_icons",
-        "label": "Show social media icons",
-        "default": true
-      }
-    ]
-  }
+{
+  "name": "Popup",
+  "class": "section-popup",
+  "settings": [
+    {
+      "type": "select",
+      "id": "mode",
+      "label": "Display mode",
+      "default": "disabled",
+      "options": [
+        {
+          "value": "enabled",
+          "label": "Enabled"
+        },
+        {
+          "value": "testing",
+          "label": "Test mode"
+        },
+        {
+          "value": "disabled",
+          "label": "Disabled"
+        }
+      ],
+      "info": "Test mode displays your popup each time even after dismissing it. Switch to Enabled once you are happy with how your popup looks."
+    },
+    {
+      "type": "range",
+      "id": "popup_delay_seconds",
+      "label": "Delay",
+      "info": "Delay is disabled in theme editor for visibility",
+      "default": 5,
+      "min": 2,
+      "max": 60,
+      "step": 1,
+      "unit": "sec"
+    },
+    {
+      "type": "range",
+      "id": "popup_dismiss_for_days",
+      "label": "Frequency",
+      "default": 30,
+      "info": "Number of days before a dismissed popup reappears",
+      "min": 2,
+      "max": 30,
+      "step": 1,
+      "unit": "day"
+    },
+    {
+      "type": "select",
+      "id": "position",
+      "label": "Position",
+      "default": "center",
+      "options": [
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "bottom-left",
+          "label": "Bottom left"
+        },
+        {
+          "value": "bottom-right",
+          "label": "Bottom right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Sign up and save"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Entice customers to sign up for your mailing list with discounts or exclusive offers.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "header",
+      "content": "Newsletter"
+    },
+    {
+      "type": "paragraph",
+      "content": "Customers who subscribe will have their email address added to the 'accepts marketing' [customer list](/admin/customers?query=&accepts_marketing=1)."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_newsletter",
+      "label": "Show newsletter signup",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Social media"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social_icons",
+      "label": "Show social media icons",
+      "default": true
+    }
+  ]
+}
 {% endschema %}

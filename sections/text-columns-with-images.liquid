@@ -6,7 +6,7 @@
   {% endunless %}
 
   .section-id-{{ section.id }} {
-     font-weight: {{ section.settings.font_weight}};
+     font-weight: {{ section.settings.font_weight }};
      font-size: {{ section.settings.font_size }}px;
   }
 
@@ -29,9 +29,9 @@
 {% if product.type == 'JamTee' %}
   {% assign product_type = 'JamTees' | handleize %}
 {% endif %}
-{% assign has_product_switcher = false %}
+
 {% if product.type == 'Double Cozy Cloak' or product.type == 'Cozy Cloak' %}
-  {% assign has_product_switcher = true %}
+  
 {% endif %}
 {% assign collection = collections[product_type] %}
 
@@ -108,7 +108,7 @@
           {% endif %}
 
           {% if metafield_text != blank %}
-          <div class="text-column__text rte align-{{ section.settings.text_alignment }}">{{  metafield_text }}</div>
+          <div class="text-column__text rte align-{{ section.settings.text_alignment }}">{{ metafield_text }}</div>
           {% elsif block.settings.text != blank %}
             <div class="text-column__text rte align-{{ section.settings.text_alignment }}">{{ block.settings.text }}</div>
           {% endif %}

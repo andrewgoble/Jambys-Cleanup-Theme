@@ -5,7 +5,7 @@
       <div class="dtc-shop-by-subtype_box{% if block.settings.label contains collection.title %} active{% endif %}">
         <a href="{{ block.settings.link }}">
           <img 
-              src="{{ block.settings.image | img_url: '300x' }}" 
+              src="{{ block.settings.image | image_url: width: 300 }}" 
               alt="{{ block.settings.label }}"
               width="150"
               height="150"
@@ -21,7 +21,9 @@
 {% schema %}
 {
   "name": "DTC Shop By Subtype",
-  "settings": [],
+  "settings": [
+
+  ],
   "class": "dtc-shop-by-subtype",
   "blocks": [
     {

@@ -215,9 +215,9 @@
           {% if product.type == 'JamTee' %}
             {% assign product_type = 'JamTees' | handleize %}
           {% endif %}
-          {% assign has_product_switcher = false %}
+          
           {% if product.type == 'Double Cozy Cloak' or product.type == 'Cozy Cloak' %}
-            {% assign has_product_switcher = true %}
+            
           {% endif %}
           {% assign collection = collections[product_type] %}
         {% endif %}
@@ -238,180 +238,192 @@
 
 
 {% schema %}
-  {
-    "name": "Featured collection",
-    "class": "section-featured-collection",
-    "settings": [
-      {
-        "type": "text",
-        "id": "title",
-        "label": "Heading",
-        "default": "Featured collection"
-      },
-      {
-        "type": "select",
-        "id": "title_alignment",
-        "label": "Heading Alignment",
-        "options": [
-          {
-            "value": "left",
-            "label": "Left"
-          },
-          {
-            "value": "center",
-            "label": "Center"
-          },
-          {
-            "value": "right",
-            "label": "right"
-          }
-        ],
-        "default": "left"
-      },
-      {
-        "type": "textarea",
-        "id": "body_text",
-        "label": "Body Text"
-      },
-      {
-        "type": "collection",
-        "id": "collection",
-        "label": "Collection"
-      },
-      {
-        "type": "checkbox",
-        "id": "product_type_collection",
-        "label": "Use product type as collection",
-        "info": "Only works on the product template",
-        "default": false
-      },
-      {
-        "type": "checkbox",
-        "id": "related_products_metafield",
-        "label": "Use related products metafield",
-        "info": "Only works on the product template",
-        "default": false
-      },
-      {
-        "type": "select",
-        "id": "layout",
-        "label": "Layout",
-        "options": [
-          {
-            "value": "columns",
-            "label": "Collage"
-          },
-          {
-            "value": "rows",
-            "label": "Grid"
-          },
-          {
-            "value": "carousel",
-            "label": "Carousel"
-          }
-        ],
-        "default": "rows",
-        "info": "Collage will only work when the 'Image shape' is set to Natural - in Products / Image shape"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_vendor",
-        "label": "Show product vendor",
-        "default": false
-      },
-      {
-        "type": "range",
-        "id": "grid",
-        "label": "Desktop products per row",
-        "min": 2,
-        "max": 4,
-        "default": 3
-      },
-      {
-        "type": "range",
-        "id": "rows",
-        "label": "Rows",
-        "min": 1,
-        "max": 4,
-        "default": 2,
-        "info": "Does not apply to carousel layout"
-      },
-      {
-        "type": "select",
-        "id": "grid_mobile",
-        "label": "Mobile products per row",
-        "options": [
-          {
-            "value": "1",
-            "label": "1"
-          },
-          {
-            "value": "2",
-            "label": "2"
-          }
-        ],
-        "default": "2"
-      },
-      {
-        "type": "number",
-        "id": "max_products",
-        "label": "Maximum product count"
-      },
-      {
-        "type": "checkbox",
-        "id": "hide_swatches",
-        "label": "Hide color swatches",
-        "default": false
-      },
-      {
-        "type": "checkbox",
-        "id": "alternate_bg_color",
-        "label": "Use alternate section color",
-        "default": false
-      },
-      {
-        "type": "checkbox",
-        "id": "show_view_all",
-        "label": "Show 'View all' link",
-        "default": true
-      },
-      {
-        "type": "select",
-        "id": "wave",
-        "label": "Wave",
-        "options": [
-          {
-            "value": "none",
-            "label": "None"
-          },
-          {
-            "value": "top",
-            "label": "Top"
-          },
-          {
-            "value": "bottom",
-            "label": "Bottom"
-          },
-          {
-            "value": "both",
-            "label": "Both"
-          }
-        ],
-        "default": "none"
-      },
-      {
-        "id": "color_bg",
-        "type": "color",
-        "label": "Background color",
-        "default": "#ffffff"
+{
+  "name": "Featured collection",
+  "class": "section-featured-collection",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Featured collection"
+    },
+    {
+      "type": "select",
+      "id": "title_alignment",
+      "label": "Heading Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "textarea",
+      "id": "body_text",
+      "label": "Body Text"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "checkbox",
+      "id": "product_type_collection",
+      "label": "Use product type as collection",
+      "info": "Only works on the product template",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "related_products_metafield",
+      "label": "Use related products metafield",
+      "info": "Only works on the product template",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "columns",
+          "label": "Collage"
+        },
+        {
+          "value": "rows",
+          "label": "Grid"
+        },
+        {
+          "value": "carousel",
+          "label": "Carousel"
+        }
+      ],
+      "default": "rows",
+      "info": "Collage will only work when the 'Image shape' is set to Natural - in Products / Image shape"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show product vendor",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "grid",
+      "label": "Desktop products per row",
+      "min": 2,
+      "max": 4,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "rows",
+      "label": "Rows",
+      "min": 1,
+      "max": 4,
+      "default": 2,
+      "info": "Does not apply to carousel layout"
+    },
+    {
+      "type": "select",
+      "id": "grid_mobile",
+      "label": "Mobile products per row",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "number",
+      "id": "max_products",
+      "label": "Maximum product count"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_swatches",
+      "label": "Hide color swatches",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "alternate_bg_color",
+      "label": "Use alternate section color",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show 'View all' link",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "wave",
+      "label": "Wave",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "id": "color_bg",
+      "type": "color",
+      "label": "Background color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured collection",
+      "settings": {
       }
-    ],
-    "presets": [
-      {
-        "name": "Featured collection",
-        "settings": {}
-      }
-    ],
-    "templates": ["article", "index", "page", "product", "collection", "blog", "list-collections", "search", "404", "cart"]
-  }
+    }
+  ],
+  "templates": [
+    "article",
+    "index",
+    "page",
+    "product",
+    "collection",
+    "blog",
+    "list-collections",
+    "search",
+    "404",
+    "cart"
+  ]
+}
 {% endschema %}

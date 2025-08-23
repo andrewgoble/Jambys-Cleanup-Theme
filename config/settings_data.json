@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "current": {
     "footer_background": "#f3f4f9",
@@ -1112,7 +1103,8 @@
           "swatch_rEJpre",
           "swatch_W46YFg"
         ],
-        "settings": {}
+        "settings": {
+        }
       },
       "color-swatches-2": {
         "type": "color-swatches-2",
@@ -1592,7 +1584,8 @@
           "swatch_X94zrL",
           "swatch_3ti9rR"
         ],
-        "settings": {}
+        "settings": {
+        }
       },
       "reviews-marquee": {
         "type": "reviews-marquee",
@@ -1961,7 +1954,8 @@
           "f13795db-dd6e-4d19-a867-54d0c51079b3",
           "c3e10d8d-85cf-4797-8c1b-2380b49ee521"
         ],
-        "settings": {}
+        "settings": {
+        }
       },
       "color-swatches-3": {
         "type": "color-swatches-3",
@@ -2071,15 +2065,19 @@
           "0187e9e8-31c6-4ed2-b07c-11ed7d7bb0a5",
           "5fec84f2-9e7b-465f-8ef0-eabdd65e1cae"
         ],
-        "settings": {}
+        "settings": {
+        }
       }
     },
-    "content_for_index": [],
+    "content_for_index": [
+
+    ],
     "blocks": {
       "855628211100114053": {
         "type": "shopify://apps/klaviyo-email-marketing-sms/blocks/klaviyo-onsite-embed/2632fe16-c075-4321-a88b-50b567f42507",
         "disabled": false,
-        "settings": {}
+        "settings": {
+        }
       },
       "16017602894386113438": {
         "type": "shopify://apps/junip-product-reviews-ugc/blocks/junip-store-key/dc14f5a8-ed15-41b1-ad08-cfba23f9789b",
@@ -2091,17 +2089,20 @@
       "10384935893930344104": {
         "type": "shopify://apps/seoant-broken-link-redirect/blocks/brokenlink-404/cc7b1996-e567-42d0-8862-356092041863",
         "disabled": false,
-        "settings": {}
+        "settings": {
+        }
       },
       "15685250022964305326": {
         "type": "shopify://apps/elevar-conversion-tracking/blocks/dataLayerEmbed/bc30ab68-b15c-4311-811f-8ef485877ad6",
         "disabled": false,
-        "settings": {}
+        "settings": {
+        }
       },
       "1877152918344802950": {
         "type": "shopify://apps/intelligems-a-b-testing/blocks/intelligems-script/fa83b64c-0c77-4c0c-b4b2-b94b42f5ef19",
         "disabled": true,
-        "settings": {}
+        "settings": {
+        }
       },
       "15683396631634586217": {
         "type": "shopify://apps/inbox/blocks/chat/841fc607-4181-4ad1-842d-e24d7f8bad6b",
@@ -2118,12 +2119,14 @@
       "17676059084223943535": {
         "type": "shopify://apps/triplewhale/blocks/triple_pixel_snippet/483d496b-3f1a-4609-aea7-8eee3b6b7a2a",
         "disabled": false,
-        "settings": {}
+        "settings": {
+        }
       },
       "10641372206048101839": {
         "type": "shopify://apps/rebuy-personalization-engine/blocks/rebuy-global-embed/a26ae9b9-933b-40bf-bbc6-bf1220bbc4dc",
         "disabled": false,
-        "settings": {}
+        "settings": {
+        }
       },
       "733389323033596483": {
         "type": "shopify://apps/okendo/blocks/theme-settings/bb689e69-ea70-4661-8fb7-ad24a2e23c29",
@@ -2135,17 +2138,20 @@
       "11560147490181472608": {
         "type": "shopify://apps/rivo-loyalty-rewards-referrals/blocks/app-embed/580e9665-b2cd-4dbc-b6ba-6445ac9e6871",
         "disabled": false,
-        "settings": {}
+        "settings": {
+        }
       },
       "depict_brand_features": {
         "type": "shopify://apps/depict/blocks/depict_brand_features/ad5c7d1f-ddfb-424b-b936-7f08c4544f6b",
         "disabled": false,
-        "settings": {}
+        "settings": {
+        }
       },
       "10840395464443086010": {
         "type": "shopify://apps/alia/blocks/customer-app-frame/51f1d398-3e41-44da-b81e-defd5804b292",
         "disabled": false,
-        "settings": {}
+        "settings": {
+        }
       }
     }
   },
@@ -2268,15 +2274,18 @@
             },
             "1601536195594": {
               "type": "menu",
-              "settings": {}
+              "settings": {
+              }
             },
             "1601536198541": {
               "type": "menu",
-              "settings": {}
+              "settings": {
+              }
             },
             "1601536182566": {
               "type": "newsletter",
-              "settings": {}
+              "settings": {
+              }
             }
           },
           "block_order": [
@@ -2500,15 +2509,18 @@
             },
             "1599643486667": {
               "type": "menu",
-              "settings": {}
+              "settings": {
+              }
             },
             "1599643512956": {
               "type": "menu",
-              "settings": {}
+              "settings": {
+              }
             },
             "1599643553849": {
               "type": "newsletter",
-              "settings": {}
+              "settings": {
+              }
             }
           },
           "block_order": [
@@ -2640,15 +2652,18 @@
             },
             "1601020687263": {
               "type": "menu",
-              "settings": {}
+              "settings": {
+              }
             },
             "1601022030378": {
               "type": "menu",
-              "settings": {}
+              "settings": {
+              }
             },
             "1601021503013": {
               "type": "newsletter",
-              "settings": {}
+              "settings": {
+              }
             }
           },
           "block_order": [

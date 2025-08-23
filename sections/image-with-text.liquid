@@ -25,7 +25,7 @@
     }
 
     .section-id-{{ section.id }}.lazy-background {
-      background-image: url("{{ section.settings.bg_image | img_url: '2000x' }}");
+      background-image: url("{{ section.settings.bg_image | image_url: width: 2000 }}");
     }
 
     #section-id-{{ section.id }} h2 {
@@ -46,7 +46,7 @@
   {% endunless %}
 
   .section-id-{{ section.id }} {
-     font-weight: {{ section.settings.font_weight}};
+     font-weight: {{ section.settings.font_weight }};
      font-size: {{ section.settings.font_size }}px;
   }
 
@@ -155,7 +155,7 @@
             style="max-width: {{ section.settings.image.width }}px; max-height: {{ section.settings.image.height }}px">
           <div class="rimage-wrapper" style="padding-top:{{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%">
             <noscript>
-              <img src="{{ section.settings.image | img_url: '1024x1024' }}" alt="{{ section.settings.image.alt | escape }}" class="rimage__image">
+              <img src="{{ section.settings.image | image_url: width: 1024, height: 1024 }}" alt="{{ section.settings.image.alt | escape }}" class="rimage__image">
             </noscript>
           </div>
         </div>
@@ -255,285 +255,286 @@
 
 
 {% schema %}
-  {
-    "name": "Media with text",
-    "class": "section-image-with-text",
-    "settings": [
-      {
-        "type": "header",
-        "content": "Text"
-      },
-      {
-        "type": "text",
-        "id": "subheading",
-        "label": "Subheading"
-      },
-      {
-        "type": "textarea",
-        "id": "title",
-        "label": "Heading",
-        "default": "Media with text"
-      },
-      {
-        "type": "checkbox",
-        "id": "title_above_image_mobile",
-        "label": "Show title above image on mobile"
-      },
-      {
-        "type": "range",
-        "id": "title_size",
-        "min": 16,
-        "max": 100,
-        "step": 2,
-        "unit": "px",
-        "label": "Heading text size",
-        "default": 28
-      },
-      {
-        "type": "richtext",
-        "id": "text",
-        "label": "Text",
-        "default": "<p>Use this text to share information about your store with your customers. Describe product, share announcements, or welcome customers to your store.</p>"
-      },
-      {
-        "type": "text",
-        "id": "button_label",
-        "label": "Button"
-      },
-      {
-        "type": "url",
-        "id": "button_link",
-        "label": "Button link"
-      },
-      {
-        "type": "checkbox",
-        "id": "button_arrowless",
-        "label": "Hide button arrow?"
-      },
-      {
-        "type": "select",
-        "id": "text_alignment",
-        "label": "Text alignment",
-        "default": "center",
-        "options": [
-          {
-            "label": "Left",
-            "value": "left"
-          },
-          {
-            "label": "Center",
-            "value": "center"
-          },
-          {
-            "label": "Right",
-            "value": "right"
-          }
-        ]
-      },
-      {
-        "type": "range",
-        "id": "text_width",
-        "min": 30,
-        "max": 70,
-        "step": 1,
-        "unit": "%",
-        "label": "Text width",
-        "default": 50
-      },
-      {
-        "type": "select",
-        "id": "button_style",
-        "label": "Button style",
-        "default": "auto",
-        "options": [
-          {
-            "label": "Button - primary",
-            "value": "primary"
-          },
-          {
-            "label": "Button - secondary",
-            "value": "secondary"
-          },
-          {
-            "label": "Button - auto",
-            "value": "auto"
-          },
-          {
-            "label": "Link",
-            "value": "link"
-          }
-        ]
-      },
-      {
-        "type": "header",
-        "content": "Media"
-      },
-      {
-        "type": "image_picker",
-        "id": "image",
-        "label": "Image",
-        "info": "If you're using an mp4 video, it's recommended to also add an image, which will be shown while the video loads"
-      },
-      {
-        "id": "video",
-        "type": "text",
-        "label": "MP4 video URL",
-        "info": "E.g. https://example.com/video.mp4 - will not work with YouTube or Vimeo. [Learn more](https://cleancanvas.co.uk/support/showcase/sections/#inner-anchor-5)"
-      },
-      {
-        "type": "range",
-        "id": "image_width",
-        "min": 40,
-        "max": 100,
-        "step": 1,
-        "unit": "%",
-        "label": "Media scale",
-        "default": 100
-      },
-      {
-        "type": "select",
-        "id": "image_position",
-        "label": "Media position",
-        "default": "right",
-        "options": [
-          {
-            "value": "right",
-            "label": "Right"
-          },
-          {
-            "value": "left",
-            "label": "Left"
-          }
-        ]
-      },
-      {
-        "type": "select",
-        "id": "media_size",
-        "label": "Media size",
-        "options": [
-          {
-            "value": "cover",
-            "label": "Fill"
-          },
-          {
-            "value": "contain",
-            "label": "Natural"
-          }
-        ],
-        "default": "cover"
-      },
-      {
-        "type": "header",
-        "content": "Style"
-      },
-      {
-        "type": "radio",
-        "id": "color_scheme",
-        "label": "Color scheme",
-        "default": "standard",
-        "options": [
-          {
-            "value": "standard",
-            "label": "Standard"
-          },
-          {
-            "value": "alt",
-            "label": "Alternate colors"
-          },
-          {
-            "value": "custom",
-            "label": "Custom colors"
-          }
-        ]
-      },
-      {
-        "type": "color",
-        "id": "color_bg",
-        "label": "Custom background color"
-      },
-      {
-        "type": "color",
-        "id": "color_text",
-        "label": "Custom text color"
-      },
-      {
-        "type": "image_picker",
-        "id": "bg_image",
-        "label": "Background Image"
-      },
-      {
-        "type": "range",
-        "id": "font_size",
-        "min": 12,
-        "max": 24,
-        "step": 1,
-        "unit": "px",
-        "label": "Body font size",
-        "default": 18
-      },
-      {
-        "type": "range",
-        "id": "font_weight",
-        "min": 100,
-        "max": 900,
-        "step": 100,
-        "label": "Body font weight",
-        "default": 600
-      },
-      {
-        "type": "select",
-        "id": "wave",
-        "label": "Wave",
-        "options": [
-          {
-            "value": "none",
-            "label": "None"
-          },
-          {
-            "value": "top",
-            "label": "Top"
-          },
-          {
-            "value": "bottom",
-            "label": "Bottom"
-          },
-          {
-            "value": "both",
-            "label": "Both"
-          }
-        ],
-        "default": "none"
-      },
-      {
-        "type": "text",
-        "id": "custom_bullet_point_icon",
-        "label": "Custom bullet point icon",
-        "info": "Enter the URL of an SVG or PNG uploaded to Shopify."
+{
+  "name": "Media with text",
+  "class": "section-image-with-text",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Heading",
+      "default": "Media with text"
+    },
+    {
+      "type": "checkbox",
+      "id": "title_above_image_mobile",
+      "label": "Show title above image on mobile"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 16,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading text size",
+      "default": 28
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Use this text to share information about your store with your customers. Describe product, share announcements, or welcome customers to your store.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_arrowless",
+      "label": "Hide button arrow?"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "default": "center",
+      "options": [
+        {
+          "label": "Left",
+          "value": "left"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "right"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "text_width",
+      "min": 30,
+      "max": 70,
+      "step": 1,
+      "unit": "%",
+      "label": "Text width",
+      "default": 50
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "default": "auto",
+      "options": [
+        {
+          "label": "Button - primary",
+          "value": "primary"
+        },
+        {
+          "label": "Button - secondary",
+          "value": "secondary"
+        },
+        {
+          "label": "Button - auto",
+          "value": "auto"
+        },
+        {
+          "label": "Link",
+          "value": "link"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "If you're using an mp4 video, it's recommended to also add an image, which will be shown while the video loads"
+    },
+    {
+      "id": "video",
+      "type": "text",
+      "label": "MP4 video URL",
+      "info": "E.g. https://example.com/video.mp4 - will not work with YouTube or Vimeo. [Learn more](https://cleancanvas.co.uk/support/showcase/sections/#inner-anchor-5)"
+    },
+    {
+      "type": "range",
+      "id": "image_width",
+      "min": 40,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Media scale",
+      "default": 100
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Media position",
+      "default": "right",
+      "options": [
+        {
+          "value": "right",
+          "label": "Right"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "media_size",
+      "label": "Media size",
+      "options": [
+        {
+          "value": "cover",
+          "label": "Fill"
+        },
+        {
+          "value": "contain",
+          "label": "Natural"
+        }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "radio",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "standard",
+      "options": [
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "alt",
+          "label": "Alternate colors"
+        },
+        {
+          "value": "custom",
+          "label": "Custom colors"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "color_bg",
+      "label": "Custom background color"
+    },
+    {
+      "type": "color",
+      "id": "color_text",
+      "label": "Custom text color"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Body font size",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "font_weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "label": "Body font weight",
+      "default": 600
+    },
+    {
+      "type": "select",
+      "id": "wave",
+      "label": "Wave",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "custom_bullet_point_icon",
+      "label": "Custom bullet point icon",
+      "info": "Enter the URL of an SVG or PNG uploaded to Shopify."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "bullet_point",
+      "name": "Bullet Point",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Media with text",
+      "settings": {
       }
-    ],
-    "blocks": [
-      {
-        "type": "bullet_point",
-        "name": "Bullet Point",
-        "settings": [
-          {
-            "type": "textarea",
-            "id": "title",
-            "label": "Title"
-          },
-          {
-            "type": "richtext",
-            "id": "text",
-            "label": "Text"
-          }
-        ]
-      }
-    ],
-    "presets": [
-      {
-        "name": "Media with text",
-        "settings": {}
-      }
-    ]
-  }
+    }
+  ]
+}
 {% endschema %}

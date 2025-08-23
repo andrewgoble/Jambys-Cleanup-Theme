@@ -185,7 +185,7 @@
              data-parent-fit="cover">
           <noscript>
             <div class="rimage-wrapper" style="padding-top:{{ 1 | divided_by: collection.featured_image.aspect_ratio | times: 100 }}%">
-              <img src="{{ collection.featured_image | img_url: '1024x1024' }}" alt="{{ collection.featured_image.alt | escape }}" class="rimage__image">
+              <img src="{{ collection.featured_image | image_url: width: 1024, height: 1024 }}" alt="{{ collection.featured_image.alt | escape }}" class="rimage__image">
             </div>
           </noscript>
         </div>
@@ -259,10 +259,10 @@
     {% assign swatch_blocks = section.blocks | where: 'type', 'filter_swatch' %}
     <style>
       {% for product_type_block in icon_blocks %}
-        .{{ product_type_block.settings.product_type | downcase | escape | replace: " ", "-"| replace:"+","\\+" }} {
-          order: {{forloop.index0}}
+        .{{ product_type_block.settings.product_type | downcase | escape | replace: " ", "-" | replace: "+", "\\+" }} {
+          order: {{ forloop.index0 }}
         }
-      {% endfor%}
+      {% endfor %}
     </style>
     
     {% render "top-search-filter",
@@ -300,279 +300,279 @@
 </div>
 
 {% schema %}
-  {
-    "name": "Collection pages",
-    "class": "theme-filter-container",
-    "settings": [
-      {
-        "type": "header",
-        "content": "Header"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_collection_content",
-        "label": "Show collection title/description",
-        "default": true
-      },
-      {
-        "type": "checkbox",
-        "id": "show_collection_image",
-        "label": "Show collection image",
-        "default": true
-      },
-      {
-        "type": "select",
-        "id": "description_position",
-        "label": "Description position",
-        "options": [
-          {
-            "value": "top",
-            "label": "Top"
-          },
-          {
-            "value": "bottom",
-            "label": "Bottom"
-          }
-        ]
-      },
-      {
-        "type": "header",
-        "content": "GRID"
-      },
-      {
-        "type": "select",
-        "id": "layout",
-        "label": "Layout",
-        "options": [
-          {
-            "value": "columns",
-            "label": "Collage"
-          },
-          {
-            "value": "rows",
-            "label": "Grid"
-          }
-        ],
-        "default": "rows",
-        "info": "Collage will only work when the 'Image shape' is set to Natural - in Products / Image shape"
-      },
-      {
-        "type": "range",
-        "id": "grid",
-        "label": "Desktop products per row",
-        "min": 2,
-        "max": 4,
-        "default": 3
-      },
-      {
-        "type": "select",
-        "id": "grid_mobile",
-        "label": "Mobile products per row",
-        "options": [
-          {
-            "value": "1",
-            "label": "1"
-          },
-          {
-            "value": "2",
-            "label": "2"
-          }
-        ],
-        "default": "2"
-      },
-      {
-        "type": "range",
-        "id": "products_per_page",
-        "label": "Products per page",
-        "min": 12,
-        "max": 48,
-        "step": 6,
-        "default": 18
-      },
-      {
-        "type": "checkbox",
-        "id": "enable_infinite_scroll",
-        "label": "Enable infinite-scroll",
-        "default": true,
-        "info": "As visitors scroll down, more products are loaded in automatically."
-      },
-      {
-        "type": "checkbox",
-        "id": "show_vendor",
-        "label": "Show product vendor",
-        "default": false
-      },
-      {
-        "type": "header",
-        "content": "FILTERS"
-      },
-      {
-        "type": "paragraph",
-        "content": "To create the collection filters, go to your [navigation](\/admin\/menus) page."
-      },
-      {
-        "type": "checkbox",
-        "id": "show_filter_counts",
-        "label": "Show filter counts",
-        "default": false
-      },
-      {
-        "type": "checkbox",
-        "id": "show_filter_deadends",
-        "label": "Show filters with zero results",
-        "default": true
-      },
-      {
-        "type": "checkbox",
-        "id": "ajax_products",
-        "label": "Filter and sort without reloading the page",
-        "default": true,
-        "info": "Some apps require this to be disabled"
-      },
-      {
-        "type": "radio",
-        "id": "filter_mode",
-        "label": "Filter mode",
-        "default": "sidebar",
-        "options": [
-          {
-            "value": "none",
-            "label": "None"
-          },
-          {
-            "value": "simple",
-            "label": "Simple"
-          },
-          {
-            "value": "sidebar",
-            "label": "Sidebar"
-          }
-        ],
-        "info": "'Simple' is only recommended if you have a small number of filters. Note, it doesn't allow for multiple options within a filter to be selected and it won't show the price range filter."
-      },
-      {
-        "type": "header",
-        "content": "Sidebar Settings"
-      },
-      {
-        "type": "checkbox",
-        "id": "sticky_sidebar",
-        "label": "Stick the sidebar on scroll",
-        "default": true
-      },
-      {
-        "type": "select",
-        "id": "collapse_filters_method",
-        "label": "Filter group collapse",
-        "default": "none",
-        "options": [
-          {
-            "value": "none",
-            "label": "None"
-          },
-          {
-            "value": "over-6",
-            "label": "Over 6 items"
-          },
-          {
-            "value": "over-12",
-            "label": "Over 12 items"
-          },
-          {
-            "value": "over-18",
-            "label": "Over 18 items"
-          },
-          {
-            "value": "all",
-            "label": "All"
-          }
-        ]
-      },
-      {
-        "type": "checkbox",
-        "id": "collapse_sort_by",
-        "label": "Collapse 'Sort by' filter group",
-        "default": false
-      },
-      {
-        "type": "header",
-        "content": "Sorting"
-      },
-      {
-        "type": "checkbox",
-        "id": "enable_sorting",
-        "label": "Enable sorting",
-        "default": true
-      },
-      {
-        "type": "checkbox",
-        "id": "show_featured_in_sort",
-        "label": "Show 'Featured' option in sorting dropdown",
-        "default": false
-      }
-    ],
-    "blocks": [
-      {
-         "type": "@app"
-      },
-      {
-        "type": "filter_icon",
-        "name": "Filter Icon",
-        "settings": [
-          {
-            "type": "image_picker",
-            "id": "filter_icon_img",
-            "label": "Icon on Product Type Filter"
-          },
-          {
-            "type": "text",
-            "id": "product_type",
-            "label": "Product type this icon will show on"
-          }
-        ]
-      },
-      {
-        "type": "filter_swatch",
-        "name": "Filter Color Swatch",
-        "settings": [
-          {
-            "type": "text",
-            "id": "color_name",
-            "label": "Name of color that swatch will show on"
-          },
-          {
-            "type": "color",
-            "id": "filter_swatch_color",
-            "label": "Color used for swatch"
-          },
-          {
-            "type": "image_picker",
-            "id": "filter_swatch_image",
-            "label": "Image used for swatch"
-          }
-        ]
-      },
-      {
-        "type": "quick_link",
-        "name": "Quick Link",
-        "settings": [
-          {
-            "type": "text",
-            "id": "title",
-            "label": "Link Title"
-          },
-          {
-            "type": "url",
-            "id": "link",
-            "label": "Link"
-          },
-          {
-            "type": "image_picker",
-            "id": "image",
-            "label": "Image"
-          }
-        ]
-      }
-    ]
-  }
+{
+  "name": "Collection pages",
+  "class": "theme-filter-container",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_content",
+      "label": "Show collection title/description",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_image",
+      "label": "Show collection image",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "description_position",
+      "label": "Description position",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "GRID"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "columns",
+          "label": "Collage"
+        },
+        {
+          "value": "rows",
+          "label": "Grid"
+        }
+      ],
+      "default": "rows",
+      "info": "Collage will only work when the 'Image shape' is set to Natural - in Products / Image shape"
+    },
+    {
+      "type": "range",
+      "id": "grid",
+      "label": "Desktop products per row",
+      "min": 2,
+      "max": 4,
+      "default": 3
+    },
+    {
+      "type": "select",
+      "id": "grid_mobile",
+      "label": "Mobile products per row",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 12,
+      "max": 48,
+      "step": 6,
+      "default": 18
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_infinite_scroll",
+      "label": "Enable infinite-scroll",
+      "default": true,
+      "info": "As visitors scroll down, more products are loaded in automatically."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show product vendor",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "FILTERS"
+    },
+    {
+      "type": "paragraph",
+      "content": "To create the collection filters, go to your [navigation](/admin/menus) page."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_filter_counts",
+      "label": "Show filter counts",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_filter_deadends",
+      "label": "Show filters with zero results",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "ajax_products",
+      "label": "Filter and sort without reloading the page",
+      "default": true,
+      "info": "Some apps require this to be disabled"
+    },
+    {
+      "type": "radio",
+      "id": "filter_mode",
+      "label": "Filter mode",
+      "default": "sidebar",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "simple",
+          "label": "Simple"
+        },
+        {
+          "value": "sidebar",
+          "label": "Sidebar"
+        }
+      ],
+      "info": "'Simple' is only recommended if you have a small number of filters. Note, it doesn't allow for multiple options within a filter to be selected and it won't show the price range filter."
+    },
+    {
+      "type": "header",
+      "content": "Sidebar Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_sidebar",
+      "label": "Stick the sidebar on scroll",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "collapse_filters_method",
+      "label": "Filter group collapse",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "over-6",
+          "label": "Over 6 items"
+        },
+        {
+          "value": "over-12",
+          "label": "Over 12 items"
+        },
+        {
+          "value": "over-18",
+          "label": "Over 18 items"
+        },
+        {
+          "value": "all",
+          "label": "All"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "collapse_sort_by",
+      "label": "Collapse 'Sort by' filter group",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Sorting"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "label": "Enable sorting",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_featured_in_sort",
+      "label": "Show 'Featured' option in sorting dropdown",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "filter_icon",
+      "name": "Filter Icon",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "filter_icon_img",
+          "label": "Icon on Product Type Filter"
+        },
+        {
+          "type": "text",
+          "id": "product_type",
+          "label": "Product type this icon will show on"
+        }
+      ]
+    },
+    {
+      "type": "filter_swatch",
+      "name": "Filter Color Swatch",
+      "settings": [
+        {
+          "type": "text",
+          "id": "color_name",
+          "label": "Name of color that swatch will show on"
+        },
+        {
+          "type": "color",
+          "id": "filter_swatch_color",
+          "label": "Color used for swatch"
+        },
+        {
+          "type": "image_picker",
+          "id": "filter_swatch_image",
+          "label": "Image used for swatch"
+        }
+      ]
+    },
+    {
+      "type": "quick_link",
+      "name": "Quick Link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Link Title"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        }
+      ]
+    }
+  ]
+}
 {% endschema %}

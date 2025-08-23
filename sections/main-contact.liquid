@@ -21,7 +21,7 @@
           {% assign message_label = 'contact.form.message' | t %}
           <ul>
             {% for field in form.errors %}
-              <li>{{ field | replace: 'body',message_label | capitalize }} - {{ form.errors.messages[field] }}</li>
+              <li>{{ field | replace: 'body', message_label | capitalize }} - {{ form.errors.messages[field] }}</li>
             {% endfor %}
           </ul>
         </div>

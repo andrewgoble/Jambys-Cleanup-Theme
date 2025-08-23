@@ -82,7 +82,7 @@
             {%- endif -%}
               <noscript>
                 <div class="rimage-wrapper" style="padding-top:{{ 1 | divided_by: block.settings.image.aspect_ratio | times: 100 }}%">
-                  <img src="{{ block.settings.image | img_url: '1024x1024' }}" alt="{{ block.settings.image.alt | escape }}" class="rimage__image"/>
+                  <img src="{{ block.settings.image | image_url: width: 1024, height: 1024 }}" alt="{{ block.settings.image.alt | escape }}" class="rimage__image"/>
                 </div>
               </noscript>
           </div>
@@ -97,7 +97,7 @@
               {%- endif -%}
                 <noscript>
                   <div class="rimage-wrapper" style="padding-top:{{ 1 | divided_by: block.settings.mobile_image.aspect_ratio | times: 100 }}%">
-                    <img src="{{ block.settings.mobile_image | img_url: '1024x1024' }}" alt="{{ block.settings.mobile_image.alt | escape }}" class="rimage__image"/>
+                    <img src="{{ block.settings.mobile_image | image_url: width: 1024, height: 1024 }}" alt="{{ block.settings.mobile_image.alt | escape }}" class="rimage__image"/>
                   </div>
                 </noscript>
             </div>
@@ -157,352 +157,352 @@
 
 
 {% schema %}
-  {
-    "name": "Slideshow",
-    "class": "section-slideshow header-overlap-section",
-    "max_blocks": 8,
-    "settings": [
-      {
-        "type": "radio",
-        "id": "height",
-        "label": "Slide height",
-        "options": [
-          {
-            "value": "adapt",
-            "label": "Adapt to first image"
-          },
-          {
-            "value": "full",
-            "label": "Full screen"
-          },
-          {
-            "value": "fixed",
-            "label": "Fixed height"
-          }
-        ],
-        "default": "fixed"
-      },
-      {
-        "type": "range",
-        "id": "height_desktop",
-        "min": 200,
-        "max": 1000,
-        "step": 20,
-        "unit": "px",
-        "label": "Desktop fixed height",
-        "default": 600
-      },
-      {
-        "type": "range",
-        "id": "height_mobile",
-        "min": 100,
-        "max": 1000,
-        "step": 20,
-        "unit": "px",
-        "label": "Mobile fixed height",
-        "default": 500
-      },
-      {
-        "id": "full_width",
-        "type": "checkbox",
-        "label": "Full page width",
-        "default": true
-      },
-      {
-        "id": "mobile_overlay_under",
-        "type": "checkbox",
-        "label": "Show text below image on mobile",
-        "default": false
-      },
-      {
-        "id": "overlay_style_tint",
-        "type": "checkbox",
-        "label": "Show overlay tint",
-        "default": true
-      },
-      {
-        "type": "header",
-        "content": "Slideshow navigation"
-      },
-      {
-        "type": "select",
-        "id": "slide_transition",
-        "label": "Transition",
-        "options": [
-          {
-            "value": "zoom",
-            "label": "Zoom"
-          },
-          {
-            "value": "slide",
-            "label": "Slide"
-          },
-          {
-            "value": "fade",
-            "label": "Fade"
-          },
-          {
-            "value": "instant",
-            "label": "Instant"
-          }
-        ],
-        "default": "slide"
-      },
-      {
-        "id": "slide_navigation",
-        "type": "select",
-        "label": "Slide navigation style",
-        "default": "arrows",
-        "options": [
-          {
-            "value": "arrows",
-            "label": "Arrows"
-          },
-          {
-            "value": "dots",
-            "label": "Dots"
-          },
-          {
-            "value": "none",
-            "label": "None"
-          }
-        ]
-      },
-      {
-        "id": "autoplay",
-        "type": "checkbox",
-        "label": "Auto-rotate slides",
-        "default": true
-      },
-      {
-        "type": "range",
-        "id": "autoplay_speed",
-        "min": 1,
-        "max": 20,
-        "step": 1,
-        "unit": "s",
-        "label": "Change slides every",
-        "default": 7
-      }
-    ],
-    "blocks": [
-      {
-        "type": "image",
-        "name": "Slide",
-        "settings": [
-          {
-            "type": "image_picker",
-            "id": "image",
-            "label": "Image",
-            "info": "2048 x 1024px recommended"
-          },
-          {
-            "type": "image_picker",
-            "id": "mobile_image",
-            "label": "Mobile image",
-            "info": "1024px x 1024px recommended"
-          },
-          {
-            "type": "select",
-            "id": "desktop_image_position",
-            "label": "Desktop image alignment",
-            "info": "Used to keep the subject of your image in view",
-            "options": [
-              {
-                "value": "left top",
-                "label": "Top left"
-              },
-              {
-                "value": "center top",
-                "label": "Top center"
-              },
-              {
-                "value": "right top",
-                "label": "Top right"
-              },
-              {
-                "value": "left center",
-                "label": "Middle left"
-              },
-              {
-                "value": "center center",
-                "label": "Middle center"
-              },
-              {
-                "value": "right center",
-                "label": "Middle right"
-              },
-              {
-                "value": "left bottom",
-                "label": "Bottom left"
-              },
-              {
-                "value": "center bottom",
-                "label": "Bottom center"
-              },
-              {
-                "value": "right bottom",
-                "label": "Bottom right"
-              }
-            ],
-            "default": "center center"
-          },
-          {
-            "type": "select",
-            "id": "mobile_image_position",
-            "label": "Mobile image alignment",
-            "options": [
-              {
-                "value": "left top",
-                "label": "Top left"
-              },
-              {
-                "value": "center top",
-                "label": "Top center"
-              },
-              {
-                "value": "right top",
-                "label": "Top right"
-              },
-              {
-                "value": "left center",
-                "label": "Middle left"
-              },
-              {
-                "value": "center center",
-                "label": "Middle center"
-              },
-              {
-                "value": "right center",
-                "label": "Middle right"
-              },
-              {
-                "value": "left bottom",
-                "label": "Bottom left"
-              },
-              {
-                "value": "center bottom",
-                "label": "Bottom center"
-              },
-              {
-                "value": "right bottom",
-                "label": "Bottom right"
-              }
-            ],
-            "default": "center center"
-          },
-          {
-            "type": "url",
-            "id": "slide_link",
-            "label": "Slide link"
-          },
-          {
-            "type": "text",
-            "id": "subheading",
-            "label": "Subheading",
-            "default": "Subheading"
-          },
-          {
-            "type": "textarea",
-            "id": "title",
-            "label": "Heading",
-            "default": "Tell your story"
-          },
-          {
-            "type": "range",
-            "id": "title_size",
-            "min": 20,
-            "max": 150,
-            "step": 2,
-            "unit": "px",
-            "label": "Heading text size",
-            "default": 60
-          },
-          {
-            "type": "checkbox",
-            "id": "heading_h1",
-            "label": "Set as primary page heading",
-            "info": "Uses <h1> tag. One per page recommended. [Learn more](https://cleancanvas.co.uk/support/showcase/seo#inner-anchor-0)",
-            "default": false
-          },
-          {
-            "type": "richtext",
-            "id": "text",
-            "label": "Text",
-            "default": "<p>Pair text with an image to tell a story</p>"
-          },
-          {
-            "type": "checkbox",
-            "id": "enlarge_text",
-            "label": "Enlarge text",
-            "default": true
-          },
-          {
-            "type": "text",
-            "id": "button_label",
-            "label": "Button"
-          },
-          {
-            "type": "select",
-            "id": "overlay_position",
-            "label": "Text alignment",
-            "options": [
-              {
-                "value": "position--left position--top",
-                "label": "Top left"
-              },
-              {
-                "value": "position--hcenter position--top",
-                "label": "Top center"
-              },
-              {
-                "value": "position--right position--top",
-                "label": "Top right"
-              },
-              {
-                "value": "position--left position--vcenter",
-                "label": "Middle left"
-              },
-              {
-                "value": "position--hcenter position--vcenter",
-                "label": "Middle center"
-              },
-              {
-                "value": "position--right position--vcenter",
-                "label": "Middle right"
-              },
-              {
-                "value": "position--left position--bottom",
-                "label": "Bottom left"
-              },
-              {
-                "value": "position--hcenter position--bottom",
-                "label": "Bottom center"
-              },
-              {
-                "value": "position--right position--bottom",
-                "label": "Bottom right"
-              }
-            ],
-            "default": "position--hcenter position--vcenter"
-          }
-        ]
-      }
-    ],
-    "presets": [
-      {
-        "name": "Slideshow",
-        "settings": {
+{
+  "name": "Slideshow",
+  "class": "section-slideshow header-overlap-section",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "radio",
+      "id": "height",
+      "label": "Slide height",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "Adapt to first image"
         },
-        "blocks": [
-          {
-            "type": "image"
-          },
-           {
-            "type": "image"
-          }
-        ]
-      }
-    ]
-  }
+        {
+          "value": "full",
+          "label": "Full screen"
+        },
+        {
+          "value": "fixed",
+          "label": "Fixed height"
+        }
+      ],
+      "default": "fixed"
+    },
+    {
+      "type": "range",
+      "id": "height_desktop",
+      "min": 200,
+      "max": 1000,
+      "step": 20,
+      "unit": "px",
+      "label": "Desktop fixed height",
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "height_mobile",
+      "min": 100,
+      "max": 1000,
+      "step": 20,
+      "unit": "px",
+      "label": "Mobile fixed height",
+      "default": 500
+    },
+    {
+      "id": "full_width",
+      "type": "checkbox",
+      "label": "Full page width",
+      "default": true
+    },
+    {
+      "id": "mobile_overlay_under",
+      "type": "checkbox",
+      "label": "Show text below image on mobile",
+      "default": false
+    },
+    {
+      "id": "overlay_style_tint",
+      "type": "checkbox",
+      "label": "Show overlay tint",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Slideshow navigation"
+    },
+    {
+      "type": "select",
+      "id": "slide_transition",
+      "label": "Transition",
+      "options": [
+        {
+          "value": "zoom",
+          "label": "Zoom"
+        },
+        {
+          "value": "slide",
+          "label": "Slide"
+        },
+        {
+          "value": "fade",
+          "label": "Fade"
+        },
+        {
+          "value": "instant",
+          "label": "Instant"
+        }
+      ],
+      "default": "slide"
+    },
+    {
+      "id": "slide_navigation",
+      "type": "select",
+      "label": "Slide navigation style",
+      "default": "arrows",
+      "options": [
+        {
+          "value": "arrows",
+          "label": "Arrows"
+        },
+        {
+          "value": "dots",
+          "label": "Dots"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ]
+    },
+    {
+      "id": "autoplay",
+      "type": "checkbox",
+      "label": "Auto-rotate slides",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "unit": "s",
+      "label": "Change slides every",
+      "default": 7
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "2048 x 1024px recommended"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Mobile image",
+          "info": "1024px x 1024px recommended"
+        },
+        {
+          "type": "select",
+          "id": "desktop_image_position",
+          "label": "Desktop image alignment",
+          "info": "Used to keep the subject of your image in view",
+          "options": [
+            {
+              "value": "left top",
+              "label": "Top left"
+            },
+            {
+              "value": "center top",
+              "label": "Top center"
+            },
+            {
+              "value": "right top",
+              "label": "Top right"
+            },
+            {
+              "value": "left center",
+              "label": "Middle left"
+            },
+            {
+              "value": "center center",
+              "label": "Middle center"
+            },
+            {
+              "value": "right center",
+              "label": "Middle right"
+            },
+            {
+              "value": "left bottom",
+              "label": "Bottom left"
+            },
+            {
+              "value": "center bottom",
+              "label": "Bottom center"
+            },
+            {
+              "value": "right bottom",
+              "label": "Bottom right"
+            }
+          ],
+          "default": "center center"
+        },
+        {
+          "type": "select",
+          "id": "mobile_image_position",
+          "label": "Mobile image alignment",
+          "options": [
+            {
+              "value": "left top",
+              "label": "Top left"
+            },
+            {
+              "value": "center top",
+              "label": "Top center"
+            },
+            {
+              "value": "right top",
+              "label": "Top right"
+            },
+            {
+              "value": "left center",
+              "label": "Middle left"
+            },
+            {
+              "value": "center center",
+              "label": "Middle center"
+            },
+            {
+              "value": "right center",
+              "label": "Middle right"
+            },
+            {
+              "value": "left bottom",
+              "label": "Bottom left"
+            },
+            {
+              "value": "center bottom",
+              "label": "Bottom center"
+            },
+            {
+              "value": "right bottom",
+              "label": "Bottom right"
+            }
+          ],
+          "default": "center center"
+        },
+        {
+          "type": "url",
+          "id": "slide_link",
+          "label": "Slide link"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Subheading",
+          "default": "Subheading"
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Heading",
+          "default": "Tell your story"
+        },
+        {
+          "type": "range",
+          "id": "title_size",
+          "min": 20,
+          "max": 150,
+          "step": 2,
+          "unit": "px",
+          "label": "Heading text size",
+          "default": 60
+        },
+        {
+          "type": "checkbox",
+          "id": "heading_h1",
+          "label": "Set as primary page heading",
+          "info": "Uses <h1> tag. One per page recommended. [Learn more](https://cleancanvas.co.uk/support/showcase/seo#inner-anchor-0)",
+          "default": false
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Pair text with an image to tell a story</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "enlarge_text",
+          "label": "Enlarge text",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button"
+        },
+        {
+          "type": "select",
+          "id": "overlay_position",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "position--left position--top",
+              "label": "Top left"
+            },
+            {
+              "value": "position--hcenter position--top",
+              "label": "Top center"
+            },
+            {
+              "value": "position--right position--top",
+              "label": "Top right"
+            },
+            {
+              "value": "position--left position--vcenter",
+              "label": "Middle left"
+            },
+            {
+              "value": "position--hcenter position--vcenter",
+              "label": "Middle center"
+            },
+            {
+              "value": "position--right position--vcenter",
+              "label": "Middle right"
+            },
+            {
+              "value": "position--left position--bottom",
+              "label": "Bottom left"
+            },
+            {
+              "value": "position--hcenter position--bottom",
+              "label": "Bottom center"
+            },
+            {
+              "value": "position--right position--bottom",
+              "label": "Bottom right"
+            }
+          ],
+          "default": "position--hcenter position--vcenter"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Slideshow",
+      "settings": {
+      },
+      "blocks": [
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        }
+      ]
+    }
+  ]
+}
 {% endschema %}

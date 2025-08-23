@@ -81,7 +81,7 @@
     <div class="slideshow-blog">
       {% if section.settings.title_image != blank %}
         <h2>
-          <img class="blog-image-title" src="{{ section.settings.title_image | img_url: '500x' }}">
+          <img class="blog-image-title" src="{{ section.settings.title_image | image_url: width: 500 }}">
         </h2>
       {% elsif section.settings.title != blank %}
         <h2 class="slideshow-blog__title feature-subheader overlay-type" data-cc-animate data-cc-animate-delay="0.2s">
@@ -129,7 +129,7 @@
 
                   <noscript>
                     <div class="rimage-wrapper" style="padding-top:{{ 1 | divided_by: article.image.aspect_ratio | times: 100 }}%">
-                      <img src="{{ article.image | img_url: '1024x1024' }}" alt="{{ article.image.alt | escape }}" class="rimage__image"/>
+                      <img src="{{ article.image | image_url: width: 1024, height: 1024 }}" alt="{{ article.image.alt | escape }}" class="rimage__image"/>
                     </div>
                   </noscript>
                 </div>
@@ -276,7 +276,7 @@
         {% if section.settings.title != blank or section.settings.show_view_all %}
           <div class="section-heading" data-cc-animate>
             {% if section.settings.title_image != blank %}
-              <img class="blog-image-title" src="{{ section.settings.title_image | img_url: '500x' }}">
+              <img class="blog-image-title" src="{{ section.settings.title_image | image_url: width: 500 }}">
             {% elsif section.settings.title != blank %}
               <h2 class=" h2">{{ section.settings.title | escape }}</h2>
             {% else %}
@@ -364,232 +364,232 @@
 
 
 {% schema %}
-  {
-    "name": "Blog posts",
-    "class": "section-featured-blog",
-    "settings": [
-      {
-        "type": "text",
-        "id": "title",
-        "label": "Heading",
-        "default": "Blog posts"
-      },
-      {
-        "type": "image_picker",
-        "id": "title_image",
-        "label": "Heading Image",
-        "info": "This overwrites a text title"
-      },
-      {
-        "type": "blog",
-        "id": "blog",
-        "label": "Blog"
-      },
-      {
-        "type": "select",
-        "id": "title_alignment",
-        "label": "Heading Alignment",
-        "options": [
-          {
-            "value": "left",
-            "label": "Left"
-          },
-          {
-            "value": "center",
-            "label": "Center"
-          },
-          {
-            "value": "right",
-            "label": "right"
-          }
-        ],
-        "default": "left"
-      },
-      {
-        "type": "textarea",
-        "id": "body_text",
-        "label": "Body Text"
-      },
-      {
-        "type": "range",
-        "id": "post_limit",
-        "min": 1,
-        "max": 12,
-        "step": 1,
-        "label": "Posts",
-        "default": 3,
-        "info": "The slideshow will only show a maximum of 7 posts"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_view_all",
-        "label": "Show 'View all' link",
-        "default": true
-      },
-      {
-        "type": "checkbox",
-        "id": "blog_show_author",
-        "label": "Show author",
-        "default": false
-      },
-      {
-        "type": "checkbox",
-        "id": "blog_show_date",
-        "label": "Show date",
-        "default": true
-      },
-      {
-        "type": "radio",
-        "id": "layout",
-        "label": "Layout",
-        "default": "slideshow",
-        "options": [
-          {
-            "value": "carousel",
-            "label": "Carousel"
-          },
-          {
-            "value": "slideshow",
-            "label": "Slideshow"
-          }
-        ]
-      },
-      {
-        "type": "header",
-        "content": "Carousel settings"
-      },
-      {
-        "type": "checkbox",
-        "id": "blog_first_post_big",
-        "label": "Enlarge first blog post",
-        "info": "If selected, the 'Image shape' settings will be ignored",
-        "default": false
-      },
-      {
-        "type": "header",
-        "content": "Slideshow settings"
-      },
-      {
-        "type": "radio",
-        "id": "height",
-        "label": "Slide height",
-        "options": [
-          {
-            "value": "full",
-            "label": "Full screen"
-          },
-          {
-            "value": "fixed",
-            "label": "Fixed height"
-          }
-        ],
-        "default": "full"
-      },
-      {
-        "type": "range",
-        "id": "height_desktop",
-        "min": 600,
-        "max": 1000,
-        "step": 20,
-        "unit": "px",
-        "label": "Desktop fixed height",
-        "default": 700
-      },
-      {
-        "type": "range",
-        "id": "height_mobile",
-        "min": 360,
-        "max": 1000,
-        "step": 20,
-        "unit": "px",
-        "label": "Mobile fixed height",
-        "default": 500
-      },
-      {
-        "id": "full_width",
-        "type": "checkbox",
-        "label": "Full page width",
-        "default": true
-      },
-      {
-        "id": "overlay_style_tint",
-        "type": "checkbox",
-        "label": "Show overlay tint",
-        "default": true
-      },
-      {
-        "id": "autoplay",
-        "type": "checkbox",
-        "label": "Auto-rotate slides",
-        "default": true
-      },
-      {
-        "type": "range",
-        "id": "autoplay_speed",
-        "min": 1,
-        "max": 20,
-        "step": 1,
-        "unit": "s",
-        "label": "Change slides every",
-        "default": 7
-      },
-      {
-        "type": "select",
-        "id": "slide_transition",
-        "label": "Transition",
-        "options": [
-          {
-            "value": "zoom",
-            "label": "Zoom"
-          },
-          {
-            "value": "slide",
-            "label": "Slide"
-          },
-          {
-            "value": "fade",
-            "label": "Fade"
-          }
-        ],
-        "default": "slide"
-      },
-      {
-        "type": "select",
-        "id": "wave",
-        "label": "Wave",
-        "options": [
-          {
-            "value": "none",
-            "label": "None"
-          },
-          {
-            "value": "top",
-            "label": "Top"
-          },
-          {
-            "value": "bottom",
-            "label": "Bottom"
-          },
-          {
-            "value": "both",
-            "label": "Both"
-          }
-        ],
-        "default": "none"
-      },
-      {
-        "id": "color_bg",
-        "type": "color",
-        "label": "Background color",
-        "default": "#ffffff"
-      }
-    ],
-    "presets": [
-      {
-        "name": "Blog posts",
-        "settings": {
+{
+  "name": "Blog posts",
+  "class": "section-featured-blog",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Blog posts"
+    },
+    {
+      "type": "image_picker",
+      "id": "title_image",
+      "label": "Heading Image",
+      "info": "This overwrites a text title"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog"
+    },
+    {
+      "type": "select",
+      "id": "title_alignment",
+      "label": "Heading Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "right"
         }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "textarea",
+      "id": "body_text",
+      "label": "Body Text"
+    },
+    {
+      "type": "range",
+      "id": "post_limit",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "label": "Posts",
+      "default": 3,
+      "info": "The slideshow will only show a maximum of 7 posts"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show 'View all' link",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_show_author",
+      "label": "Show author",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_show_date",
+      "label": "Show date",
+      "default": true
+    },
+    {
+      "type": "radio",
+      "id": "layout",
+      "label": "Layout",
+      "default": "slideshow",
+      "options": [
+        {
+          "value": "carousel",
+          "label": "Carousel"
+        },
+        {
+          "value": "slideshow",
+          "label": "Slideshow"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Carousel settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_first_post_big",
+      "label": "Enlarge first blog post",
+      "info": "If selected, the 'Image shape' settings will be ignored",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Slideshow settings"
+    },
+    {
+      "type": "radio",
+      "id": "height",
+      "label": "Slide height",
+      "options": [
+        {
+          "value": "full",
+          "label": "Full screen"
+        },
+        {
+          "value": "fixed",
+          "label": "Fixed height"
+        }
+      ],
+      "default": "full"
+    },
+    {
+      "type": "range",
+      "id": "height_desktop",
+      "min": 600,
+      "max": 1000,
+      "step": 20,
+      "unit": "px",
+      "label": "Desktop fixed height",
+      "default": 700
+    },
+    {
+      "type": "range",
+      "id": "height_mobile",
+      "min": 360,
+      "max": 1000,
+      "step": 20,
+      "unit": "px",
+      "label": "Mobile fixed height",
+      "default": 500
+    },
+    {
+      "id": "full_width",
+      "type": "checkbox",
+      "label": "Full page width",
+      "default": true
+    },
+    {
+      "id": "overlay_style_tint",
+      "type": "checkbox",
+      "label": "Show overlay tint",
+      "default": true
+    },
+    {
+      "id": "autoplay",
+      "type": "checkbox",
+      "label": "Auto-rotate slides",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "unit": "s",
+      "label": "Change slides every",
+      "default": 7
+    },
+    {
+      "type": "select",
+      "id": "slide_transition",
+      "label": "Transition",
+      "options": [
+        {
+          "value": "zoom",
+          "label": "Zoom"
+        },
+        {
+          "value": "slide",
+          "label": "Slide"
+        },
+        {
+          "value": "fade",
+          "label": "Fade"
+        }
+      ],
+      "default": "slide"
+    },
+    {
+      "type": "select",
+      "id": "wave",
+      "label": "Wave",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "id": "color_bg",
+      "type": "color",
+      "label": "Background color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog posts",
+      "settings": {
       }
-    ]
-  }
+    }
+  ]
+}
 {% endschema %}

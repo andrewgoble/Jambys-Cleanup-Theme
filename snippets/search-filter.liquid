@@ -163,7 +163,7 @@
           <div class="proteus-quicklinks quicklinks-desktop">
           <div class="quicklinks_title">Product Quicklinks</div>
             {% for quick_link in quick_links %}
-              <a href="{{ quick_link.settings.link }}" class="proteus-quicklinks-item"><img src="{{ quick_link.settings.image | img_url: "100x" }}"><p>{{ quick_link.settings.title }}</p></a>
+              <a href="{{ quick_link.settings.link }}" class="proteus-quicklinks-item"><img src="{{ quick_link.settings.image | image_url: width: 100 }}"><p>{{ quick_link.settings.title }}</p></a>
             {% endfor %}
           </div>
         {% endif %}
@@ -239,7 +239,7 @@
  
                       {%- if value.count > 0 or section.settings.show_filter_deadends %}
                         {%- assign num_available_options = num_available_options | plus: 1 -%}
-                        <label class="cc-checkbox{% if product_type_icon != '' %} has-icon{% endif %}{% if is_color %} is-color{% endif %} {{ value.label | downcase | escape | replace: " ", "-"}}">
+                        <label class="cc-checkbox{% if product_type_icon != '' %} has-icon{% endif %}{% if is_color %} is-color{% endif %} {{ value.label | downcase | escape | replace: " ", "-" }}">
 
                           {% if is_color %}
                           {% comment %}
@@ -256,7 +256,7 @@
 
                           <span class="cc-checkbox__label">
                             {% if product_type_icon != '' %}
-                              <img class="product-type-filter-icon" src="{{ product_type_icon | img_url }}">
+                              <img class="product-type-filter-icon" src="{{ product_type_icon | image_url: width: 100, height: 100 }}">
                             {% endif %}
                             {{ value.label | escape }} 
                           </span>
@@ -356,7 +356,7 @@
                 {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
                   <li>
                     <a href="{{ filter.url_to_remove }}" class="active-filter-controls__tag" data-active-tag="{{ filter | escape }}">
-                      {%-if filter.min_value.value %}{%- render "price", price: filter.min_value.value -%}{%- else -%}{%- render "price", price: 0 -%}{%- endif -%}&nbsp;-&nbsp;{%- if filter.max_value.value -%}{%- render "price", price: filter.max_value.value -%}{%- else -%}{%- render "price", price: filter.range_max -%}{% endif %}
+                      {%- if filter.min_value.value %}{%- render "price", price: filter.min_value.value -%}{%- else -%}{%- render "price", price: 0 -%}{%- endif -%}&nbsp;-&nbsp;{%- if filter.max_value.value -%}{%- render "price", price: filter.max_value.value -%}{%- else -%}{%- render "price", price: filter.range_max -%}{% endif %}
                     </a>
                   </li>
                 {%- endif -%}

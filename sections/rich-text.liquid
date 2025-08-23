@@ -82,167 +82,168 @@
 
 
 {% schema %}
-  {
-    "name": "Rich text",
-    "class": "section-rich-text",
-    "settings": [
-      {
-        "type": "text",
-        "id": "subheading",
-        "label": "Subheading"
-      },
-      {
-        "type": "textarea",
-        "id": "title",
-        "label": "Heading",
-        "default": "Rich text"
-      },
-      {
-        "type": "range",
-        "id": "title_size",
-        "min": 20,
-        "max": 150,
-        "step": 2,
-        "unit": "px",
-        "label": "Heading text size",
-        "default": 60
-      },
-      {
-        "type": "checkbox",
-        "id": "heading_h1",
-        "label": "Set as primary page heading",
-        "info": "Uses <h1> tag. One per page recommended. [Learn more](https://cleancanvas.co.uk/support/showcase/seo#inner-anchor-0)",
-        "default": false
-      },
-      {
-        "type": "richtext",
-        "id": "text",
-        "label": "Text",
-        "default": "<p>Use this text to share information about your store with your customers.</p><p>Describe product, share announcements, or welcome customers to your store.</p>"
-      },
-      {
-        "type": "image_picker",
-        "id": "image",
-        "label": "Image"
-      },
-      {
-        "type": "range",
-        "id": "image_width",
-        "min": 60,
-        "max": 700,
-        "step": 10,
-        "label": "Image width",
-        "unit": "px",
-        "default": 120
-      },
-      {
-        "type": "text",
-        "id": "button_label",
-        "label": "Button"
-      },
-      {
-        "type": "url",
-        "id": "button_link",
-        "label": "Button link"
-      },
-      {
-        "type": "select",
-        "id": "button_style",
-        "label": "Button style",
-        "options": [
-          {
-            "label": "Button - primary",
-            "value": "primary"
-          },
-          {
-            "label": "Button - secondary",
-            "value": "secondary"
-          },
-          {
-            "label": "Button - auto",
-            "value": "auto"
-          },
-          {
-            "label": "Link",
-            "value": "link"
-          }
-        ],
-        "default": "auto"
-      },
-      {
-        "type": "select",
-        "id": "text_alignment",
-        "label": "Text alignment",
-        "default": "center",
-        "options": [
-          {
-            "label": "Left",
-            "value": "left"
-          },
-          {
-            "label": "Center",
-            "value": "center"
-          },
-          {
-            "label": "Right",
-            "value": "right"
-          }
-        ]
-      },
-      {
-        "type": "checkbox",
-        "id": "enlarge_text",
-        "label": "Enlarge text",
-        "default": false
-      },
-      {
-        "type": "checkbox",
-        "id": "full_width",
-        "label": "Wide display",
-        "default": false
-      },
-      {
-        "type": "checkbox",
-        "id": "no_padding_bottom",
-        "label": "Remove bottom spacing",
-        "default": false
-      },
-      {
-        "type": "radio",
-        "id": "color_scheme",
-        "label": "Color scheme",
-        "default": "standard",
-        "options": [
-          {
-            "value": "standard",
-            "label": "Standard"
-          },
-          {
-            "value": "alt",
-            "label": "Alternate colors"
-          },
-          {
-            "value": "custom",
-            "label": "Custom colors"
-          }
-        ]
-      },
-      {
-        "type": "color",
-        "id": "color_bg",
-        "label": "Custom background color"
-      },
-      {
-        "type": "color",
-        "id": "color_text",
-        "label": "Custom text color"
+{
+  "name": "Rich text",
+  "class": "section-rich-text",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Heading",
+      "default": "Rich text"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 20,
+      "max": 150,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading text size",
+      "default": 60
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_h1",
+      "label": "Set as primary page heading",
+      "info": "Uses <h1> tag. One per page recommended. [Learn more](https://cleancanvas.co.uk/support/showcase/seo#inner-anchor-0)",
+      "default": false
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Use this text to share information about your store with your customers.</p><p>Describe product, share announcements, or welcome customers to your store.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "image_width",
+      "min": 60,
+      "max": 700,
+      "step": 10,
+      "label": "Image width",
+      "unit": "px",
+      "default": 120
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "options": [
+        {
+          "label": "Button - primary",
+          "value": "primary"
+        },
+        {
+          "label": "Button - secondary",
+          "value": "secondary"
+        },
+        {
+          "label": "Button - auto",
+          "value": "auto"
+        },
+        {
+          "label": "Link",
+          "value": "link"
+        }
+      ],
+      "default": "auto"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "default": "center",
+      "options": [
+        {
+          "label": "Left",
+          "value": "left"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "right"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "enlarge_text",
+      "label": "Enlarge text",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Wide display",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "no_padding_bottom",
+      "label": "Remove bottom spacing",
+      "default": false
+    },
+    {
+      "type": "radio",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "standard",
+      "options": [
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "alt",
+          "label": "Alternate colors"
+        },
+        {
+          "value": "custom",
+          "label": "Custom colors"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "color_bg",
+      "label": "Custom background color"
+    },
+    {
+      "type": "color",
+      "id": "color_text",
+      "label": "Custom text color"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rich text",
+      "settings": {
       }
-    ],
-    "presets": [
-      {
-        "name": "Rich text",
-        "settings": {}
-      }
-    ]
-  }
+    }
+  ]
+}
 {% endschema %}

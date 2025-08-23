@@ -43,7 +43,7 @@
                                             {%- assign handle = url_parts[-1] -%}
                                             {% assign product = all_products[handle] %}
 
-                                            {% assign item_img = product.metafields.product.fabric_img | img_url: "460x" %}
+                                            {% assign item_img = product.metafields.product.fabric_img | image_url: width: 460 %}
                                             {% assign item_type = product.metafields.product.fabric_type_multi.value %}
                                             {% assign item_description = product.metafields.product.fabric_description %}
                                             {% assign fabric_url = product.metafields.custom.fabric_link.value.url %}
@@ -78,13 +78,13 @@
                                 {% endfor %}
                             </div>
                         {% else %}
-                            {% assign first_img = '' %}
-                            {% assign first_title = '' %}
+                            
+                            
 
                             <div class="mega-menu-items mega-menu-left-items">
                                 <h3>{{ link.title }}</h3>
                                 <ul class="mega-menu">
-                                    {% if link.title == "Tops"%}
+                                    {% if link.title == "Tops" %}
                                         <li class="mega-menu-item">
                                             <a 
                                                 data-item-img="https://cdn.shopify.com/s/files/1/0090/4128/1109/files/tees.png?v=1710514880"
@@ -107,7 +107,7 @@
                                             >Sleepwear</a>
                                         </li>
                                     {% endif %}
-                                    {% if link.title == "Bottoms"%}
+                                    {% if link.title == "Bottoms" %}
                                         <li class="mega-menu-item">
                                             <a 
                                                 data-item-img="https://cdn.shopify.com/s/files/1/0090/4128/1109/files/shorts_d8dba22e-0d7b-4f46-9409-a65f4a990e67.png?v=1710515800"

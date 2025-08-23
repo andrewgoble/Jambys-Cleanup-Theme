@@ -115,144 +115,145 @@
 </div>
 
 {% schema %}
-  {
-    "name": "Testimonials",
-    "class": "section-testimonials",
-    "settings": [
-      {
-        "type": "text",
-        "id": "title",
-        "label": "Heading"
+{
+  "name": "Testimonials",
+  "class": "section-testimonials",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "default": "primary",
+      "options": [
+        {
+          "label": "Button - primary",
+          "value": "primary"
+        },
+        {
+          "label": "Button - secondary",
+          "value": "secondary"
+        },
+        {
+          "label": "Link",
+          "value": "link"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "alternate_bg_color",
+      "label": "Use alternate section color",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "range",
+          "id": "star_rating",
+          "min": 0,
+          "max": 5,
+          "step": 1,
+          "label": "Star rating",
+          "default": 5
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Heading",
+          "default": "Testimonial header"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Use to this text to elaborate on the main heading</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "image_picker",
+          "id": "image1",
+          "label": "Image",
+          "info": "750 x 1000px recommended"
+        },
+        {
+          "type": "text",
+          "id": "image1_caption",
+          "label": "Image caption"
+        },
+        {
+          "type": "image_picker",
+          "id": "image2",
+          "label": "Image",
+          "info": "750 x 1000px recommended"
+        },
+        {
+          "type": "text",
+          "id": "image2_caption",
+          "label": "Image caption"
+        },
+        {
+          "type": "select",
+          "id": "layout",
+          "label": "Layout",
+          "options": [
+            {
+              "value": "left",
+              "label": "Testimonial on left"
+            },
+            {
+              "value": "right",
+              "label": "Testimonial on right"
+            }
+          ],
+          "default": "left"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "settings": {
       },
-      {
-        "type": "select",
-        "id": "button_style",
-        "label": "Button style",
-        "default": "primary",
-        "options": [
-          {
-            "label": "Button - primary",
-            "value": "primary"
-          },
-          {
-            "label": "Button - secondary",
-            "value": "secondary"
-          },
-          {
-            "label": "Link",
-            "value": "link"
+      "blocks": [
+        {
+          "type": "testimonial",
+          "settings": {
+            "layout": "right"
           }
-        ]
-      },
-      {
-        "type": "checkbox",
-        "id": "alternate_bg_color",
-        "label": "Use alternate section color",
-        "default": false
-      }
-    ],
-    "blocks": [
-      {
-        "type": "testimonial",
-        "name": "Testimonial",
-        "settings": [
-          {
-            "type": "range",
-            "id": "star_rating",
-            "min": 0,
-            "max": 5,
-            "step": 1,
-            "label": "Star rating",
-            "default": 5
-          },
-          {
-            "type": "textarea",
-            "id": "title",
-            "label": "Heading",
-            "default": "Testimonial header"
-          },
-          {
-            "type": "richtext",
-            "id": "text",
-            "label": "Text",
-            "default": "<p>Use to this text to elaborate on the main heading</p>"
-          },
-          {
-            "type": "text",
-            "id": "button_label",
-            "label": "Button"
-          },
-          {
-            "type": "url",
-            "id": "link",
-            "label": "Link"
-          },
-          {
-            "type": "image_picker",
-            "id": "image1",
-            "label": "Image",
-            "info": "750 x 1000px recommended"
-          },
-          {
-            "type": "text",
-            "id": "image1_caption",
-            "label": "Image caption"
-          },
-          {
-            "type": "image_picker",
-            "id": "image2",
-            "label": "Image",
-            "info": "750 x 1000px recommended"
-          },
-          {
-            "type": "text",
-            "id": "image2_caption",
-            "label": "Image caption"
-          },
-          {
-            "type": "select",
-            "id": "layout",
-            "label": "Layout",
-            "options": [
-              {
-                "value": "left",
-                "label": "Testimonial on left"
-              },
-              {
-                "value": "right",
-                "label": "Testimonial on right"
-              }
-            ],
-            "default": "left"
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "layout": "left"
           }
-        ]
-      }
-    ],
-    "presets": [
-      {
-        "name": "Testimonials",
-        "settings": {},
-        "blocks": [
-          {
-            "type": "testimonial",
-            "settings": {
-              "layout": "right"
-            }
-          },
-          {
-            "type": "testimonial",
-            "settings": {
-              "layout": "left"
-            }
-          },
-          {
-            "type": "testimonial",
-            "settings": {
-              "layout": "left"
-            }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "layout": "left"
           }
-        ]
-      }
-    ]
-  }
+        }
+      ]
+    }
+  ]
+}
 {% endschema %}

@@ -48,7 +48,7 @@
   {% if settings.prod_hover == "second_image" %}hover-image{% endif %}
   {% if settings.prod_hover == "all_images" and product.images.size > 1 %}all-images{% endif %}
   {% if product.tags contains 'meta-layout-right' %}layout-right{% endif %}
-  {% if settings.prod_label_layout == 'marquee_on_hover' %} product-block--marquee-on-hover {% endif%}
+  {% if settings.prod_label_layout == 'marquee_on_hover' %} product-block--marquee-on-hover {% endif %}
   {% if settings.quickbuy_enabled %}product-block--quickbuy{% endif %}
   {% if mp4_url != blank %}product-block--video{% endif %}
   {% if product_has_swatches %}product-block--has-swatches{% endif %}
@@ -62,7 +62,7 @@
       {%- liquid
         assign images = ""
         for image in product.images
-          assign image_placeholder = image | img_url: '1x1' | replace: '_1x1.', '_{width}x.'
+          assign image_placeholder = image | image_url: width: 1, height: 1 | replace: '_1x1.', '_{width}x.'
           assign images = images | append: "," | append: image_placeholder | append: "&alt=" | append: image.alt
         endfor
       -%}
@@ -85,10 +85,10 @@
         </div>
         {% endif %}
         {% assign collection_handle = collection.handle %}
-        {% assign first_index = -1 %}
+        
 
         <div class="swiper-wrapper">
-          {% assign product_only_images = product.media | where:'media_type', 'image' %}
+          {% assign product_only_images = product.media | where: 'media_type', 'image' %}
           
           {% for itemImage in product_only_images %}
             {% assign alt_tags = itemImage.alt | split: "|" %}
@@ -144,12 +144,12 @@
             {% assign limit_slider = 4 %}
           {% endif %}
 
-          {% for itemImage in product_only_images limit: limit_slider  %}
-            {% if forloop.index0 == first_image and has_alt_priority  %}
+          {% for itemImage in product_only_images limit: limit_slider %}
+            {% if forloop.index0 == first_image and has_alt_priority %}
               {% continue %}
             {% endif %}
           <div class="swiper-slide">
-            {% if i <= 4 and forloop.index0 == 0 and has_alt_priority == false%}
+            {% if i <= 4 and forloop.index0 == 0 and has_alt_priority == false %}
               <a href="{{ product_url }}" aria-label="{{ product.title | escape }}" tabindex="-1">
                 {{ itemImage | image_url: width: 600 | image_tag: class: 'swiper-slide-image', loading: 'eager', fetchpriority: 'high' }}
               </a>
@@ -193,7 +193,7 @@
 
           {% if settings.prod_hover == "second_image" and product.media.size > 1 %}
           <div class="image__second">
-            {% render 'responsive-image-collection', image: secondary_image, aspect_ratio: primary_image.aspect_ratio, first: false, index:i %}
+            {% render 'responsive-image-collection', image: secondary_image, aspect_ratio: primary_image.aspect_ratio, first: false, index: i %}
           </div>
           {% endif %}
         </a>
@@ -206,7 +206,7 @@
             <ul class="cc-swatches {% if settings.swatch_use_prod_images == true %}cc-swatches-prod-img cc-swatches-prod-img-{{ settings.swatch_prod_images_shape }}{% endif %}" data-option-name="{{ product_option.name | escape }}">
               {%- if product.options.size == 1 -%}
                 {%- for variant in product.variants -%}
-                  {%- assign variant_image = variant.featured_media.preview_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+                  {%- assign variant_image = variant.featured_media.preview_image | image_url: width: 1, height: 1 | replace: '_1x1.', '_{width}x.' -%}
                   {% if forloop.index <= option_limit %}
                     <li>
                       <a rel="nofollow"
@@ -218,10 +218,10 @@
                           class="{% unless variant.available %}unavailable{% endunless %} lazyload"
                             data-option-item="{{ variant.title | downcase | escape }}"
                             {% if variant.featured_media %}data-media="{{ variant.featured_media.id }}"{% endif %}
-                      {% if settings.swatch_method == "image" and settings.swatch_use_prod_images == false  %}
+                      {% if settings.swatch_method == "image" and settings.swatch_use_prod_images == false %}
                         data-bgset="{{ variant.title | handle | append: '.png' | file_img_url: '48x48', crop: 'center' }}"
                       {% elsif settings.swatch_use_prod_images == true %}
-                        data-bgset="{{ variant.featured_media.preview_image | img_url: '72x', crop: 'center' }}"
+                        data-bgset="{{ variant.featured_media.preview_image | image_url: width: 72, crop: 'center' }}"
                         style="{% if settings.swatch_prod_images_shape == "natural" %}padding-top: {{ 1 | divided_by: variant.featured_media.preview_image.aspect_ratio | times: 100 }}%;{% endif %}"
                       {% else %}
                         style="background-color:{{ variant.title | downcase | remove: ' ' | escape }}"
@@ -252,7 +252,7 @@
                         break
                       endif
                     endfor
-                    assign variant_image = option_value_variant.featured_media.preview_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.'
+                    assign variant_image = option_value_variant.featured_media.preview_image | image_url: width: 1, height: 1 | replace: '_1x1.', '_{width}x.'
                   -%}
                   {% if forloop.index <= option_limit %}
                     <li>
@@ -265,10 +265,10 @@
                         {% endif %}
                           data-option-item="{{ product_option_value | downcase | escape }}"
                           {% if option_value_variant.featured_media %}data-media="{{ option_value_variant.featured_media.id }}"{% endif %}
-                        {% if settings.swatch_method == "image" and settings.swatch_use_prod_images == false  %}
+                        {% if settings.swatch_method == "image" and settings.swatch_use_prod_images == false %}
                           data-bgset="{{ product_option_value | handle | append: '.png' | file_img_url: '48x48', crop: 'center' }}"
                         {% elsif settings.swatch_use_prod_images == true %}
-                          data-bgset="{{ option_value_variant.featured_media.preview_image | img_url: '72x', crop: 'center' }}"
+                          data-bgset="{{ option_value_variant.featured_media.preview_image | image_url: width: 72, crop: 'center' }}"
                           style="{% if settings.swatch_prod_images_shape == "natural" %}padding-top: {{ 1 | divided_by: option_value_variant.featured_media.preview_image.aspect_ratio | times: 100 }}%;{% endif %}"
                         {% else %}
                           style="background-color:{{ product_option_value | downcase | remove: ' ' | escape }}"

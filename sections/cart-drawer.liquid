@@ -82,7 +82,7 @@
           <div class="empty-cart-link-card">
             <a href="{{ section.settings.card_1_link }}">
             {% if section.settings.card_1_title != blank %}
-              <div class="empty-cart-link-card-image"><img src='{{ section.settings.card_1_img | img_url: "200x" }}'></div>
+              <div class="empty-cart-link-card-image"><img src='{{ section.settings.card_1_img | image_url: width: 200 }}'></div>
             {% endif %}
             {% if section.settings.card_1_title != blank %}
               <h3>{{ section.settings.card_1_title }}</h3>
@@ -94,7 +94,7 @@
           <div class="empty-cart-link-card">
             <a href="{{ section.settings.card_2_link }}">
             {% if section.settings.card_2_title != blank %}
-              <div class="empty-cart-link-card-image"><img src="{{ section.settings.card_2_img | img_url: "200x" }}"></div>
+              <div class="empty-cart-link-card-image"><img src="{{ section.settings.card_2_img | image_url: width: 200 }}"></div>
             {% endif %}
             {% if section.settings.card_2_title != blank %}
               <h3>{{ section.settings.card_2_title }}</h3>

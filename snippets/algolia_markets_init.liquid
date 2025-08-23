@@ -1,7 +1,7 @@
 <script>
   algoliaShopify.shopify = {}
   algoliaShopify.shopify.routes = {};
-  algoliaShopify.shopify.routes.search_url = "{{ routes.search_url  }}";
+  algoliaShopify.shopify.routes.search_url = "{{ routes.search_url }}";
   algoliaShopify.shopify.market = {
     "id": {{ localization.market.id | json }},
     "language": {{ localization.language | json }},
@@ -14,7 +14,7 @@
     allProducts: "{{ shop.metafields.algolia_search.translations.allProducts | default: 'See all products' }}",
     articles: "{{ shop.metafields.algolia_search.translations.articles | default: 'Articles' }}",
     by: "{{ shop.metafields.algolia_search.translations.by | default: 'by' }}",
-    changeInput: "{{ shop.metafields.algolia_search.translations.changeInput | default:  'changing your input' }}",
+    changeInput: "{{ shop.metafields.algolia_search.translations.changeInput | default: 'changing your input' }}",
     clearAll: "{{ shop.metafields.algolia_search.translations.clearAll | default: 'Clear all' }}",
     clearFilters: "{{ shop.metafields.algolia_search.translations.clearFilters | default: 'clearing the filters' }}",
     collections: "{{ shop.metafields.algolia_search.translations.collections | default: 'Collections' }}",

@@ -31,7 +31,7 @@
       data-parent-fit="cover">
       <noscript>
         <div class="rimage-wrapper" style="padding-top:{{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%">
-          <img src="{{ section.settings.image | img_url: '1024x1024' }}" alt="{{ section.settings.image.alt | escape }}" class="rimage__image">
+          <img src="{{ section.settings.image | image_url: width: 1024, height: 1024 }}" alt="{{ section.settings.image.alt | escape }}" class="rimage__image">
         </div>
       </noscript>
     </div>
@@ -86,97 +86,98 @@
 </div>
 
 {% schema %}
-  {
-    "name": "Newsletter",
-    "class": "section-newsletter",
-    "settings": [
-      {
-        "type": "text",
-        "id": "subheading",
-        "label": "Subheading"
-      },
-      {
-        "type": "text",
-        "id": "title",
-        "label": "Heading",
-        "default": "Subscribe to our newsletter"
-      },
-	    {
-        "type": "richtext",
-        "id": "text",
-        "label": "Text",
-        "default": "<p>Sign up to our newsletter and we’ll keep you up to date with the latest arrivals<\/p>"
-      },
-      {
-        "type": "range",
-        "id": "height_desktop",
-        "min": 300,
-        "max": 1000,
-        "step": 50,
-        "unit": "px",
-        "label": "Desktop fixed height",
-        "default": 500
-      },
-      {
-        "type": "range",
-        "id": "height_mobile",
-        "min": 300,
-        "max": 700,
-        "step": 50,
-        "unit": "px",
-        "label": "Mobile fixed height",
-        "default": 400
-      },
-      {
-        "type": "paragraph",
-        "content": "Customers who subscribe will have their email address added to the 'accepts marketing' [customer list](/admin/customers?query=&accepts_marketing=1)"
-      },
-      {
-        "type": "header",
-        "content": "Background"
-      },
-      {
-        "type": "image_picker",
-        "id": "image",
-        "label": "Image",
-        "info": "2048 x 1024px recommended"
-      },
-      {
-        "type": "radio",
-        "id": "color_scheme",
-        "label": "Color scheme",
-        "default": "standard",
-        "options": [
-          {
-            "value": "standard",
-            "label": "Standard"
-          },
-          {
-            "value": "alt",
-            "label": "Alternate colors"
-          },
-          {
-            "value": "custom",
-            "label": "Custom colors"
-          }
-        ]
-      },
-      {
-        "type": "color",
-        "id": "color_bg",
-        "label": "Custom background color"
-      },
-      {
-        "type": "color",
-        "id": "color_text",
-        "label": "Custom text color"
+{
+  "name": "Newsletter",
+  "class": "section-newsletter",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Subscribe to our newsletter"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Sign up to our newsletter and we’ll keep you up to date with the latest arrivals</p>"
+    },
+    {
+      "type": "range",
+      "id": "height_desktop",
+      "min": 300,
+      "max": 1000,
+      "step": 50,
+      "unit": "px",
+      "label": "Desktop fixed height",
+      "default": 500
+    },
+    {
+      "type": "range",
+      "id": "height_mobile",
+      "min": 300,
+      "max": 700,
+      "step": 50,
+      "unit": "px",
+      "label": "Mobile fixed height",
+      "default": 400
+    },
+    {
+      "type": "paragraph",
+      "content": "Customers who subscribe will have their email address added to the 'accepts marketing' [customer list](/admin/customers?query=&accepts_marketing=1)"
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "2048 x 1024px recommended"
+    },
+    {
+      "type": "radio",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "standard",
+      "options": [
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "alt",
+          "label": "Alternate colors"
+        },
+        {
+          "value": "custom",
+          "label": "Custom colors"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "color_bg",
+      "label": "Custom background color"
+    },
+    {
+      "type": "color",
+      "id": "color_text",
+      "label": "Custom text color"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter",
+      "settings": {
       }
-	  ],
-	  "presets": [
-      {
-        "name": "Newsletter",
-        "settings": {}
-      }
-	  ]
-  }
+    }
+  ]
+}
 {% endschema %}
