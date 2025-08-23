@@ -1,3 +1,27 @@
+{% comment %}
+  =============================================================================
+  COLLECTION LIST SECTION
+  =============================================================================
+  Displays a list of collections with customizable layout and styling
+  - Supports multiple layout options (rows, carousel)
+  - Configurable grid sizes (2, 3, or 4 columns)
+  - Customizable background colors and wave effects
+  - Responsive design with mobile/desktop breakpoints
+  - Optional view all link to collections page
+  - Swiper.js integration for carousel functionality
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  DYNAMIC STYLING & COLOR CUSTOMIZATION
+  =============================================================================
+  CSS styles for background colors and header colors
+  - color_bg: Custom background color from section settings
+  - header_color: Custom header text color from section settings
+  - section-id-{{ section.id }}: Unique identifier for section-specific styling
+  - collection-block .caption.upper: Collection title and link color styling
+  - Swiper container initialization styles for carousel layout
+{% endcomment %}
 {% style %}
   {% unless section.settings.color_bg == blank %}
      .section-id-{{ section.id }} {
@@ -8,15 +32,36 @@
      .header_color {
         color: {{ section.settings.header_color }};
      }
-	.collection-block .caption.upper, .collection-block .caption.upper a {
+        .collection-block .caption.upper, .collection-block .caption.upper a {
         color: {{ section.settings.header_color }};
-	}
+        }
   {% endunless %}
+  {% comment %}
+    =============================================================================
+    SWIPER CAROUSEL INITIALIZATION STYLES
+    =============================================================================
+    Ensures proper slide sizing before Swiper.js initialization
+    - min-width: 100% for uninitialized carousel slides
+    - Prevents layout shift when carousel initializes
+    - Applies only to non-initialized Swiper containers
+  {% endcomment %}
   .product-list.swiper-container:not(.swiper--initialized) .swiper-slide {
     min-width: 100%;
   }
 {% endstyle %}
 
+{% comment %}
+  =============================================================================
+  WAVE STYLING INTEGRATION
+  =============================================================================
+  Optional decorative wave borders for visual interest
+  - wave: Wave position setting (none/top/bottom/both)
+  - wave-styles: Snippet for rendering wave SVG elements
+  - wave_position: Passes wave position to wave-styles snippet
+  - section_id: Unique section identifier for styling
+  - fill_color: Wave color matches section background color
+  - Creates seamless integration between waves and background
+{% endcomment %}
 {%- if section.settings.wave != "none" -%}
   {%- render 'wave-styles', 
     wave_position: section.settings.wave, 
@@ -24,6 +69,18 @@
     fill_color: section.settings.color_bg -%}
 {%- endif -%}
 
+{% comment %}
+  =============================================================================
+  LAYOUT & GRID CONFIGURATION
+  =============================================================================
+  Dynamic layout configuration based on section settings
+  - layout: 'rows' for grid layout, 'carousel' for horizontal scrolling
+  - grid: Number of columns per row (2, 3, or 4)
+  - product_class: CSS class for responsive grid columns
+  - column half: 2-column grid (50% width each)
+  - column third: 3-column grid (33.33% width each)
+  - column quarter: 4-column grid (25% width each)
+{% endcomment %}
 {% if section.settings.layout == 'rows' %}
   {% if section.settings.grid == 2 %}
     {% assign product_class = 'column half' %}
@@ -34,18 +91,82 @@
   {% endif %}
 {% endif %}
 
+{% comment %}
+  =============================================================================
+  CAROUSEL LAYOUT CONTAINER
+  =============================================================================
+  Swiper.js carousel wrapper for horizontal scrolling layout
+  - product-slider: Main carousel container class
+  - Only renders when layout is set to 'carousel'
+  - Enables touch/swipe functionality on mobile devices
+  - Supports navigation arrows and scrollbar
+{% endcomment %}
 {% if section.settings.layout == 'carousel' %}<div class="product-slider">{% endif %}
 
+{% comment %}
+  =============================================================================
+  MAIN SECTION CONTAINER
+  =============================================================================
+  Primary container with dynamic classes and section identification
+  - wide-container: Full-width layout with proper spacing
+  - half-gutter: Reduced spacing for tighter layout
+  - section-spacing: Consistent vertical spacing between sections
+  - section-id-{{ section.id }}: Unique identifier for section-specific styling
+  - use-alt-bg: Optional alternate background color class
+  - data-section-type="collection-list": Identifies section type for JavaScript
+  - data-cc-animate: JavaScript animation trigger for entrance effects
+{% endcomment %}
 <div class="wide-container half-gutter section-spacing section-id-{{ section.id }} {% if section.settings.alternate_bg_color %}use-alt-bg {% endif %}" data-section-type="collection-list" data-cc-animate>
+
+  {% comment %}
+    =============================================================================
+    SECTION HEADING & TITLE
+    =============================================================================
+    Section title with optional view all link
+    - section-heading: Container for title and navigation
+    - data-cc-animate: JavaScript animation trigger
+    - title: Section title from theme editor settings
+    - show_view_all: Boolean to display view all collections link
+    - routes.collections_url: Link to main collections page
+    - collections.general.view_all: Localized text for view all link
+  {% endcomment %}
   {% if section.settings.title != blank or section.settings.show_view_all %}
     <div class="section-heading" data-cc-animate>
       {% if section.settings.title != blank %}
+        {% comment %}
+          =============================================================================
+          SECTION TITLE
+          =============================================================================
+          Main section heading with customizable color
+          - h2: Semantic heading level for section structure
+          - header_color: Custom color class for title styling
+          - section.settings.title: Title text from theme editor
+          - escape filter: Prevents XSS in title text
+        {% endcomment %}
         <h2 class="h2 header_color">{{ section.settings.title | escape }}</h2>
       {% else %}
+        {% comment %}
+          =============================================================================
+          EMPTY TITLE PLACEHOLDER
+          =============================================================================
+          Empty div to maintain layout when no title is provided
+          - Ensures consistent spacing and alignment
+          - Prevents layout shift when title is hidden
+        {% endcomment %}
         <div></div>
       {% endif %}
 
       {% if section.settings.show_view_all %}
+        {% comment %}
+          =============================================================================
+          VIEW ALL COLLECTIONS LINK
+          =============================================================================
+          Link to view all collections page
+          - view-all-link: Styling class for the link
+          - data-cc-animate-click: Animation trigger for click effects
+          - routes.collections_url: URL to main collections page
+          - collections.general.view_all: Localized link text
+        {% endcomment %}
         <a data-cc-animate-click class="view-all-link" href="{{ routes.collections_url }}">
           {{ 'collections.general.view_all' | t }}
         </a>
@@ -53,11 +174,37 @@
     </div>
   {% endif %}
 
+  {% comment %}
+    =============================================================================
+    ANIMATION TYPE & LAYOUT DETERMINATION
+    =============================================================================
+    Determines the animation type and layout structure
+    - animation_type: Animation trigger for entrance effects
+    - layout: Section layout setting (columns, rows, carousel)
+    - cc-fade-in-up: Default animation for grid/row layout
+    - cc-fade-in: Animation for collage layout
+  {% endcomment %}
   {% assign animation_type = "cc-fade-in-up" %}
   {%- if section.settings.layout == "columns" -%}
     {% assign animation_type = "cc-fade-in" %}
   {%- endif -%}
 
+  {% comment %}
+    =============================================================================
+    COLLECTION DISPLAY LOGIC
+    =============================================================================
+    Renders collection blocks based on section settings and block content
+    - layout: Section layout (columns, rows, carousel)
+    - grid: Number of columns per row (2, 3, or 4)
+    - product_class: CSS class for responsive grid columns
+    - block.settings.collection: Collection ID from block settings
+    - collections[block.settings.collection]: Collection object
+    - block.settings.image: Image picker for collection block
+    - block.settings.block_bg_color: Block background color
+    - animation_type: Animation trigger for entrance effects
+    - i: Block index for animation and unique identifier
+    - animate: Animation trigger for entrance effects
+  {% endcomment %}
   {% if section.settings.layout == 'carousel' %}
     <div class="swiper-container product-list product-list--{{ section.settings.layout }}"
          data-products-in-view="{{ section.settings.grid }}">
