@@ -1,9 +1,55 @@
+{% comment %}
+  =============================================================================
+  APPS SECTION
+  =============================================================================
+  Dynamic section for rendering third-party app blocks and content
+  - Acts as a container for app-specific blocks and functionality
+  - Supports full-width and contained layouts via skip_container setting
+  - Renders all app blocks assigned to this section
+  - Integrates with Shopify app ecosystem for extended functionality
+  - Used for reviews, social media, loyalty programs, and other app integrations
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  MAIN APPS CONTAINER
+  =============================================================================
+  Primary container with dynamic width and animation support
+  - section-spacing: Consistent vertical spacing between sections
+  - container: Default contained width (can be skipped)
+  - skip_container: Boolean setting to remove container constraints
+  - data-cc-animate: JavaScript animation trigger for entrance effects
+  - Responsive layout that adapts to app block content
+{% endcomment %}
 <div class="section-spacing {% unless section.settings.skip_container %}container{% endunless %}" data-cc-animate>
+  {% comment %}
+    =============================================================================
+    APP BLOCK RENDERING LOOP
+    =============================================================================
+    Iterates through all app blocks assigned to this section
+    - section.blocks: Array of all blocks assigned to this section
+    - block: Individual app block object with type and settings
+    - render block: Renders the app block using its type identifier
+    - Supports multiple app blocks in a single section
+    - Each app block can have its own settings and functionality
+  {% endcomment %}
   {%- for block in section.blocks -%}
     {% render block %}
   {%- endfor -%}
 </div>
 
+{% comment %}
+  =============================================================================
+  SCHEMA CONFIGURATION
+  =============================================================================
+  Theme editor configuration for apps section customization
+  - name: Section name displayed in theme editor
+  - settings: Configurable options for merchants
+  - skip_container: Toggle for full-width vs contained layout
+  - blocks: Block types that can be added to this section
+  - @app: Accepts all app blocks from installed Shopify apps
+  - presets: Default section configuration for easy addition
+{% endcomment %}
 {% schema %}
 {
   "name": "Apps",
