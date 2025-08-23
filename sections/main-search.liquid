@@ -1,3 +1,15 @@
+{% comment %}
+  =============================================================================
+  MAIN SEARCH SECTION - SEARCH RESULTS & FILTERING
+  =============================================================================
+  Core search functionality with advanced filtering, sorting, and pagination
+  - URL construction for search results with proper escaping
+  - Integration with search-filter snippet for advanced filtering
+  - Configurable layout options (grid vs collage)
+  - AJAX filtering support for smooth user experience
+  - Responsive grid settings for mobile/desktop
+{% endcomment %}
+
 {%- liquid
   assign current_sort_by = search.sort_by | default: search.default_sort_by
 
@@ -9,12 +21,31 @@
   endif
 -%}
 
+{% comment %}
+  =============================================================================
+  MAIN SEARCH CONTAINER & COMPONENT INTEGRATION
+  =============================================================================
+  Primary search container with JavaScript component hooks
+  - data-section-type: JavaScript hook for search functionality
+  - data-ajax-filtering: Toggle for AJAX vs page reload filtering
+  - data-components: List of required JavaScript components
+  - py-medium: Vertical padding for proper spacing
+{% endcomment %}
 <div id="MainContent" data-section-type="search-template"
      data-ajax-filtering="{{ section.settings.ajax_products }}"
      data-components="tabs,product-block,price-range,accordion,sticky-scroll-direction"
      class="py-medium">
 
   {% paginate search.results by section.settings.products_per_page %}
+    {% comment %}
+      =============================================================================
+      SEARCH HEADER & TITLE DISPLAY
+      =============================================================================
+      Optional search title display with animation support
+      - search_show_title: Toggle for title visibility
+      - feature-header: Consistent heading styling
+      - data-cc-animate: JavaScript animation hook
+    {% endcomment %}
     <div class="central align-center">
       {% if section.settings.search_show_title %}
         <h1 class="feature-header" data-cc-animate>{{ 'general.search.title' | t }}</h1>
@@ -23,6 +54,18 @@
       
     </div>
 
+    {% comment %}
+      =============================================================================
+      SEARCH FILTERS & RESULTS DISPLAY
+      =============================================================================
+      Advanced filtering system using search-filter snippet
+      - mode: "search" for search-specific filter behavior
+      - results: Search results object for filter generation
+      - results_url: Constructed URL for filter state management
+      - section: Current section for filter configuration
+      - current_sort_by: Current sorting preference
+      - paginate: Pagination object for result navigation
+    {% endcomment %}
     {% if search.performed %}
       {% render 'search-filter',
         mode: "search",
@@ -36,7 +79,17 @@
   {% endpaginate %}
 </div>
 
-
+{% comment %}
+  =============================================================================
+  SEARCH SECTION SCHEMA - CONFIGURATION & CUSTOMIZATION
+  =============================================================================
+  Theme editor configuration for search functionality and appearance
+  - Header settings: Title display and styling options
+  - Grid settings: Layout, columns, and pagination configuration
+  - Filter settings: Advanced filtering system configuration
+  - Sidebar settings: Filter sidebar behavior and appearance
+  - Sorting settings: Result ordering and user preference options
+{% endcomment %}
 {% schema %}
   {
     "name": "Search results",
@@ -46,6 +99,14 @@
         "type": "header",
         "content": "Header"
       },
+      {% comment %}
+        =============================================================================
+        HEADER CONFIGURATION
+        =============================================================================
+        Controls the display of the search page title
+        - search_show_title: Toggle for title visibility
+        - Default: true (shows "Search results" heading)
+      {% endcomment %}
       {
         "type": "checkbox",
         "id": "search_show_title",
@@ -56,6 +117,15 @@
         "type": "header",
         "content": "Grid"
       },
+      {% comment %}
+        =============================================================================
+        LAYOUT CONFIGURATION
+        =============================================================================
+        Controls how search results are displayed
+        - columns: Collage layout (requires natural image shape)
+        - rows: Standard grid layout with consistent spacing
+        - Note: Collage only works with natural image shapes in product settings
+      {% endcomment %}
       {
         "type": "select",
         "id": "layout",
@@ -73,6 +143,15 @@
         "default": "rows",
         "info": "Collage will only work when the 'Image shape' is set to Natural - in Products / Image shape"
       },
+      {% comment %}
+        =============================================================================
+        DESKTOP GRID CONFIGURATION
+        =============================================================================
+        Controls number of products per row on desktop devices
+        - Range: 2-4 products per row
+        - Default: 3 products (balanced layout)
+        - Affects overall page width and product sizing
+      {% endcomment %}
       {
         "type": "range",
         "id": "grid",
@@ -81,6 +160,15 @@
         "max": 4,
         "default": 3
       },
+      {% comment %}
+        =============================================================================
+        MOBILE GRID CONFIGURATION
+        =============================================================================
+        Controls number of products per row on mobile devices
+        - Options: 1 or 2 products per row
+        - Default: 2 products (optimized for mobile viewing)
+        - Ensures proper touch target sizes on small screens
+      {% endcomment %}
       {
         "type": "select",
         "id": "grid_mobile",
@@ -97,6 +185,15 @@
         ],
         "default": "2"
       },
+      {% comment %}
+        =============================================================================
+        PAGINATION CONFIGURATION
+        =============================================================================
+        Controls how many search results are shown per page
+        - Range: 6-48 results per page
+        - Step: 6 results (consistent with grid layouts)
+        - Default: 12 results (balanced performance and UX)
+      {% endcomment %}
       {
         "type": "range",
         "id": "products_per_page",
@@ -106,6 +203,15 @@
         "step": 6,
         "default": 12
       },
+      {% comment %}
+        =============================================================================
+        INFINITE SCROLL CONFIGURATION
+        =============================================================================
+        Enables automatic loading of more results as users scroll
+        - Default: true (modern UX pattern)
+        - Automatically loads more products without page navigation
+        - Improves user experience for large result sets
+      {% endcomment %}
       {
         "type": "checkbox",
         "id": "enable_infinite_scroll",
@@ -113,6 +219,14 @@
         "default": true,
         "info": "As visitors scroll down, more products are loaded in automatically."
       },
+      {% comment %}
+        =============================================================================
+        VENDOR DISPLAY CONFIGURATION
+        =============================================================================
+        Controls whether product vendor information is shown
+        - Default: false (cleaner product display)
+        - Useful for multi-vendor stores or brand-focused displays
+      {% endcomment %}
       {
         "type": "checkbox",
         "id": "show_vendor",
@@ -123,11 +237,29 @@
         "type": "header",
         "content": "FILTERS"
       },
+      {% comment %}
+        =============================================================================
+        FILTER SYSTEM INFORMATION
+        =============================================================================
+        Instructions for setting up search filters
+        - Filters are created through Shopify's navigation system
+        - Link to admin navigation page for filter configuration
+        - Filters are automatically applied to search results
+      {% endcomment %}
       {
         "type": "paragraph",
         "content": "To create the search filters, go to your [navigation](\/admin\/menus) page."
       },
       
+  {% comment %}
+    =============================================================================
+    FILTER COUNT DISPLAY
+    =============================================================================
+    Shows the number of results for each filter option
+    - Default: false (cleaner interface)
+    - Helpful for users to understand result distribution
+    - Can be performance-intensive with large catalogs
+  {% endcomment %}
   {
     "type": "checkbox",
     "id": "show_filter_counts",
@@ -136,6 +268,15 @@
   }
 ,
       
+  {% comment %}
+    =============================================================================
+    DEAD END FILTER DISPLAY
+    =============================================================================
+    Shows filters that would result in zero results
+    - Default: true (prevents user confusion)
+    - Helps users understand why no results appear
+    - Important for user experience and filter navigation
+  {% endcomment %}
   {
     "type": "checkbox",
     "id": "show_filter_deadends",
@@ -144,6 +285,15 @@
   }
 ,
       
+  {% comment %}
+    =============================================================================
+    AJAX FILTERING CONFIGURATION
+    =============================================================================
+    Enables filtering without page reloads
+    - Default: true (smooth user experience)
+    - Some third-party apps require this to be disabled
+    - Improves performance and user engagement
+  {% endcomment %}
   {
     "type": "checkbox",
     "id": "ajax_products",
@@ -153,6 +303,16 @@
   }
 ,
       
+  {% comment %}
+    =============================================================================
+    FILTER MODE CONFIGURATION
+    =============================================================================
+    Controls how filters are displayed and interacted with
+    - none: No filtering (basic search only)
+    - simple: Basic filtering for small catalogs
+    - sidebar: Full sidebar filtering (recommended)
+    - Note: Simple mode has limitations with multiple selections
+  {% endcomment %}
   {
     "type": "radio",
     "id": "filter_mode",
@@ -181,6 +341,15 @@
         "content": "Sidebar Settings"
       },
       
+  {% comment %}
+    =============================================================================
+    STICKY SIDEBAR CONFIGURATION
+    =============================================================================
+    Keeps filter sidebar visible during page scroll
+    - Default: true (improves filter accessibility)
+    - Ensures filters remain accessible on long result pages
+    - Important for user experience on mobile devices
+  {% endcomment %}
   {
     "type": "checkbox",
     "id": "sticky_sidebar",
@@ -189,6 +358,17 @@
   }
 ,
       
+  {% comment %}
+    =============================================================================
+    FILTER GROUP COLLAPSE CONFIGURATION
+    =============================================================================
+    Controls automatic collapsing of filter groups
+    - none: All filters always visible
+    - over-6: Collapse groups with more than 6 options
+    - over-12: Collapse groups with more than 12 options
+    - over-18: Collapse groups with more than 18 options
+    - all: Collapse all filter groups by default
+  {% endcomment %}
   {
     "type": "select",
     "id": "collapse_filters_method",
@@ -219,6 +399,14 @@
   }
 ,
       
+  {% comment %}
+    =============================================================================
+    SORT BY COLLAPSE CONFIGURATION
+    =============================================================================
+    Controls whether the sort by filter group is collapsed
+    - Default: false (sort options always visible)
+    - Useful for clean interface when sorting is less important
+  {% endcomment %}
   {
     "type": "checkbox",
     "id": "collapse_sort_by",
@@ -232,6 +420,15 @@
         "content": "Sorting"
       },
       
+  {% comment %}
+    =============================================================================
+    SORTING ENABLEMENT
+    =============================================================================
+    Controls whether users can sort search results
+    - Default: true (full sorting functionality)
+    - Allows users to sort by relevance, price, date, etc.
+    - Essential for user control over result display
+  {% endcomment %}
   {
     "type": "checkbox",
     "id": "enable_sorting",

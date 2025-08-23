@@ -1,3 +1,16 @@
+{% comment %}
+  =============================================================================
+  MAIN CART SECTION - SHOPPING CART FUNCTIONALITY
+  =============================================================================
+  Complete shopping cart page with advanced features and third-party integrations
+  - Intelligems discount system integration
+  - Dynamic pricing with discount allocations
+  - Cart notes and terms acceptance
+  - Multiple checkout options (Shopify, PayPal, Google)
+  - Responsive cart item management
+  - Continue shopping navigation
+{% endcomment %}
+
 {%- liquid
    assign continue_shopping_page = routes.all_products_collection_url
    if section.settings.continue_shopping_page != blank
@@ -5,16 +18,46 @@
    endif
  -%}
 
+{% comment %}
+  =============================================================================
+  CART PAGE CONTAINER & TITLE
+  =============================================================================
+  Main cart page container with optional title display
+  - central: Centers content within page width constraints
+  - py-medium: Vertical padding for proper spacing
+  - content: Applies consistent content styling
+  - data-section-type: JavaScript hook for cart functionality
+  - cart_show_title: Toggle for cart page title visibility
+{% endcomment %}
 <div class="central py-medium content" data-section-type="cart-template">
   {% if section.settings.cart_show_title %}
     <h1 data-cc-animate class="h2">{{ 'cart.general.title' | t }}
     </h1>
   {% endif %}
 
+  {% comment %}
+    =============================================================================
+    CART ITEMS DISPLAY - ONLY SHOW WHEN CART HAS ITEMS
+    =============================================================================
+    Main cart form with item listing and management
+    - cart.item_count > 0: Conditional display for cart contents
+    - Form action: POSTs to cart update endpoint
+    - id="cartform": JavaScript hook for form handling
+    - data-cc-animate: Animation hook for cart display
+  {% endcomment %}
   {% if cart.item_count > 0 %}
 
     <form action="{{ routes.cart_url }}" method="post" id="cartform" data-cc-animate>
 
+      {% comment %}
+        =============================================================================
+        CART LIST HEADER - COLUMN LABELS
+        =============================================================================
+        Table-like header for cart item columns
+        - col-image: Product image column
+        - col-notimage: Product details, price, quantity, and total columns
+        - Localized labels from theme locales for internationalization
+      {% endcomment %}
       <ul class="cart-list clearfix">
 
         <li class="item cart-list-header">
@@ -31,6 +74,16 @@
           </div>
         </li>
 
+      {% comment %}
+        =============================================================================
+        INTELLIGEMS DISCOUNT SYSTEM INTEGRATION
+        =============================================================================
+        Third-party discount system for advanced pricing
+        - _igLineItemDiscount: Intelligems line item discount property
+        - intelligems_total: Accumulates total Intelligems discounts
+        - Handles cases where discount is 0, nil, or blank
+        - Integrates with Shopify's discount allocation system
+      {% endcomment %}
       {% assign intelligems_total = 0 %}
       {% for item in cart.items %}
         {% case item.properties._igLineItemDiscount %}
@@ -42,16 +95,42 @@
         {% endcase %}
 
           {% comment %}
-            Determining the handle of the collection that was last seen for the 'continue shopping' link.
+            =============================================================================
+            CART ITEM DISPLAY - INDIVIDUAL PRODUCT ROWS
+            =============================================================================
+            Each cart item displayed with full product information
+            - col-image: Product image with link to product page
+            - col-notimage: Product details, pricing, quantity controls
+            - Responsive image rendering for optimal display
+            - Preorder label support for future product releases
           {% endcomment %}
 
           <li class="item clearfix">
+            {% comment %}
+              =============================================================================
+              PRODUCT IMAGE COLUMN
+              =============================================================================
+              Product image display with link to product page
+              - data-cc-animate-click: Animation hook for click interactions
+              - responsive-image: Snippet for optimized image display
+              - Links to product detail page for easy navigation
+            {% endcomment %}
             <div class="col-image">
               <a data-cc-animate-click class="image" href="{{ item.url }}">
                 {% render 'responsive-image', image: item.image %}
               </a>
             </div>
             <div class="col-notimage">
+              {% comment %}
+                =============================================================================
+                PRODUCT DESCRIPTION & DETAILS
+                =============================================================================
+                Product information including title, variant, and properties
+                - show_preorder_label: Toggle for preorder product labels
+                - template_suffix: Checks for preorder product type
+                - Product title with variant information display
+                - Line item properties for custom product options
+              {% endcomment %}
               <div class="desc">
                 {% if settings.show_preorder_label and item.product.template_suffix == 'preorder' %}
                   <div class="feature-subheader feature-subheader--small">{{ 'products.product.preorder' | t }}
@@ -68,7 +147,14 @@
                   </a>
                 </div>
                 {% comment %}
-                  Line Item Properties
+                  =============================================================================
+                  LINE ITEM PROPERTIES DISPLAY
+                  =============================================================================
+                  Custom product properties and options
+                  - item.properties: Custom fields added during product selection
+                  - first_character_in_key == '_': Hides internal properties
+                  - File upload handling for custom properties
+                  - Property key-value display with proper formatting
                 {% endcomment %}
                 {% if item.properties.size > 0 %}
                   <div class="line-items">
@@ -90,6 +176,15 @@
                 {% endif %}
 
 
+                {% comment %}
+                  =============================================================================
+                  SUBSCRIPTION PLAN DISPLAY
+                  =============================================================================
+                  Selling plan information for subscription products
+                  - item.selling_plan_allocation: Shopify subscription data
+                  - Displays subscription plan name for recurring orders
+                  - Important for subscription-based business models
+                {% endcomment %}
                 {% if item.selling_plan_allocation %}
                   <div class="subscription-description">
                     <p>{{ item.selling_plan_allocation.selling_plan.name }}
@@ -97,11 +192,31 @@
                   </div>
                 {% endif %}
 
+                {% comment %}
+                  =============================================================================
+                  BACKORDER TEXT DISPLAY
+                  =============================================================================
+                  Optional backorder information for out-of-stock products
+                  - show_backorder_text: Section setting toggle
+                  - backorder snippet: Renders backorder-specific messaging
+                  - Only shows for products with inventory tracking enabled
+                {% endcomment %}
                 {% if section.settings.show_backorder_text == true %}
                   {% render 'backorder', variant: item.variant %}
                 {% endif %}
               </div>
 
+              {% comment %}
+                =============================================================================
+                ITEM PRICING & DISCOUNT DISPLAY
+                =============================================================================
+                Complex pricing logic with multiple discount types
+                - original_line_price vs final_line_price: Discount comparison
+                - Intelligems discount integration and display
+                - Line-level discount allocations from Shopify
+                - Unit price display for bulk pricing
+                - Original price strikethrough for discounted items
+              {% endcomment %}
               <div class="item-price">
                 {% if item.original_line_price > item.final_line_price %}
                   {% if item.original_line_price and item.original_line_price != item.line_price and intelligems_discount == 0 %}
@@ -117,6 +232,16 @@
 
                 {% render 'unit-price', variant: item %}
 
+                {% comment %}
+                  =============================================================================
+                  LINE-LEVEL DISCOUNT ALLOCATIONS
+                  =============================================================================
+                  Individual item discount display
+                  - item.line_level_discount_allocations: Shopify discount data
+                  - Intelligems filtering: Hides Intelligems from discount display
+                  - Discount title and amount display with proper formatting
+                  - Negative amount styling for clear discount indication
+                {% endcomment %}
                 {% if item.line_level_discount_allocations.size > 0 %}
                   <ul class="cart-discount-list">
                     {% for discount_allocation in item.line_level_discount_allocations %}
@@ -134,6 +259,18 @@
                 {% endif %}
               </div>
 
+              {% comment %}
+                =============================================================================
+                QUANTITY CONTROLS & REMOVE BUTTON
+                =============================================================================
+                Interactive quantity management and item removal
+                - quantity: Plus/minus buttons with quantity input
+                - border-radius: Dynamic button styling based on theme settings
+                - routes.cart_change_url: Shopify cart update endpoint
+                - forloop.index: Line item position for cart updates
+                - aria-label: Accessibility labels for screen readers
+                - remove: Link to remove item (sets quantity to 0)
+              {% endcomment %}
               <div class="quantity-and-remove">
                 <div class="quantity border-radius-{{ settings.buttons_shape }}">
                   <a class="minus" href="{{ routes.cart_change_url }}?line={{ forloop.index }}&quantity={{ item.quantity | minus: 1 }}" aria-label="{{ 'cart.general.decrease' | t | escape }}">
@@ -149,6 +286,16 @@
                 </a>
               </div>
 
+              {% comment %}
+                =============================================================================
+                LINE ITEM TOTAL DISPLAY
+                =============================================================================
+                Individual item total with discount calculations
+                - original_line_price vs final_line_price: Discount comparison
+                - Intelligems discount integration
+                - theme-money: Consistent currency formatting
+                - Shows both original and discounted totals when applicable
+              {% endcomment %}
               <div class="line-total">
                 {% if item.original_line_price != item.final_line_price %}
                   {% if item.original_line_price and item.original_line_price != item.line_price and intelligems_discount == 0 %}
@@ -168,6 +315,16 @@
 
       </ul>
 
+      {% comment %}
+        =============================================================================
+        CART ACTIONS - UPDATE & CONTINUE SHOPPING
+        =============================================================================
+        Cart management actions below item list
+        - update: Submit button to update cart quantities
+        - continue: Link to continue shopping (configurable destination)
+        - Separator styling for visual clarity
+        - data-cc-animate-click: Animation hook for interactions
+      {% endcomment %}
       <div class="update-continue">
         <input class="update textbutton" type="submit" name="update" value="{{ 'cart.general.update' | t | escape }}"/>
         <span>|</span>
@@ -175,7 +332,27 @@
         </a>
       </div>
 
+      {% comment %}
+        =============================================================================
+        CART SUMMARY & CHECKOUT SECTION
+        =============================================================================
+        Bottom section with totals, notes, and checkout options
+        - under-cart: Container for cart summary information
+        - subtotal-row: Cart totals with discount display
+        - Cart notes, terms acceptance, and tax information
+        - Multiple checkout button options
+      {% endcomment %}
       <div class="under-cart">
+        {% comment %}
+          =============================================================================
+          CART-LEVEL DISCOUNT DISPLAY
+          =============================================================================
+          Store-wide discounts applied to entire cart
+          - cart.cart_level_discount_applications: Cart-level discount data
+          - Intelligems filtering: Hides Intelligems from display
+          - align-right: Right-aligned discount information
+          - Negative amount styling for clear discount indication
+        {% endcomment %}
         <div class="subtotal-row">
           {%- if cart.cart_level_discount_applications != blank -%}
             <ul class="cart-discount-list align-right">
@@ -194,6 +371,16 @@
             </ul>
           {%- endif -%}
 
+          {% comment %}
+            =============================================================================
+            CART SUBTOTAL DISPLAY
+            =============================================================================
+            Total cart value before taxes and shipping
+            - label: Localized "Subtotal" text
+            - amount: Cart total price with proper currency formatting
+            - is_total_price: Flag for total price display
+            - theme-money: Consistent currency styling
+          {% endcomment %}
           <div class="subtotal">
             <span class="label">{{ 'cart.general.subtotal' | t }}
             </span>
@@ -202,6 +389,16 @@
           </div>
         </div>
 
+        {% comment %}
+          =============================================================================
+          CART NOTES SECTION
+          =============================================================================
+          Optional order notes for customer service
+          - cart_note_show: Section setting toggle
+          - note: Cart note field for customer instructions
+          - feature-subheader--small: Consistent label styling
+          - Textarea for multi-line note input
+        {% endcomment %}
         {% if section.settings.cart_note_show %}
           <p class="note-area">
             <label for="note" class="feature-subheader--small">{{ 'cart.label.note' | t }}
@@ -211,6 +408,17 @@
           </p>
         {% endif %}
 
+        {% comment %}
+          =============================================================================
+          TERMS & CONDITIONS ACCEPTANCE
+          =============================================================================
+          Legal terms acceptance checkbox
+          - cart_terms_show: Section setting toggle
+          - cart_terms_page: Configurable terms page URL
+          - terms_label_html: Dynamic terms label with link
+          - Conditional link display based on terms page setting
+          - Important: Hides additional checkout buttons when enabled
+        {% endcomment %}
         {% if section.settings.cart_terms_show %}
           <p class="terms rte">
             <input type="checkbox" id="terms"/>
@@ -227,6 +435,17 @@
           </p>
         {% endif %}
 
+        {% comment %}
+          =============================================================================
+          TAX & SHIPPING INFORMATION
+          =============================================================================
+          Dynamic tax and shipping policy display
+          - show_tax_and_shipping: Section setting toggle
+          - cart.taxes_included: Shopify tax configuration
+          - shop.shipping_policy: Store shipping policy information
+          - Conditional messaging based on tax and shipping settings
+          - rte: Rich text editor styling for policy content
+        {% endcomment %}
         {% if section.settings.show_tax_and_shipping %}
           {%- capture taxes_shipping_checkout -%}
             {%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
@@ -244,9 +463,28 @@
           </div>
         {% endif %}
 
+        {% comment %}
+          =============================================================================
+          PRIMARY CHECKOUT BUTTON
+          =============================================================================
+          Main checkout button for Shopify checkout
+          - checkout-btn: Primary button styling
+          - tn-original-checkout: Third-party checkout integration class
+          - name="checkout": Form submission to Shopify checkout
+          - Localized checkout button text
+        {% endcomment %}
         <input type="submit" class="checkout-btn tn-original-checkout" name="checkout" value="{{ 'cart.general.checkout' | t | escape }}"/>
 
-        {% comment %}Paypal and Google checkout buttons{% endcomment %}
+        {% comment %}
+          =============================================================================
+          ADDITIONAL CHECKOUT OPTIONS
+          =============================================================================
+          Third-party checkout buttons (PayPal, Google, etc.)
+          - show_additional_checkout_buttons: Section setting toggle
+          - additional_checkout_buttons: Shopify's additional checkout content
+          - cart_terms_show == false: Only shows when terms not required
+          - content_for_additional_checkout_buttons: Shopify checkout button content
+        {% endcomment %}
         {% if section.settings.show_additional_checkout_buttons and additional_checkout_buttons and section.settings.cart_terms_show == false %}
           <div class="additional-checkout-buttons">
             {{ content_for_additional_checkout_buttons }}
@@ -258,6 +496,17 @@
 
   {% else %}
 
+    {% comment %}
+      =============================================================================
+      EMPTY CART STATE
+      =============================================================================
+      Display when cart has no items
+      - rte: Rich text editor styling for consistent typography
+      - data-cc-animate: Animation hooks for empty state display
+      - data-cc-animate-delay: Staggered animation timing
+      - continue_browsing: Link to continue shopping
+      - align-center: Centered layout for empty state
+    {% endcomment %}
     <div>
       <div class="rte" data-cc-animate data-cc-animate-delay="0.4s">
         <p data-cc-animate data-cc-animate-delay="0.2s" class="align-center">
@@ -273,17 +522,45 @@
   {% endif %}
 </div>
 
-
+{% comment %}
+  =============================================================================
+  CART SECTION SCHEMA - CONFIGURATION & CUSTOMIZATION
+  =============================================================================
+  Theme editor configuration for cart functionality and appearance
+  - Header settings: Title display and styling options
+  - Cart functionality: Notes, terms, and checkout options
+  - Display settings: Tax info, backorder text, and additional buttons
+  - Navigation: Continue shopping page configuration
+{% endcomment %}
 {% schema %}
   {
     "name": "Cart page",
     "settings": [
+      {% comment %}
+        =============================================================================
+        CART TITLE CONFIGURATION
+        =============================================================================
+        Controls the display of the cart page title
+        - cart_show_title: Toggle for title visibility
+        - Default: true (shows "Shopping Cart" heading)
+        - h2: Consistent heading styling
+      {% endcomment %}
       {
         "type": "checkbox",
         "id": "cart_show_title",
         "label": "Show page title",
         "default": true
       },
+      {% comment %}
+        =============================================================================
+        TERMS & CONDITIONS CONFIGURATION
+        =============================================================================
+        Legal terms acceptance requirement
+        - cart_terms_show: Toggle for terms checkbox
+        - Important: Hides additional checkout buttons when enabled
+        - Default: false (allows additional checkout options)
+        - Info: Explains the trade-off with additional checkout buttons
+      {% endcomment %}
       {
         "type": "checkbox",
         "id": "cart_terms_show",
@@ -291,32 +568,93 @@
         "info": "Additional checkout buttons will be hidden",
         "default": false
       },
+      {% comment %}
+        =============================================================================
+        TERMS PAGE CONFIGURATION
+        =============================================================================
+        URL for terms and conditions page
+        - cart_terms_page: Link to legal terms page
+        - Used in terms acceptance checkbox label
+        - Optional: Can be left blank for basic terms display
+      {% endcomment %}
       {
         "type": "url",
         "id": "cart_terms_page",
         "label": "Page for 'Terms and Conditions' link"
       },
+      {% comment %}
+        =============================================================================
+        CONTINUE SHOPPING NAVIGATION
+        =============================================================================
+        Destination for continue shopping link
+        - continue_shopping_page: Custom page URL for navigation
+        - Default: routes.all_products_collection_url (all products)
+        - Override: Custom page for specific shopping experience
+      {% endcomment %}
       {
         "type": "url",
         "id": "continue_shopping_page",
         "label": "Page for 'Continue shopping' link"
-      }, {
+      }, 
+      {% comment %}
+        =============================================================================
+        CART NOTES CONFIGURATION
+        =============================================================================
+        Order notes functionality for customer service
+        - cart_note_show: Toggle for notes textarea
+        - Default: true (enables customer order instructions)
+        - Notes: Customer can add special instructions for orders
+      {% endcomment %}
+      {
         "type": "checkbox",
         "id": "cart_note_show",
         "label": "Enable order notes",
         "default": true
-      }, {
+      }, 
+      {% comment %}
+        =============================================================================
+        TAX & SHIPPING INFORMATION DISPLAY
+        =============================================================================
+        Policy information display below cart
+        - show_tax_and_shipping: Toggle for policy information
+        - Default: true (shows tax and shipping details)
+        - Dynamic: Adapts based on store tax and shipping settings
+        - rte: Rich text editor styling for policy content
+      {% endcomment %}
+      {
         "type": "checkbox",
         "id": "show_tax_and_shipping",
         "label": "Show tax and shipping information",
         "default": true
-      }, {
+      },
+      {% comment %}
+        =============================================================================
+        ADDITIONAL CHECKOUT BUTTONS
+        =============================================================================
+        Third-party checkout options (PayPal, Google, etc.)
+        - show_additional_checkout_buttons: Toggle for additional options
+        - Default: true (shows multiple checkout methods)
+        - Important: Hidden when terms acceptance is required
+        - Info: Links to Shopify documentation for setup
+      {% endcomment %}
+      {
         "type": "checkbox",
         "id": "show_additional_checkout_buttons",
         "label": "Show additional checkout options",
         "default": true,
         "info": "Display other gateways and quick checkout buttons. [Read more](https://help.shopify.com/en/manual/payments/accelerated-checkouts)"
-      }, {
+      }, 
+      {% comment %}
+        =============================================================================
+        BACKORDER TEXT DISPLAY
+        =============================================================================
+        Out-of-stock product messaging
+        - show_backorder_text: Toggle for backorder information
+        - Default: true (shows backorder availability)
+        - Conditional: Only displays for products with inventory tracking
+        - Info: Explains when backorder text appears
+      {% endcomment %}
+      {
         "type": "checkbox",
         "id": "show_backorder_text",
         "label": "Show backorder text",
