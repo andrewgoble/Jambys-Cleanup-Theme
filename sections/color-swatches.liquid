@@ -1,5 +1,42 @@
+{% comment %}
+  =============================================================================
+  COLOR SWATCHES SECTION
+  =============================================================================
+  Interactive color swatch display for product color selection
+  - Organizes colors into categories (Classics, Prints, Limited)
+  - Uses CSS Grid for responsive swatch layout
+  - Template-based rendering for dynamic content
+  - Category-based ordering system for consistent display
+  - Links to collection pages for color-specific product browsing
+  - Essential for product discovery and color preference selection
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  SECTION BLOCKS VALIDATION
+  =============================================================================
+  Checks if section has any blocks before rendering
+  - section_blocks_size: Count of blocks assigned to this section
+  - Prevents rendering empty swatch sections
+  - Ensures proper functionality when no swatches are configured
+{% endcomment %}
 {% assign section_blocks_size = section.blocks | size %}
 {% if section_blocks_size > 0 %}
+  {% comment %}
+    =============================================================================
+    COLOR SWATCH STYLING
+    =============================================================================
+    CSS styles for color swatch appearance and layout
+    - color-swatch-img: Individual swatch image styling
+    - box-sizing: border-box for consistent sizing
+    - display: inline-block for proper layout flow
+    - height/width: 100% for full container coverage
+    - border-radius: 100% for circular swatch appearance
+    - background-position: center for centered image display
+    - background-size: cover for full image coverage
+    - position: absolute for precise positioning
+    - opacity: 1 for full visibility
+  {% endcomment %}
   {% style %}
     .color-swatch-img {
       box-sizing: border-box;
@@ -14,10 +51,33 @@
       left: 0;
       opacity: 1;
     }
+    
+    {% comment %}
+      =============================================================================
+      SWATCH CATEGORY TITLE STYLING
+      =============================================================================
+      Styling for category title headers
+      - swatch-category-title: Base category title styling
+      - font-weight: bold for emphasis
+      - flex: 0 0 100% for full-width display
+      - !important ensures styling priority
+    {% endcomment %}
     .swatch-category-title {
       font-weight: bold;
       flex: 0 0 100% !important;
     }
+    
+    {% comment %}
+      =============================================================================
+      CATEGORY-SPECIFIC ORDERING
+      =============================================================================
+      CSS Grid order values for category positioning
+      - swatch-category-2: Classics category (order: 2000)
+      - swatch-category-3: Prints category (order: 3000)
+      - swatch-category-4: Limited category (order: 4000)
+      - Ensures consistent category display order
+      - Uses high order values to avoid conflicts with swatch ordering
+    {% endcomment %}
     .swatch-category-title[swatch-category-2] {
       order: 2000;
     }
@@ -29,11 +89,56 @@
     }
   {% endstyle %}
 
+  {% comment %}
+    =============================================================================
+    COLOR SWATCHES TEMPLATE
+    =============================================================================
+    Template container for dynamic swatch rendering
+    - id="color-swatches": Unique identifier for template
+    - Used by JavaScript for dynamic content management
+    - Contains all swatch data and category information
+    - Template approach enables efficient DOM manipulation
+  {% endcomment %}
   <template id="color-swatches">
+    {% comment %}
+      =============================================================================
+      CATEGORY FLAG INITIALIZATION
+      =============================================================================
+      Boolean flags to track which categories exist
+      - category_2: Classics category flag
+      - category_3: Prints category flag
+      - category_4: Limited category flag
+      - Used for conditional category title display
+      - Prevents empty category headers
+    {% endcomment %}
     {% assign category_2 = false %}
     {% assign category_3 = false %}
     {% assign category_4 = false %}
+    
+    {% comment %}
+      =============================================================================
+      BLOCK ITERATION & CATEGORY ASSIGNMENT
+      =============================================================================
+      Loops through all swatch blocks and assigns category indices
+      - section.blocks: Array of all swatch blocks
+      - block.settings.category: Category setting from theme editor
+      - category_index: Numeric value for CSS Grid ordering
+      - Empty category defaults to 1000 (first position)
+      - Classics category gets 2000, Prints 3000, Limited 4000
+      - Sets category flags for conditional title display
+    {% endcomment %}
     {% for block in section.blocks %}
+      {% comment %}
+        =============================================================================
+        CATEGORY CASE HANDLING
+        =============================================================================
+        Assigns category indices based on category names
+        - Empty category: Default position (1000)
+        - Classics: Second position (2000)
+        - Prints: Third position (3000)
+        - Limited: Fourth position (4000)
+        - Sets boolean flags for category existence
+      {% endcomment %}
       {% case block.settings.category %}
         {% when "" %}
         {% assign category_index = 1000 %}
@@ -47,6 +152,18 @@
         {% assign category_4 = true %}
         {% assign category_index = 4000 %}
       {% endcase %}
+      
+      {% comment %}
+        =============================================================================
+        SWATCH LINK GENERATION
+        =============================================================================
+        Creates clickable swatch links to collection pages
+        - href: Links to color-specific collection
+        - data-category: Category identifier for JavaScript
+        - data-order: CSS Grid order value for positioning
+        - style: Inline styles for swatch appearance
+        - Contains swatch image and category information
+      {% endcomment %}
       <a
         href="{% if product.handle != null %} {{ collection_product.url }} {% endif %}"
         class="color-swatch js-builder-color-swatch"
