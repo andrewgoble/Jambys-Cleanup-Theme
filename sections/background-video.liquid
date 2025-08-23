@@ -1,3 +1,26 @@
+{% comment %}
+  =============================================================================
+  BACKGROUND VIDEO SECTION
+  =============================================================================
+  Full-width section with background video and overlay content
+  - Supports both desktop and mobile video sources
+  - Multiple height options (fixed, responsive, custom)
+  - Overlay content with headings, text, and call-to-action buttons
+  - Responsive typography with mobile/desktop size adjustments
+  - Video autoplay and loop functionality
+  - Overlay tint options for better text readability
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  HEADING TAG DETERMINATION
+  =============================================================================
+  Sets appropriate heading tag based on section settings
+  - heading_tag: Default heading level (h2)
+  - section.settings.heading_h1: Boolean to promote heading to h1
+  - Used for SEO and document structure hierarchy
+  - H1 should only be used once per page for main page heading
+{% endcomment %}
 {%- liquid
   assign heading_tag = "h2"
   if section.settings.heading_h1
@@ -5,7 +28,32 @@
   endif
 -%}
 
+{% comment %}
+  =============================================================================
+  MAIN SECTION CONTAINER
+  =============================================================================
+  Primary container with dynamic classes and layout options
+  - id="section-id-{{ section.id }}": Unique section identifier
+  - section-spacing: Consistent vertical spacing between sections
+  - wide-container: Contained width layout option
+  - header-overlap-section: Allows header to overlap section content
+  - needs-alt-logo: Triggers alternate logo display for dark overlays
+  - data-section-type="background-video": Identifies section type for JavaScript
+{% endcomment %}
 <div id="section-id-{{ section.id }}" class="{% if section.settings.full_width == false %}section-spacing wide-container{% else %}header-overlap-section needs-alt-logo{% endif %}" data-section-type="background-video">
+
+  {% comment %}
+    =============================================================================
+    RESPONSIVE HEIGHT & TYPOGRAPHY STYLES
+    =============================================================================
+    Dynamic CSS for height and typography based on section settings
+    - height: Height setting (fixed, responsive, custom)
+    - height_mobile: Fixed height for mobile devices (under 768px)
+    - height_desktop: Fixed height for desktop devices (768px+)
+    - title_size: Base title size for desktop (992px+)
+    - title_size_medium: Scaled title size for medium screens (768px-991px)
+    - Responsive breakpoints: 768px (tablet), 992px (desktop)
+  {% endcomment %}
   {% style %}
     {%- if section.settings.height == 'fixed' -%}
     #section-id-{{ section.id }} .video-container {
@@ -20,38 +68,122 @@
       }
       {%- endif -%}
 
-
-    #section-id-{{ section.id }} .line-1 {
-        {%- assign title_size_medium = section.settings.title_size | times: 0.7 -%}
-        font-size: {{ title_size_medium }}px;
-      }
+      {% comment %}
+        =============================================================================
+        MEDIUM SCREEN TITLE SIZING
+        =============================================================================
+        Scaled typography for tablet devices
+        - title_size_medium: 70% of desktop title size
+        - Ensures readability on medium screens
+        - Prevents text from being too large on tablets
+      {% endcomment %}
+      #section-id-{{ section.id }} .line-1 {
+          {%- assign title_size_medium = section.settings.title_size | times: 0.7 -%}
+          font-size: {{ title_size_medium }}px;
+        }
     }
 
     @media (min-width: 992px) {
+      {% comment %}
+        =============================================================================
+        DESKTOP TITLE SIZING
+        =============================================================================
+        Full-size typography for desktop devices
+        - title_size: Full title size from section settings
+        - Applies to devices 992px and wider
+        - Provides optimal readability on large screens
+      {% endcomment %}
       #section-id-{{ section.id }} .line-1 {
         font-size: {{ section.settings.title_size }}px;
       }
     }
   {% endstyle %}
 
+  {% comment %}
+    =============================================================================
+    VIDEO CONTAINER & BACKGROUND SETUP
+    =============================================================================
+    Main video container with responsive classes and data attributes
+    - height--{{ section.settings.height }}: Dynamic height class
+    - video-container: Base video container styling
+    - video-container--background: Background video specific styling
+    - image-overlay: Overlay content container
+    - image-overlay--bg-full: Full background overlay option
+    - overlay_style_tint: Tint overlay for better text readability
+  {% endcomment %}
   {% if section.settings.video != blank %}
     <div class="height--{{ section.settings.height }} video-container video-container--background image-overlay  {% if section.settings.overlay_style_tint %}image-overlay--bg-full{% endif %}"
+
+         {% comment %}
+           =============================================================================
+           VIDEO DATA ATTRIBUTES
+           =============================================================================
+           JavaScript data attributes for video functionality
+           - data-video-url: Desktop video source URL
+           - data-mobile-video-url: Mobile video source URL
+           - data-video-autoplay: Enables automatic video playback
+           - data-video-loop: Enables continuous video looping
+           - escape filter: Prevents XSS in video URLs
+         {% endcomment %}
          data-video-url="{{ section.settings.video | escape }}" 
-         data-mobile-video-url="{{ section.settings.mobile_video | escape }}" 
+         data-mobile-video-url="{{ section.settings.video | escape }}" 
          data-video-autoplay="true"
          data-video-loop="true">
 
+      {% comment %}
+        =============================================================================
+        OVERLAY TINT VEIL
+        =============================================================================
+        Optional dark overlay for better text readability
+        - image-overlay__veil: Dark overlay container
+        - data-cc-animate: JavaScript animation trigger
+        - data-cc-animate-duration: Animation duration (1.5 seconds)
+        - Only shows when overlay_style_tint is enabled
+        - Improves contrast for overlay text content
+      {% endcomment %}
       {% if section.settings.overlay_style_tint %}
         <div class="image-overlay__veil" data-cc-animate data-cc-animate-duration="1.5s"></div>
       {% endif %}
 
+      {% comment %}
+        =============================================================================
+        VIDEO ELEMENT CONTAINER
+        =============================================================================
+        Container for the actual video element
+        - video-container__video: Video element wrapper
+        - JavaScript will inject video element here
+        - Supports both HTML5 video and external video sources
+        - Responsive sizing based on container dimensions
+      {% endcomment %}
       <div class="video-container__video"></div>
 
+      {% comment %}
+        =============================================================================
+        OVERLAY TEXT DISPLAY FLAG
+        =============================================================================
+        Boolean flag to determine if overlay text should be shown
+        - show_overlay_text: Controls overlay content visibility
+        - Used to conditionally display headings, text, and buttons
+        - Prevents empty overlay containers when no content is provided
+      {% endcomment %}
       {%- assign show_overlay_text = false -%}
       {%- if section.settings.title != blank or section.settings.subheading != blank or section.settings.text != blank or section.settings.button_label != blank -%}
         {%- assign show_overlay_text = true -%}
       {%- endif -%}
 
+      {% comment %}
+        =============================================================================
+        FALLBACK PLACEHOLDER IMAGE
+        =============================================================================
+        Displays a placeholder image if the main video fails to load or autoplay
+        - video-container__fallback: Fallback image container
+        - rimage-outer-wrapper: Responsive image wrapper
+        - lazyload: Lazy loading for better performance
+        - fade-in: Fade-in animation for smooth loading
+        - bgset: Responsive image background set
+        - sizes: Responsive image sizes
+        - parent-fit: Responsive image parent fit
+      {% endcomment %}
       {% if section.settings.placeholder_image != blank %}
         <div class="video-container__fallback rimage-outer-wrapper lazyload fade-in"
             data-bgset="{% render 'bgset', image: section.settings.placeholder_image %}"
@@ -65,28 +197,78 @@
         </div>
       {% endif %}
 
-      {%- if show_overlay_text -%}
+      {% comment %}
+        =============================================================================
+        OVERLAY CONTENT CONTAINER
+        =============================================================================
+        Container for the overlay text, headings, and call-to-action buttons
+        - overlay-type: Overlay content styling
+        - overlay {{ section.settings.overlay_position }}: Positioning classes
+        - small-padding-xs: Small padding for overlay content
+        - data-cc-animate-delay: Animation delay for fade-in-up
+        - data-cc-animate: Animation trigger for fade-in-up
+      {% endcomment %}
+      {% if show_overlay_text %}
         <div class="overlay-type overlay {{ section.settings.overlay_position }} small-padding-xs"
              data-cc-animate-delay=".5s"
              data-cc-animate="cc-fade-in-up">
           <div class="inner">
             <div>
               <div class="overlay__content">
+                {% comment %}
+                  =============================================================================
+                  SUBHEADING
+                  =============================================================================
+                  Displays the subheading text
+                  - feature-subheader: Subheading styling
+                  - section.settings.subheading: Subheading text from section settings
+                {% endcomment %}
                 {%- if section.settings.subheading != blank -%}
                   <div class="feature-subheader">
                       {{ section.settings.subheading | escape }}
                   </div>
                 {%- endif -%}
+                {% comment %}
+                  =============================================================================
+                  HEADING
+                  =============================================================================
+                  Displays the main heading text
+                  - {{ heading_tag }}: Heading tag (h1 or h2)
+                  - line-1: Heading styling
+                  - line-1--large: Large heading class
+                  - section.settings.title: Heading text from section settings
+                  - newline_to_br: Newline to break for line breaks in text
+                {% endcomment %}
                 {%- if section.settings.title != blank -%}
                   <{{ heading_tag }} class="line-1  {% if section.settings.title_size >= 86 %}line-1--large{% endif %}">
                       {{ section.settings.title | newline_to_br }}
                   </{{ heading_tag }}>
                 {%- endif -%}
+                {% comment %}
+                  =============================================================================
+                  TEXT
+                  =============================================================================
+                  Displays the main text content
+                  - rte: Rich text editor styling
+                  - line-2: Text styling
+                  - large-text: Large text class
+                  - section.settings.text: Text content from section settings
+                {% endcomment %}
                 {%- if section.settings.text != blank -%}
                   <div class="rte line-2 {% if section.settings.enlarge_text %}large-text{% endif %}">
                     {{ section.settings.text }}
                   </div>
                 {%- endif -%}
+                {% comment %}
+                  =============================================================================
+                  BUTTON
+                  =============================================================================
+                  Displays the call-to-action button
+                  - line-3: Button styling
+                  - button hover-grow: Button hover effect
+                  - section.settings.button_label: Button label from section settings
+                  - section.settings.button_link: Button link from section settings
+                {% endcomment %}
                 {%- if section.settings.button_label != blank -%}
                   <div class="line-3">
                     <a data-cc-animate-click class="button hover-grow" href="{{ section.settings.button_link }}">
@@ -98,11 +280,37 @@
             </div>
           </div>
         </div>
-      {%- endif -%}
+      {% endif %}
     </div>
   {% endif %}
 </div>
 
+{% comment %}
+  =============================================================================
+  SCHEMA SETTINGS
+  =============================================================================
+  Defines the settings for the Background Video section
+  - name: Section name
+  - class: Section class for styling
+  - settings: Array of section settings
+  - settings.video: Default desktop video link
+  - settings.mobile_video: Default mobile video link
+  - settings.placeholder_image: Default placeholder image
+  - settings.subheading: Default subheading text
+  - settings.title: Default heading text
+  - settings.title_size: Default heading text size
+  - settings.heading_h1: Default heading tag (h1 or h2)
+  - settings.text: Default text content
+  - settings.enlarge_text: Default enlarge text option
+  - settings.button_label: Default button label
+  - settings.button_link: Default button link
+  - settings.overlay_position: Default text alignment
+  - settings.height: Default video height
+  - settings.height_desktop: Default desktop fixed height
+  - settings.height_mobile: Default mobile fixed height
+  - settings.full_width: Default full page width option
+  - settings.overlay_style_tint: Default overlay tint option
+{% endcomment %}
 {% schema %}
 {
   "name": "Background video",
