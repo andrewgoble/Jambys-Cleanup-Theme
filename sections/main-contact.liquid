@@ -1,23 +1,107 @@
+{% comment %}
+  =============================================================================
+  MAIN CONTACT SECTION - CONTACT FORM & PAGE CONTENT
+  =============================================================================
+  Complete contact page with form functionality and content display
+  - Shopify contact form integration with validation
+  - Conditional page title display
+  - Rich text content from page settings
+  - Form error handling and success messages
+  - Responsive form layout with accessibility features
+  - Staggered animations for enhanced user experience
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  MAIN CONTACT CONTAINER
+  =============================================================================
+  Primary contact page container with responsive layout and animations
+  - central: Centers content within page width constraints
+  - py-medium: Vertical padding for proper spacing
+  - data-cc-animate: JavaScript animation trigger for entrance effects
+  - data-cc-animate-delay="0.2s": Staggered animation timing
+  - Responsive design that adapts to different screen sizes
+{% endcomment %}
 <div class="central py-medium" data-cc-animate data-cc-animate-delay="0.2s">
+  {% comment %}
+    =============================================================================
+    CONDITIONAL PAGE TITLE
+    =============================================================================
+    Optional page title display based on theme editor setting
+    - section.settings.show_title: Boolean setting for title visibility
+    - feature-header: Consistent heading styling across theme
+    - page.title: Page title from Shopify admin settings
+    - H1 tag for proper page hierarchy and SEO
+  {% endcomment %}
   {% if section.settings.show_title %}
     <h1 class="feature-header">{{ page.title }}</h1>
   {% endif %}
 
+  {% comment %}
+    =============================================================================
+    SHOPIFY CONTACT FORM INTEGRATION
+    =============================================================================
+    Built-in Shopify contact form with comprehensive functionality
+    - contact form: Shopify's native contact form system
+    - Automatic form submission handling and validation
+    - Customer support ticket creation in Shopify admin
+    - Form state management (success, errors, initial)
+  {% endcomment %}
   {% form 'contact' %}
+    {% comment %}
+      =============================================================================
+      FORM SUBMISSION SUCCESS STATE
+      =============================================================================
+      Success message displayed after successful form submission
+      - form.posted_successfully?: Boolean for successful submission
+      - rte align-center: Rich text styling with center alignment
+      - contact.form.post_success: Localized success message
+      - Replaces entire form with confirmation message
+    {% endcomment %}
     {% if form.posted_successfully? %}
       <div class="rte align-center">
         {{ 'contact.form.post_success' | t }}
       </div>
 
     {% else %}
-
+      {% comment %}
+        =============================================================================
+        PAGE CONTENT DISPLAY
+        =============================================================================
+        Rich text content from page settings
+        - rte: Rich text editor styling for consistent typography
+        - page.content: Page content from Shopify admin (supports HTML)
+        - Displays above contact form for context and information
+        - Supports formatted text, images, links, and basic HTML
+      {% endcomment %}
       <div class="rte">
         {{ page.content }}
       </div>
 
+      {% comment %}
+        =============================================================================
+        FORM VALIDATION ERROR DISPLAY
+        =============================================================================
+        Error messages for form validation failures
+        - form.errors: Array of form validation errors
+        - errors: CSS class for error styling
+        - contact.form.post_error: Localized error message
+        - Loops through all validation errors for comprehensive feedback
+        - Field name customization for better user experience
+      {% endcomment %}
       {% if form.errors %}
         <div class="errors">
           <p>{{ 'contact.form.post_error' | t }}</p>
+          {% comment %}
+            =============================================================================
+            ERROR FIELD LABEL CUSTOMIZATION
+            =============================================================================
+            Customizes error field labels for better user experience
+            - message_label: Localized label for message field
+            - replace: 'body' with 'message' for user-friendly display
+            - capitalize: Capitalizes field names for consistency
+            - form.errors.messages[field]: Error message for specific field
+          {% endcomment %}
           {% assign message_label = 'contact.form.message' | t %}
           <ul>
             {% for field in form.errors %}
@@ -26,19 +110,78 @@
           </ul>
         </div>
       {% endif %}
+
+      {% comment %}
+        =============================================================================
+        CONTACT FORM INPUT FIELDS
+        =============================================================================
+        Form input fields with accessibility and validation
+        - form: CSS class for form styling
+        - input-row: Container for individual form fields
+        - required: CSS class for required field styling
+        - aria-label: Accessibility labels for screen readers
+        - placeholder: Helper text for form fields
+        - Proper input types for validation and mobile keyboards
+      {% endcomment %}
       <div class="form">
+        {% comment %}
+          =============================================================================
+          NAME INPUT FIELD
+          =============================================================================
+          Text input for contact name
+          - type="text": Standard text input
+          - required: HTML5 validation and CSS styling
+          - id="contact_name": Unique identifier for form field
+          - name="contact[name]": Form submission field name
+          - aria-label: Accessibility label for screen readers
+        {% endcomment %}
         <div class="input-row">
           <input aria-label="{{ 'contact.form.name' | t }}" placeholder="{{ 'contact.form.name' | t }}" type="text"
                  class="required" id="contact_name" name="contact[name]"/>
         </div>
+
+        {% comment %}
+          =============================================================================
+          EMAIL INPUT FIELD
+          =============================================================================
+          Email input with HTML5 validation
+          - type="email": HTML5 email validation and mobile keyboard
+          - required: HTML5 validation and CSS styling
+          - id="contact_email": Unique identifier for form field
+          - name="contact[email]": Form submission field name
+          - class="email": Additional email-specific styling
+        {% endcomment %}
         <div class="input-row">
           <input aria-label="{{ 'contact.form.email' | t }}" placeholder="{{ 'contact.form.email' | t }}" type="email"
                  class="required" id="contact_email" class="email" name="contact[email]"/>
         </div>
+
+        {% comment %}
+          =============================================================================
+          MESSAGE TEXTAREA FIELD
+          =============================================================================
+          Multi-line text input for contact message
+          - textarea: Multi-line text input for longer messages
+          - required: HTML5 validation and CSS styling
+          - id="message": Unique identifier for form field
+          - name="contact[body]": Form submission field name (Shopify standard)
+          - aria-label: Accessibility label for screen readers
+        {% endcomment %}
         <div class="input-row">
           <textarea aria-label="{{ 'contact.form.message' | t }}" placeholder="{{ 'contact.form.message' | t }}"
                     id="message" class="required" name="contact[body]"></textarea>
         </div>
+
+        {% comment %}
+          =============================================================================
+          FORM SUBMIT BUTTON
+          =============================================================================
+          Submit button for form submission
+          - wide-action: Full-width button styling class
+          - type="submit": Triggers form submission
+          - value: Button text from localized strings
+          - contact.form.send: Localized submit button text
+        {% endcomment %}
         <div class="wide-action">
           <input type="submit" value="{{ 'contact.form.send' | t }}"/>
         </div>
@@ -47,6 +190,17 @@
   {% endform %}
 </div>
 
+{% comment %}
+  =============================================================================
+  CONTACT SECTION SCHEMA - CONFIGURATION & CUSTOMIZATION
+  =============================================================================
+  Theme editor configuration for contact section customization
+  - name: Section name displayed in theme editor
+  - settings: Configurable options for merchants
+  - show_title: Toggle for page title visibility
+  - default: true for title display by default
+  - Minimal configuration for simple contact form functionality
+{% endcomment %}
 {% schema %}
 {
   "name": "Contact form",
