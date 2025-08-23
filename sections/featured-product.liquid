@@ -1,9 +1,52 @@
+{% comment %}
+  =============================================================================
+  FEATURED PRODUCT SECTION
+  =============================================================================
+  Main product display section with comprehensive media gallery and product information
+  - Displays featured product with media gallery (images, videos, 3D models)
+  - Supports multiple media layout styles (1, 2, or 3 column layouts)
+  - Includes product form with variant selection and add to cart
+  - Responsive design with mobile-specific features
+  - Integrates with product recommendations and related products
+  - Supports preorder products and special product templates
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  SECTION CONTAINER & INITIAL SETUP
+  =============================================================================
+  Main section container with responsive layout and spacing
+  - wide-container: Full-width container for featured product display
+  - half-gutter: Reduced spacing for tighter layout
+  - section-spacing: Consistent vertical spacing between sections
+{% endcomment %}
 <div class="wide-container half-gutter section-spacing">
+  {% comment %}
+    =============================================================================
+    PRODUCT ASSIGNMENT & FEATURED PRODUCT FLAG
+    =============================================================================
+    Sets up the featured product and determines if this is a featured product section
+    - is_featured_product: Boolean flag indicating this is a featured product section
+    - product: Product object from section settings or all_products collection
+    - section.settings.product: Product handle from theme editor settings
+  {% endcomment %}
   {%- liquid
     assign is_featured_product = true
     assign product = all_products[section.settings.product]
   -%}
 
+  {% comment %}
+    =============================================================================
+    PRODUCT VARIANT & MEDIA SETUP
+    =============================================================================
+    Initializes product variant and media display settings
+    - current_variant: Selected variant or first available variant
+    - featured_media: Media for current variant or fallback to product featured media
+    - media_columns_to_show: Number of media columns (1, 2, or 3)
+    - swatch_option_name_lowercase: Swatch option name for color/size selection
+    - product_form_id: Unique form identifier for this product section
+    - show_app_blocks_in_quickbuy: Flag for app block display in quick buy mode
+  {% endcomment %}
   {%- liquid
   assign current_variant = product.selected_or_first_available_variant
   assign featured_media = product.selected_or_first_available_variant.featured_media | default: product.featured_media
@@ -32,6 +75,15 @@
   endfor
 -%}
 
+{% comment %}
+  =============================================================================
+  MOBILE RESPONSIVE STYLES
+  =============================================================================
+  CSS styles for mobile device responsiveness
+  - Swiper container padding for mobile aspect ratio handling
+  - Ensures proper image display on small screens
+  - Uses product media aspect ratio for responsive sizing
+{% endcomment %}
 {% style %}
   @media(max-width: 767px){
     .product-area__media .swiper-container:not(.swiper-container-horizontal) {
@@ -40,6 +92,25 @@
   }
 {% endstyle %}
 
+{% comment %}
+  =============================================================================
+  PRODUCT AREA MAIN CONTAINER
+  =============================================================================
+  Main product display container with dynamic classes and data attributes
+  - product-area: Base container class for product display
+  - product-area--loner: Special styling for single media products
+  - product-area--restrict-width: Width restriction for non-featured products
+  - product-area--one-col: Single column media layout
+  - product-area--two-col: Two column media layout
+  - header-overlap-section: Allows header to overlap section content
+  - data-section-type: Identifies section type for JavaScript functionality
+  - data-components: Lists required JavaScript components (tabs, accordion)
+  - data-is-featured-product: Flag for featured product specific behavior
+  - data-ajax-add-to-cart: Enables/disables AJAX cart functionality
+  - data-is-preorder: Indicates if product is available for preorder
+  - data-product-id: Unique product identifier for JavaScript hooks
+  - data-enable-history-state: Enables browser history state management
+{% endcomment %}
 <div class="product-area
       {% if product.media.size == 1 %}product-area--loner{% endif %}
       {% unless section.settings.full_width or is_featured_product %} product-area--restrict-width{% endunless %}
@@ -52,6 +123,17 @@
      data-is-preorder="{{ is_preorder_product }}"
      data-product-id="{{ product.id }}"
      data-enable-history-state="true">
+  
+  {% comment %}
+    =============================================================================
+    MOBILE THUMBNAIL SIZING
+    =============================================================================
+    Dynamic CSS for mobile thumbnail sizing based on media aspect ratios
+    - Loops through all product media to set individual thumbnail widths
+    - Uses aspect ratio calculations for responsive sizing
+    - Applies to mobile devices (max-width: 767px)
+    - rimage-outer-wrapper: Container for responsive images
+  {% endcomment %}
   {% style %}
     {% for media in product.media %}
       @media(max-width:767px){
@@ -62,15 +144,51 @@
     {% endfor %}
   {% endstyle %}
 
+  {% comment %}
+    =============================================================================
+    MOBILE STICKY CART BUTTON
+    =============================================================================
+    Mobile-specific sticky add to cart button at bottom of screen
+    - product-area__add-to-cart-xs: Mobile cart button container
+    - footer-button-xs: Mobile footer button styling
+    - data-cc-animate: Animation trigger for fade-in effect
+    - data-cc-animate-delay: Animation delay for staggered entrance
+    - data-show-in-quickbuy: Controls visibility in quick buy mode
+    - Only shows when mobile sticky cart is enabled and buy buttons exist
+  {% endcomment %}
   {% if section.settings.enable_mobile_sticky_cart and has_buy_buttons %}
     <div class="product-area__add-to-cart-xs footer-button-xs" data-cc-animate="cc-fade-in-up" data-cc-animate-delay="1s" data-show-in-quickbuy="false">
       <button class="button no-hover">{{ 'products.product.add_to_cart' | t }}</button>
     </div>
   {% endif %}
 
+  {% comment %}
+    =============================================================================
+    PRODUCT MEDIA CONTAINER
+    =============================================================================
+    Main media display area with gallery functionality
+    - product-area__media: Container for all product media
+    - multi-column: Class for multi-column media layouts
+    - data-cc-animate: Animation trigger for media entrance
+    - data-cc-animate-duration: Animation duration for media display
+  {% endcomment %}
   <div class="product-area__media {% if media_columns_to_show != 1 %}multi-column{% endif %}"
        data-cc-animate data-cc-animate-duration="2s">
 
+    {% comment %}
+      =============================================================================
+      THEME GALLERY & PRODUCT SLIDER
+      =============================================================================
+      Main gallery container with Swiper.js slider functionality
+      - theme-gallery: Base gallery styling and functionality
+      - product-slider: Product-specific slider behavior
+      - featured-product__gallery: Special styling for featured products
+      - theme-gallery--loner: Single media styling
+      - theme-gallery--zoom-enabled: Zoom functionality when enabled
+      - theme-gallery--thumbs-enabled: Thumbnail navigation when enabled
+      - data-column-count: Number of media columns to display
+      - data-scroll-to-variant-media: Auto-scroll to variant media when selected
+    {% endcomment %}
     <div class="theme-gallery product-slider
         {% if is_featured_product %}featured-product__gallery{% endif %}
         {% if product.media.size == 1 %}theme-gallery--loner{% endif %}
@@ -79,7 +197,30 @@
          data-column-count="{{ media_columns_to_show }}"
          data-scroll-to-variant-media="{{ section.settings.scroll_to_variant_media }}"
     >
+      {% comment %}
+        =============================================================================
+        SWIPER CONTAINER & VIEWPORT
+        =============================================================================
+        Swiper.js container for touch/swipe functionality
+        - theme-viewport: Main viewport container for media display
+        - swiper-container: Swiper.js container class
+        - data-swiper-nav-style: Navigation style setting from theme editor
+      {% endcomment %}
       <div class="theme-viewport swiper-container" data-swiper-nav-style="{{ section.settings.slide_nav_style }}">
+        {% comment %}
+          =============================================================================
+          MEDIA WRAPPER & SLIDES
+          =============================================================================
+          Container for individual media slides
+          - theme-images: Container for all media items
+          - swiper-wrapper: Swiper.js wrapper for slide management
+          - Loops through all product media to create individual slides
+          - theme-img: Individual media item styling
+          - theme-img-{{ forloop.index }}: Unique styling for each media item
+          - swiper-slide: Swiper.js slide class
+          - current-img: Highlights currently selected media
+          - data-full-size: Full-size image URL for zoom functionality
+        {% endcomment %}
         <div class="theme-images swiper-wrapper">
           {% if product != blank %}
             {% for media in product.media %}
@@ -88,6 +229,16 @@
                         data-full-size="{{ media.preview_image | image_url }}"
                       {% endif %}
               >
+                {% comment %}
+                  =============================================================================
+                  MEDIA RENDERING LOGIC
+                  =============================================================================
+                  Conditional media rendering based on layout and product type
+                  - Multi-column layouts use different rendering approach
+                  - Featured products get special animation treatment
+                  - prevent_lazyload: Prevents lazy loading for first media item
+                  - animation_type: Sets animation style for media entrance
+                {% endcomment %}
                 {%- if media_columns_to_show != 1 -%}
                   {% render 'media', media: media, animation_type: 'cc-fade-in', prevent_lazyload: forloop.first %}
                 {%- else -%}
@@ -98,7 +249,6 @@
                     {% render 'media', media: media, prevent_lazyload: forloop.first %}
                   {%- endif -%}
                 {%- endif -%}
-
               </div>
             {% endfor %}
           {% elsif is_featured_product %}
