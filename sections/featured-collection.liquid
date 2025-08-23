@@ -1,3 +1,12 @@
+{% comment %}
+  =============================================================================
+  FEATURED COLLECTION SECTION - STYLING & LAYOUT
+  =============================================================================
+  Dynamic styling for featured collection display with configurable alignment
+  - title_alignment: Controls heading text alignment (left/center/right)
+  - featured-collection-home: Removes background for home page styling
+  - Responsive layout adjustments based on section settings
+{% endcomment %}
 {% style %}
   {% if section.settings.title_alignment == 'center' %}
   .section-id-{{ section.id }} h2 {
@@ -17,6 +26,15 @@
   }
 {% endstyle %}
 
+{% comment %}
+  =============================================================================
+  BACKGROUND COLOR & WAVE STYLING
+  =============================================================================
+  Dynamic background color and decorative wave elements
+  - color_bg: Custom background color from section settings
+  - wave-styles: Optional decorative wave borders (top/bottom/none)
+  - Wave colors automatically match background color for seamless integration
+{% endcomment %}
 {% style %}
   {% unless section.settings.color_bg == blank %}
      .section-id-{{ section.id }} {
@@ -32,6 +50,17 @@
       fill_color: section.settings.color_bg -%}
 {%- endif -%}
 
+{% comment %}
+  =============================================================================
+  LAYOUT & PRODUCT CLASS CONFIGURATION
+  =============================================================================
+  Dynamic layout configuration based on section settings
+  - layout: 'rows' for grid layout, 'columns' for collage layout
+  - grid: Number of products per row (2, 3, or 4)
+  - rows: Number of rows to display
+  - max_products: Calculated total products with override option
+  - product_class: CSS class for responsive grid columns
+{% endcomment %}
 {%- if section.settings.layout == 'rows' -%}
   {%- if section.settings.grid == 2 -%}
     {%- assign product_class = 'column half' -%}
@@ -47,6 +76,15 @@
   {%- assign max_products = max_products | at_most: section.settings.max_products -%}
 {%- endif -%}
 
+{% comment %}
+  =============================================================================
+  ANIMATION & RELATED PRODUCTS CONFIGURATION
+  =============================================================================
+  Animation types and related products metafield handling
+  - animation_type: Different animations for rows vs columns layout
+  - related_products_metafield: Custom metafield for product recommendations
+  - Product type collection switching for dynamic collection display
+{% endcomment %}
 {% assign animation_type = "cc-fade-in-up" %}
 {%- if section.settings.layout == "columns" -%}
   {% assign animation_type = "cc-fade-in" %}
@@ -62,6 +100,16 @@
 
 {% if section.settings.layout == 'carousel' %}<div class="product-slider">{% endif %}
 
+{% comment %}
+  =============================================================================
+  MAIN CONTAINER & SECTION HEADING
+  =============================================================================
+  Primary container with dynamic classes and section heading
+  - wide-container: Full-width layout with proper spacing
+  - section-heading: Title, body text, and view all link
+  - data-cc-animate: JavaScript animation hooks
+  - alternate_bg_color: Optional background color toggle
+{% endcomment %}
 <div class="wide-container half-gutter section-spacing section-id-{{ section.id }} {% if section.settings.alternate_bg_color %}use-alt-bg {% endif %}" data-section-type="featured-collection" data-components="product-block" data-cc-animate>
   {% if section.settings.title != blank or section.settings.show_view_all %}
     <div class="section-heading" data-cc-animate>
@@ -87,6 +135,17 @@
     </div>
   {% endif %}
 
+{% comment %}
+  =============================================================================
+  CAROUSEL LAYOUT - SWIPER.JS INTEGRATION
+  =============================================================================
+  Swiper.js carousel for horizontal product scrolling
+  - swiper-container: Main carousel wrapper with navigation
+  - data-products-in-view: Controls visible products count
+  - data-normheights: Normalizes slide heights for consistent appearance
+  - Navigation: Previous/next buttons and scrollbar
+  - Animation delays: Staggered product animations (0.4s intervals)
+{% endcomment %}
   {% if section.settings.layout == 'carousel' %}
     <div class="swiper-container product-list product-list--{{ section.settings.layout }}"
          data-products-in-view="{{ section.settings.grid }}">
@@ -125,6 +184,17 @@
       <div class="swiper-button-prev featured-collection-home"></div>
       <div class="swiper-button-next featured-collection-home"></div>
     </div>
+{% comment %}
+  =============================================================================
+  GRID LAYOUT - PRODUCT DISPLAY & COLLECTION SWITCHING
+  =============================================================================
+  Standard grid layout with advanced collection switching logic
+  - Responsive grid classes for mobile/desktop layouts
+  - Product type collection switching (House Hoodie → House Hoodies)
+  - Related products metafield integration
+  - Onboarding product blocks for empty states
+  - Dynamic collection assignment based on product type
+{% endcomment %}
   {% else %}
     <div class="product-list
       product-list--{{ section.settings.layout }}
