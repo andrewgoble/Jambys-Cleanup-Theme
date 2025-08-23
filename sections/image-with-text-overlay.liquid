@@ -1,3 +1,27 @@
+{% comment %}
+  =============================================================================
+  IMAGE WITH TEXT OVERLAY SECTION
+  =============================================================================
+  Full-width image section with overlaid text content
+  - Supports background images with text overlay positioning
+  - Configurable height options (fixed, responsive, natural)
+  - Dynamic overlay content with titles, text, and call-to-action buttons
+  - Responsive typography with mobile/desktop size adjustments
+  - Optional image linking and overlay tint effects
+  - Mobile-specific overlay positioning and responsive behavior
+  - Background image positioning controls for desktop and mobile
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  HEADING TAG DETERMINATION
+  =============================================================================
+  Sets appropriate heading tag based on section settings
+  - heading_tag: Default heading level (h2)
+  - section.settings.heading_h1: Boolean to promote heading to h1
+  - Used for SEO and document structure hierarchy
+  - H1 should only be used once per page for main page heading
+{% endcomment %}
 {%- liquid
   assign heading_tag = "h2"
   if section.settings.heading_h1
@@ -5,7 +29,32 @@
   endif
 -%}
 
+{% comment %}
+  =============================================================================
+  MAIN SECTION CONTAINER
+  =============================================================================
+  Primary container with section identification and component setup
+  - id="section-id-{{ section.id }}": Unique section identifier
+  - section-id-{{ section.id }}: CSS class for section-specific styling
+  - data-section-type="image-with-text-overlay": Identifies section type for JavaScript
+  - data-cc-animate: JavaScript animation trigger for entrance effects
+{% endcomment %}
 <div id="section-id-{{ section.id }}" class="section-id-{{ section.id }}" data-section-type="image-with-text-overlay" data-cc-animate>
+
+{% comment %}
+  =============================================================================
+  RESPONSIVE HEIGHT & TYPOGRAPHY STYLES
+  =============================================================================
+  Dynamic CSS for height and typography based on section settings
+  - height: Height setting (fixed, responsive, natural)
+  - height_mobile: Fixed height for mobile devices (under 768px)
+  - height_desktop: Fixed height for desktop devices (768px+)
+  - title_size: Base title size for desktop (992px+)
+  - title_size_medium: Scaled title size for medium screens (768px-991px)
+  - Responsive breakpoints: 768px (tablet), 992px (desktop)
+  - rimage-outer-wrapper: Container for responsive images
+  - placeholder-image: Fallback image styling
+{% endcomment %}
   {% style %}
     {%- if section.settings.height == 'fixed' -%}
     #section-id-{{ section.id }} .rimage-outer-wrapper,
@@ -14,10 +63,29 @@
     }
     {%- endif -%}
 
+{% comment %}
+  =============================================================================
+  MOBILE IMAGE POSITIONING
+  =============================================================================
+  Sets background position for mobile images
+  - mobile_image_position: Position setting from theme editor
+  - Applies to mobile devices (default behavior)
+  - Controls how background image is positioned on small screens
+{% endcomment %}
     #section-id-{{ section.id }} .rimage-outer-wrapper {
       background-position: {{ section.settings.mobile_image_position }}
     }
 
+{% comment %}
+  =============================================================================
+  DESKTOP RESPONSIVE STYLES
+  =============================================================================
+  Desktop-specific styles for devices 768px and wider
+  - Fixed height overrides for desktop devices
+  - Medium screen title sizing (70% of desktop size)
+  - Desktop image positioning override
+  - Ensures proper layout on larger screens
+{% endcomment %}
     @media (min-width: 768px) {
       {%- if section.settings.height == 'fixed' -%}
       #section-id-{{ section.id }} .rimage-outer-wrapper ,
@@ -36,6 +104,15 @@
       }
     }
 
+{% comment %}
+  =============================================================================
+  LARGE DESKTOP TITLE SIZING
+  =============================================================================
+  Full-size typography for large desktop devices (992px+)
+  - title_size: Full title size from section settings
+  - Applies to devices 992px and wider
+  - Provides optimal readability on large screens
+{% endcomment %}
     @media (min-width: 992px) {
       #section-id-{{ section.id }} .line-1 {
         font-size: {{ section.settings.title_size }}px;
@@ -43,17 +120,70 @@
     }
   {% endstyle %}
 
+{% comment %}
+  =============================================================================
+  CONTENT CONTAINER WRAPPER
+  =============================================================================
+  Conditional container wrapper based on full-width setting
+  - wide-container: Contained width layout option
+  - half-gutter: Reduced spacing for tighter layout
+  - section-spacing: Consistent vertical spacing between sections
+  - Only renders when full_width is false
+{% endcomment %}
   {%- unless section.settings.full_width -%}<div class="wide-container half-gutter section-spacing">{%- endunless -%}
 
+{% comment %}
+  =============================================================================
+  OVERLAY TEXT DISPLAY FLAG
+  =============================================================================
+  Boolean flag to determine if overlay text should be shown
+  - show_overlay_text: Controls overlay content visibility
+  - Checks for title, subheading, text, or button label
+  - Used to conditionally display overlay content
+  - Prevents empty overlay containers when no content is provided
+{% endcomment %}
     {%- assign show_overlay_text = false -%}
     {%- if section.settings.title != blank or section.settings.subheading != blank or section.settings.text != blank or section.settings.button_label != blank -%}
       {%- assign show_overlay_text = true -%}
     {%- endif -%}
 
+{% comment %}
+  =============================================================================
+  IMAGE OVERLAY CONTAINER
+  =============================================================================
+  Main image container with overlay functionality
+  - height--{{ section.settings.height }}: Dynamic height class
+  - image-overlay: Base overlay container class
+  - image-overlay--bg-full: Full background overlay option
+  - overlay-text-static-xs: Mobile overlay positioning class
+  - Controls overlay appearance and positioning
+{% endcomment %}
     <div class="height--{{ section.settings.height }} image-overlay {% if section.settings.overlay_style_tint %}image-overlay--bg-full{% endif %}
 {% if section.settings.mobile_overlay_under %}overlay-text-static-xs{% endif %}">
+
+{% comment %}
+  =============================================================================
+  IMAGE LINK WRAPPER
+  =============================================================================
+  Conditional link wrapper for clickable images
+  - image_link: URL for image click action
+  - text contains '</a>': Prevents double-wrapping if text already contains links
+  - Only wraps image when image_link is provided and no existing links
+{% endcomment %}
       {%- unless section.settings.image_link == blank or section.settings.text contains '</a>' -%}<a href="{{ section.settings.image_link }}">{%- endunless -%}
 
+{% comment %}
+  =============================================================================
+  IMAGE DISPLAY LOGIC
+  =============================================================================
+  Conditional image rendering based on section settings
+  - section.settings.image: Image picker from theme editor
+  - placeholder-image: Fallback when no image is provided
+  - dark: Dark overlay when text content is present
+  - lifestyle-1: Default placeholder SVG image
+  - rimage-outer-wrapper: Responsive image container
+  - lazyload: Lazy loading for better performance
+{% endcomment %}
         {% if section.settings.image == blank %}
           <div class="placeholder-image placeholder--banner {% if show_overlay_text %}dark{% endif %}">
             {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
@@ -64,9 +194,32 @@
               data-bgset="{% render 'bgset', image: section.settings.image %}"
               data-sizes="auto"
               data-parent-fit="cover">
+
+{% comment %}
+  =============================================================================
+  NATURAL HEIGHT ASPECT RATIO
+  =============================================================================
+  Sets padding-top for responsive height based on image aspect ratio
+  - section.settings.height == 'natural': Responsive height setting
+  - aspect_ratio: Image aspect ratio from image metadata
+  - padding-top: Calculated percentage for responsive height
+  - rimage-wrapper: Container for aspect ratio calculations
+{% endcomment %}
             {%- if section.settings.height == 'natural' -%}
               <div class="rimage-wrapper" style="padding-top:{{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%"></div>
             {%- endif -%}
+
+{% comment %}
+  =============================================================================
+  NOSCRIPT FALLBACK IMAGE
+  =============================================================================
+  Fallback image display when JavaScript is disabled
+  - rimage-wrapper: Container with calculated aspect ratio
+  - padding-top: Responsive height based on image dimensions
+  - image_url: Optimized image URL with width/height constraints
+  - alt: Accessibility alt text from image metadata
+  - rimage__image: Base image styling class
+{% endcomment %}
             <noscript>
               <div class="rimage-wrapper" style="padding-top:{{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%">
                 <img src="{{ section.settings.image | image_url: width: 1024, height: 1024 }}" alt="{{ section.settings.image.alt | escape }}" class="rimage__image">
@@ -75,17 +228,54 @@
           </div>
         {% endif %}
 
+{% comment %}
+  =============================================================================
+  OVERLAY CONTENT DISPLAY
+  =============================================================================
+  Conditional overlay content when text elements are present
+  - show_overlay_text: Boolean flag for overlay visibility
+  - overlay-type overlay: Base overlay styling classes
+  - {{ section.settings.overlay_position }}: Dynamic positioning from theme editor
+  - inner: Overlay content wrapper for proper positioning
+  - overlay__content: Content container with proper spacing
+{% endcomment %}
         {%- if show_overlay_text -%}
           <div class="overlay-type overlay {{ section.settings.overlay_position }}">
             <div class="inner">
               <div>
                 <div class="overlay__content" {% if section.settings.overlay_position == 'position--hcenter position--vcenter' %}data-cc-animate="cc-fade-in-zoom-out"{% endif %}>
+
+{% comment %}
+  =============================================================================
+  SUBHEADING TEXT
+  =============================================================================
+  Displays subheading text above main title
+  - feature-subheader: Subheading styling class
+  - section.settings.subheading: Subheading text from theme editor
+  - escape filter: Prevents XSS in text content
+  - Conditional animation based on overlay position
+  - data-cc-animate-delay="0.3s": Staggered animation delay
+  - Only renders when subheading is not blank
+{% endcomment %}
                   {%- if section.settings.subheading != blank -%}
                     <div class="feature-subheader" {% if section.settings.overlay_position != 'position--hcenter position--vcenter' %}data-cc-animate="cc-fade-in-up" data-cc-animate-delay="0.3s"{% endif %}>
                       {{ section.settings.subheading | escape }}
                     </div>
                   {% endif %}
 
+{% comment %}
+  =============================================================================
+  MAIN HEADING TITLE
+  =============================================================================
+  Displays main section title with preserved line breaks
+  - {{ heading_tag }}: Dynamic heading level (h1 or h2)
+  - line-1: Base title styling class
+  - line-1--large: Large title class for titles 86px+
+  - section.settings.title: Title text from theme editor
+  - newline_to_br: Converts newlines to line breaks for formatting
+  - Conditional animation based on overlay position
+  - data-cc-animate-delay="0.2s": Staggered animation delay
+{% endcomment %}
                   {%- if section.settings.title != blank -%}
                     <{{ heading_tag }} class="line-1  {% if section.settings.title_size >= 86 %}line-1--large{% endif %}"
                         {% if section.settings.overlay_position != 'position--hcenter position--vcenter' %}data-cc-animate="cc-fade-in-up" data-cc-animate-delay="0.2s"{% endif %}>
@@ -93,12 +283,36 @@
                     </{{ heading_tag }}>
                   {%- endif -%}
 
+{% comment %}
+  =============================================================================
+  BODY TEXT CONTENT
+  =============================================================================
+  Displays main text content below title
+  - rte: Rich text editor styling for formatted content
+  - line-2: Text content styling class
+  - large-text: Optional enlarged text class
+  - section.settings.text: Text content from theme editor
+  - section.settings.enlarge_text: Boolean for text size control
+  - Conditional animation based on overlay position
+  - data-cc-animate-delay="0.4s": Staggered animation delay
+{% endcomment %}
                   {%- if section.settings.text != blank -%}
                     <div class="rte line-2 {% if section.settings.enlarge_text %}large-text{% endif %}" {% if section.settings.overlay_position != 'position--hcenter position--vcenter' %}data-cc-animate="cc-fade-in-up" data-cc-animate-delay="0.4s"{% endif %}>
                       {{ section.settings.text }}
                     </div>
                   {%- endif -%}
 
+{% comment %}
+  =============================================================================
+  CALL-TO-ACTION BUTTON
+  =============================================================================
+  Displays a call-to-action button below the text content
+  - line-3: Button styling class
+  - section.settings.button_label: Button label from theme editor
+  - escape filter: Prevents XSS in text content
+  - Conditional animation based on overlay position
+  - data-cc-animate-delay="0.5s": Staggered animation delay
+{% endcomment %}
                   {%- if section.settings.button_label != blank -%}
                     <div class="line-3" {% if section.settings.overlay_position != 'position--hcenter position--vcenter' %}data-cc-animate="cc-fade-in-up" data-cc-animate-delay="0.5s"{% endif %}>
                       <span class="button hover-grow">{{ section.settings.button_label | escape }}</span>
@@ -116,6 +330,17 @@
   {%- unless section.settings.full_width -%}</div>{%- endunless -%}
 </div>
 
+{% comment %}
+  =============================================================================
+  SCHEMA CONFIGURATION
+  =============================================================================
+  Theme editor configuration for image with text overlay section
+  - name: Section name displayed in theme editor
+  - class: CSS class for section-specific styling
+  - settings: Global section settings for appearance and behavior
+  - Includes image, text, layout, and positioning options
+  - Provides comprehensive customization for overlay layouts
+{% endcomment %}
 {% schema %}
 {
   "name": "Image with text overlay",
