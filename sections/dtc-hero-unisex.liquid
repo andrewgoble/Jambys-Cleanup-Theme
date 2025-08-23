@@ -1,3 +1,27 @@
+{% comment %}
+  =============================================================================
+  DTC HERO UNISEX SECTION - ADVANCED HERO SLIDER WITH DUAL BUTTONS
+  =============================================================================
+  Advanced hero slider section with Swiper.js integration and dual button system
+  - Inline CSS for responsive button layout and styling
+  - Swiper.js carousel with conditional navigation controls
+  - Slide counting logic for navigation button visibility
+  - Dual button system with extensive color customization
+  - Video support with image fallback
+  - Responsive design with mobile optimization
+  - Used for unisex product category hero sections
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  INLINE CSS STYLING
+  =============================================================================
+  Section-specific CSS for button layout and responsive design
+  - hero-slider-content__buttons: Button container styling
+  - Responsive gap adjustments for mobile devices
+  - Mobile-specific button width and layout modifications
+  - Ensures consistent button spacing across devices
+{% endcomment %}
 <style>
   /* #unisex-slider{
     opacity:0; visibility:hidden; height:0;
@@ -19,140 +43,497 @@
   }
   }
 </style>
+
+{% comment %}
+  =============================================================================
+  HERO SLIDER CONTAINER
+  =============================================================================
+  Main container for unisex hero slider with Swiper.js integration
+  - dtc-hero-slider: Primary wrapper for hero slider
+  - id="unisex-slider": Unique identifier for JavaScript targeting
+  - Contains all slider functionality and content
+{% endcomment %}
 <div class="dtc-hero-slider" id= "unisex-slider">
 
-<div class="swiper-wrapper">
-  {% assign total_slides = 0 %}
-{%- for block in section.blocks -%}
-  {% assign total_slides = total_slides | plus: 1 %}
-  <div class="swiper-slide">
-    <div class="slide-content">
-      {%- case block.type -%}
-        {%- when 'slide' -%}
-          {% render 'dtc-hero-slide', block: block %}
-      {%- endcase -%}
-    </div>
+  {% comment %}
+    =============================================================================
+    SWIPER.JS CAROUSEL WRAPPER
+    =============================================================================
+    Swiper.js carousel container for slide management
+    - swiper-wrapper: Required class for Swiper.js functionality
+    - Contains all individual slide elements
+    - Swiper.js automatically handles slide transitions and positioning
+  {% endcomment %}
+  <div class="swiper-wrapper">
+    {% comment %}
+      =============================================================================
+      SLIDE COUNTING LOGIC
+      =============================================================================
+      Tracks total number of slides for navigation control
+      - total_slides: Counter variable for slide count
+      - plus: 1: Increments counter for each slide block
+      - Used to determine navigation button visibility
+    {% endcomment %}
+    {% assign total_slides = 0 %}
+
+    {% comment %}
+      =============================================================================
+      HERO SLIDE BLOCKS ITERATION
+      =============================================================================
+      Loops through all configured hero slide blocks
+      - section.blocks: Array of slide blocks from theme editor
+      - block: Individual slide block with settings
+      - Each block represents one hero slide
+    {% endcomment %}
+    {%- for block in section.blocks -%}
+      {% comment %}
+        =============================================================================
+        SLIDE COUNT INCREMENT
+        =============================================================================
+        Increments slide counter for each block
+        - total_slides: Running total of configured slides
+        - plus: 1: Adds one to counter for each iteration
+        - Used for conditional navigation display
+      {% endcomment %}
+      {% assign total_slides = total_slides | plus: 1 %}
+
+      {% comment %}
+        =============================================================================
+        INDIVIDUAL HERO SLIDE
+        =============================================================================
+        Single hero slide with Swiper.js integration
+        - swiper-slide: Required class for Swiper.js slide functionality
+        - slide-content: Wrapper for slide content layout
+        - Contains slide information and media content
+      {% endcomment %}
+      <div class="swiper-slide">
+        <div class="slide-content">
+          {% comment %}
+            =============================================================================
+            SLIDE TYPE CASE STATEMENT
+            =============================================================================
+            Determines slide content based on block type
+            - block.type: Block type identifier from theme editor
+            - when 'slide': Standard slide block type
+            - render 'dtc-hero-slide': Uses external snippet for slide content
+            - block: block: Passes block settings to snippet
+          {% endcomment %}
+          {%- case block.type -%}
+            {%- when 'slide' -%}
+              {% render 'dtc-hero-slide', block: block %}
+          {%- endcase -%}
+        </div>
+      </div>
+    {%- endfor -%}
   </div>
-{%- endfor -%}
-</div>
-  <!-- If we need pagination -->
+
+  {% comment %}
+    =============================================================================
+    SWIPER.JS PAGINATION DOTS
+    =============================================================================
+    Navigation dots for slide position indication
+    - swiper-pagination: Required class for Swiper.js pagination
+    - Automatically generated by Swiper.js
+    - Shows current slide position and total slides
+    - Clickable for direct slide navigation
+  {% endcomment %}
   <div class="swiper-pagination"></div>
 
+  {% comment %}
+    =============================================================================
+    CONDITIONAL NAVIGATION ARROWS
+    =============================================================================
+    Navigation arrows displayed only when multiple slides exist
+    - total_slides != 1: Only shows navigation when more than one slide
+    - swiper-button-prev: Previous slide button
+    - swiper-button-next: Next slide button
+    - Prevents unnecessary navigation for single-slide sliders
+  {% endcomment %}
   {% if total_slides != 1 %}
   <!-- If we need navigation buttons -->
   <div class="swiper-button-prev"></div>
   <div class="swiper-button-next"></div>
   {% endif %}
 </div>
+
+{% comment %}
+  =============================================================================
+  DTC HERO UNISEX SECTION SCHEMA - CONFIGURATION & CUSTOMIZATION
+  =============================================================================
+  Theme editor configuration for unisex hero slider
+  - name: Section name displayed in theme editor
+  - class: CSS class for section styling
+  - tag: HTML tag for section wrapper
+  - settings: Configurable slider and background options
+  - blocks: Slide block configuration with dual button system
+  - presets: Default section configuration
+{% endcomment %}
 {% schema %}
 {
+  {% comment %}
+    =============================================================================
+    SCHEMA BASIC CONFIGURATION
+    =============================================================================
+    Core section configuration for theme editor
+    - name: Display name in theme editor sidebar
+    - class: CSS class for section styling and functionality
+    - tag: HTML tag for section wrapper
+  {% endcomment %}
   "name": "dtc hero unisex slider",
   "class": "dtc-hero-slider-unisex",
   "tag": "section",
+
+  {% comment %}
+    =============================================================================
+    SECTION SETTINGS - SLIDER & BACKGROUND CONFIGURATION
+    =============================================================================
+    Configurable options for slider behavior and appearance
+    - loop_slider: Controls continuous loop behavior
+    - background_color: Custom background color selection
+  {% endcomment %}
   "settings": [
+    {% comment %}
+      =============================================================================
+      LOOP SLIDER SETTING
+      =============================================================================
+      Controls continuous loop behavior of slider
+      - type: "checkbox": Boolean toggle in theme editor
+      - id: "loop_slider": Internal identifier for Liquid access
+      - label: "Loop slider": User-friendly label in theme editor
+      - default: true: Default enabled state for smooth experience
+    {% endcomment %}
     {
       "type": "checkbox",
       "id": "loop_slider",
       "label": "Loop slider",
       "default": true
     },
+
+    {% comment %}
+      =============================================================================
+      BACKGROUND COLOR SETTING
+      =============================================================================
+      Custom background color for slider section
+      - type: "color": Color picker in theme editor
+      - label: "Background color": User-friendly label
+      - id: "background_color": Internal identifier for Liquid access
+      - Overrides default theme background colors
+    {% endcomment %}
     {
       "type": "color",
       "label": "Background color",
       "id": "background_color"
     }
   ],
+
+  {% comment %}
+    =============================================================================
+    SECTION BLOCKS - ADVANCED HERO SLIDE MANAGEMENT
+    =============================================================================
+    Slide block configuration with dual button system and extensive customization
+    - Merchants can add multiple slide blocks
+    - Each block supports dual buttons with individual color schemes
+    - Video support with image fallback
+    - Comprehensive color customization for all button states
+  {% endcomment %}
   "blocks": [
+    {% comment %}
+      =============================================================================
+      SLIDE BLOCK TYPE
+      =============================================================================
+      Advanced hero slide block with dual button system
+      - name: "Slide": Display name in theme editor
+      - type: "slide": Internal identifier for block type
+      - settings: Extensive configurable options for slide content
+    {% endcomment %}
     {
       "name": "Slide",
       "type": "slide",
       "settings": [
+        {% comment %}
+          =============================================================================
+          SLIDE IMAGE SETTING
+          =============================================================================
+          Hero slide background image selection
+          - type: "image_picker": Image selector in theme editor
+          - id: "image": Internal identifier for Liquid access
+          - label: "Image": User-friendly label in theme editor
+          - Visual background for hero slide
+        {% endcomment %}
         {
           "type": "image_picker",
           "id": "image",
           "label": "Image"
         },
+
+        {% comment %}
+          =============================================================================
+          SLIDE VIDEO SETTING
+          =============================================================================
+          Hero slide video file with image fallback
+          - id: "video_file": Internal identifier for Liquid access
+          - type: "video": Video file selector in theme editor
+          - label: "Video": User-friendly label in theme editor
+          - info: Explains video priority over image
+          - Video displays instead of image when provided
+        {% endcomment %}
         {
           "id": "video_file",
           "type": "video",
           "label": "Video",
           "info": "if there is a video, it will be displayed instead of the image"
         },
+
+        {% comment %}
+          =============================================================================
+          SLIDE TITLE SETTING
+          =============================================================================
+          Main heading for hero slide
+          - type: "text": Simple text input field
+          - id: "title": Internal identifier for Liquid access
+          - label: "Title": User-friendly label in theme editor
+          - Displayed prominently on slide
+        {% endcomment %}
         {
           "type": "text",
           "id": "title",
           "label": "Title"
         },
+
+        {% comment %}
+          =============================================================================
+          SLIDE DESCRIPTION SETTING
+          =============================================================================
+          Descriptive text below slide title
+          - type: "textarea": Multi-line text input field
+          - id: "description": Internal identifier for Liquid access
+          - label: "Description": User-friendly label in theme editor
+          - Supports longer descriptive content
+        {% endcomment %}
         {
           "type": "textarea",
           "id": "description",
           "label": "Description"
         },
+
+        {% comment %}
+          =============================================================================
+          PRIMARY BUTTON LABEL SETTING
+          =============================================================================
+          Text displayed on primary call-to-action button
+          - type: "text": Simple text input field
+          - id: "button_label": Internal identifier for Liquid access
+          - label: "Button Label": User-friendly label in theme editor
+          - Displayed on primary CTA button
+        {% endcomment %}
         {
           "type": "text",
           "id": "button_label",
           "label": "Button Label"
         },
+
+        {% comment %}
+          =============================================================================
+          PRIMARY BUTTON LINK SETTING
+          =============================================================================
+          Destination URL for primary call-to-action button
+          - type: "url": URL input field with validation
+          - id: "button_link": Internal identifier for Liquid access
+          - label: "Button link": User-friendly label in theme editor
+          - Links to collection, product, or external page
+        {% endcomment %}
         {
           "type": "url",
           "id": "button_link",
           "label": "Button link"
         },
+
+        {% comment %}
+          =============================================================================
+          PRIMARY BUTTON BACKGROUND COLOR
+          =============================================================================
+          Background color for primary button
+          - type: "color": Color picker in theme editor
+          - id: "btn_bg_color": Internal identifier for Liquid access
+          - label: "Button Background": User-friendly label
+          - Customizes primary button appearance
+        {% endcomment %}
         {
           "type": "color",
           "id": "btn_bg_color",
           "label": "Button Background"
         },
+
+        {% comment %}
+          =============================================================================
+          PRIMARY BUTTON BORDER COLOR
+          =============================================================================
+          Border color for primary button
+          - type: "color": Color picker in theme editor
+          - id: "btn_border_color": Internal identifier for Liquid access
+          - label: "Button Border": User-friendly label
+          - Customizes primary button border appearance
+        {% endcomment %}
         {
           "type": "color",
           "id": "btn_border_color",
           "label": "Button Border"
         },
+
+        {% comment %}
+          =============================================================================
+          PRIMARY BUTTON TEXT COLOR
+          =============================================================================
+          Text color for primary button
+          - type: "color": Color picker in theme editor
+          - id: "btn_text_color": Internal identifier for Liquid access
+          - label: "Button Text": User-friendly label
+          - Customizes primary button text appearance
+        {% endcomment %}
         {
           "type": "color",
           "id": "btn_text_color",
           "label": "Button Text"
         },
+
+        {% comment %}
+          =============================================================================
+          PRIMARY BUTTON HOVER BACKGROUND COLOR
+          =============================================================================
+          Background color for primary button hover state
+          - type: "color": Color picker in theme editor
+          - id: "btn_hover_color": Internal identifier for Liquid access
+          - label: "Hover Color": User-friendly label
+          - Customizes primary button hover appearance
+        {% endcomment %}
         {
           "type": "color",
           "id": "btn_hover_color",
           "label": "Hover Color"
         },
+
+        {% comment %}
+          =============================================================================
+          PRIMARY BUTTON HOVER TEXT COLOR
+          =============================================================================
+          Text color for primary button hover state
+          - type: "color": Color picker in theme editor
+          - id: "btn_hover_text_color": Internal identifier for Liquid access
+          - label: "Hover Text Color": User-friendly label
+          - Customizes primary button hover text appearance
+        {% endcomment %}
         {
           "type": "color",
           "id": "btn_hover_text_color",
           "label": "Hover Text Color"
         },
+
+        {% comment %}
+          =============================================================================
+          SECONDARY BUTTON LABEL SETTING
+          =============================================================================
+          Text displayed on secondary call-to-action button
+          - type: "text": Simple text input field
+          - id: "second_button_label": Internal identifier for Liquid access
+          - label: "Second Button Label": User-friendly label in theme editor
+          - Displayed on secondary CTA button
+        {% endcomment %}
         {
           "type": "text",
           "id": "second_button_label",
           "label": "Second Button Label"
         },
+
+        {% comment %}
+          =============================================================================
+          SECONDARY BUTTON LINK SETTING
+          =============================================================================
+          Destination URL for secondary call-to-action button
+          - type: "url": URL input field with validation
+          - id: "second_button_link": Internal identifier for Liquid access
+          - label: "Second Button link": User-friendly label in theme editor
+          - Links to different destination than primary button
+        {% endcomment %}
         {
           "type": "url",
           "id": "second_button_link",
           "label": "Second Button link"
         },
+
+        {% comment %}
+          =============================================================================
+          SECONDARY BUTTON BACKGROUND COLOR
+          =============================================================================
+          Background color for secondary button
+          - type: "color": Color picker in theme editor
+          - id: "btn2_bg_color": Internal identifier for Liquid access
+          - label: "Second Button Background": User-friendly label
+          - Customizes secondary button appearance
+        {% endcomment %}
         {
           "type": "color",
           "id": "btn2_bg_color",
           "label": "Second Button Background"
         },
+
+        {% comment %}
+          =============================================================================
+          SECONDARY BUTTON BORDER COLOR
+          =============================================================================
+          Border color for secondary button
+          - type: "color": Color picker in theme editor
+          - id: "btn2_border_color": Internal identifier for Liquid access
+          - label: "Second Button Border": User-friendly label
+          - Customizes secondary button border appearance
+        {% endcomment %}
         {
           "type": "color",
           "id": "btn2_border_color",
           "label": "Second Button Border"
         },
+
+        {% comment %}
+          =============================================================================
+          SECONDARY BUTTON TEXT COLOR
+          =============================================================================
+          Text color for secondary button
+          - type: "color": Color picker in theme editor
+          - id: "btn2_text_color": Internal identifier for Liquid access
+          - label: "Second Button Text": User-friendly label
+          - Customizes secondary button text appearance
+        {% endcomment %}
         {
           "type": "color",
           "id": "btn2_text_color",
           "label": "Second Button Text"
         },
+
+        {% comment %}
+          =============================================================================
+          SECONDARY BUTTON HOVER BACKGROUND COLOR
+          =============================================================================
+          Background color for secondary button hover state
+          - type: "color": Color picker in theme editor
+          - id: "btn2_hover_color": Internal identifier for Liquid access
+          - label: "Second Hover Color": User-friendly label
+          - Customizes secondary button hover appearance
+        {% endcomment %}
         {
           "type": "color",
           "id": "btn2_hover_color",
           "label": "Second Hover Color"
         },
+
+        {% comment %}
+          =============================================================================
+          SECONDARY BUTTON HOVER TEXT COLOR
+          =============================================================================
+          Text color for secondary button hover state
+          - type: "color": Color picker in theme editor
+          - id: "btn2_hover_text_color": Internal identifier for Liquid access
+          - label: "Second Hover Text Color": User-friendly label
+          - Customizes secondary button hover text appearance
+        {% endcomment %}
         {
           "type": "color",
           "id": "btn2_hover_text_color",
@@ -161,6 +542,17 @@
       ]
     }
   ],
+
+  {% comment %}
+    =============================================================================
+    SECTION PRESETS - DEFAULT CONFIGURATION
+    =============================================================================
+    Default section configuration for easy addition to pages
+    - name: "dtc hero image/video": Display name when adding section to page
+    - Provides starting point for merchants to customize
+    - All blocks start empty by default
+    - Indicates support for both image and video content
+  {% endcomment %}
   "presets": [
     {
       "name": "dtc hero image/video"

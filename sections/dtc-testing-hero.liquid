@@ -1,37 +1,187 @@
+{% comment %}
+  =============================================================================
+  DTC TESTING HERO SECTION - SWIPER.JS HERO SLIDER
+  =============================================================================
+  Testing hero slider section with Swiper.js carousel functionality
+  - Swiper.js integration for smooth slide transitions
+  - Multiple slide blocks with image and content
+  - Configurable loop slider setting
+  - Navigation arrows and pagination dots
+  - Responsive design with mobile optimization
+  - Used for testing hero slider functionality
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  HERO SLIDER CONTAINER
+  =============================================================================
+  Main container for hero slider with Swiper.js integration
+  - dtc-hero-slider: Primary wrapper for hero slider
+  - data-loop-slider: Data attribute for loop slider setting
+  - section.settings.loop_slider: Boolean setting from theme editor
+  - Controls whether slider loops continuously
+{% endcomment %}
 <div class="dtc-hero-slider" data-loop-slider={{ section.settings.loop_slider }}>
-<div class="swiper-wrapper">
-{%- for block in section.blocks -%}
-  <div class="swiper-slide">
-    <div class="slide-content">
-      {%- case block.type -%}
-        {%- when 'slide' -%}
-          <div class="slide-content__info">
-            <h1>{{ block.settings.title }}</h1> 
-            <p>{{ block.settings.description }}</p>
-            <a href="{{ block.settings.button_link }}">{{ block.settings.button_label }}</a>
-          </div>
-          {%- assign image = block.settings.image -%}
-          <div class="slide-content__image" style="">
-            <img src="{{ image | image_url }}" alt="{{ block.settings.title }}">
-          </div>
-      {%- endcase -%}
-    </div>
+  {% comment %}
+    =============================================================================
+    SWIPER.JS CAROUSEL WRAPPER
+    =============================================================================
+    Swiper.js carousel container for slide management
+    - swiper-wrapper: Required class for Swiper.js functionality
+    - Contains all individual slide elements
+    - Swiper.js automatically handles slide transitions and positioning
+  {% endcomment %}
+  <div class="swiper-wrapper">
+    {% comment %}
+      =============================================================================
+      HERO SLIDE BLOCKS ITERATION
+      =============================================================================
+      Loops through all configured hero slide blocks
+      - section.blocks: Array of slide blocks from theme editor
+      - block: Individual slide block with settings
+      - Each block represents one hero slide
+    {% endcomment %}
+    {%- for block in section.blocks -%}
+      {% comment %}
+        =============================================================================
+        INDIVIDUAL HERO SLIDE
+        =============================================================================
+        Single hero slide with Swiper.js integration
+        - swiper-slide: Required class for Swiper.js slide functionality
+        - slide-content: Wrapper for slide content layout
+        - Contains slide information and image
+      {% endcomment %}
+      <div class="swiper-slide">
+        <div class="slide-content">
+          {% comment %}
+            =============================================================================
+            SLIDE TYPE CASE STATEMENT
+            =============================================================================
+            Determines slide content based on block type
+            - block.type: Block type identifier from theme editor
+            - when 'slide': Standard slide block type
+            - Extensible for future slide types
+          {% endcomment %}
+          {%- case block.type -%}
+            {%- when 'slide' -%}
+              {% comment %}
+                =============================================================================
+                SLIDE CONTENT INFORMATION
+                =============================================================================
+                Text content area for hero slide
+                - slide-content__info: Content wrapper styling class
+                - title: Main heading for slide
+                - description: Descriptive text below title
+                - button: Call-to-action button with custom link and label
+              {% endcomment %}
+              <div class="slide-content__info">
+                <h1>{{ block.settings.title }}</h1> 
+                <p>{{ block.settings.description }}</p>
+                <a href="{{ block.settings.button_link }}">{{ block.settings.button_label }}</a>
+              </div>
+
+              {% comment %}
+                =============================================================================
+                SLIDE IMAGE ASSIGNMENT
+                =============================================================================
+                Assigns slide image to variable for processing
+                - block.settings.image: Slide image from theme editor
+                - image: Local variable for image processing
+                - Used for responsive image rendering
+              {% endcomment %}
+              {%- assign image = block.settings.image -%}
+
+              {% comment %}
+                =============================================================================
+                SLIDE IMAGE DISPLAY
+                =============================================================================
+                Visual image area for hero slide
+                - slide-content__image: Image container styling class
+                - image | image_url: Generates optimized image URL
+                - alt: block.settings.title: Accessibility alt text using slide title
+                - Responsive image sizing and optimization
+              {% endcomment %}
+              <div class="slide-content__image" style="">
+                <img src="{{ image | image_url }}" alt="{{ block.settings.title }}">
+              </div>
+          {%- endcase -%}
+        </div>
+      </div>
+    {%- endfor -%}
   </div>
-{%- endfor -%}
-</div>
-  <!-- If we need pagination -->
+
+  {% comment %}
+    =============================================================================
+    SWIPER.JS PAGINATION DOTS
+    =============================================================================
+    Navigation dots for slide position indication
+    - swiper-pagination: Required class for Swiper.js pagination
+    - Automatically generated by Swiper.js
+    - Shows current slide position and total slides
+    - Clickable for direct slide navigation
+  {% endcomment %}
   <div class="swiper-pagination"></div>
 
-  <!-- If we need navigation buttons -->
+  {% comment %}
+    =============================================================================
+    SWIPER.JS NAVIGATION ARROWS
+    =============================================================================
+    Previous and next slide navigation buttons
+    - swiper-button-prev: Previous slide button
+    - swiper-button-next: Next slide button
+    - Automatically positioned and styled by Swiper.js
+    - Clickable for manual slide navigation
+  {% endcomment %}
   <div class="swiper-button-prev"></div>
   <div class="swiper-button-next"></div>
 </div>
+
+{% comment %}
+  =============================================================================
+  DTC TESTING HERO SECTION SCHEMA - CONFIGURATION & CUSTOMIZATION
+  =============================================================================
+  Theme editor configuration for DTC testing hero slider
+  - name: Section name displayed in theme editor
+  - class: CSS class for section styling
+  - tag: HTML tag for section wrapper
+  - settings: Configurable slider options
+  - blocks: Slide block configuration for merchants
+  - presets: Default section configuration
+{% endcomment %}
 {% schema %}
 {
+  {% comment %}
+    =============================================================================
+    SCHEMA BASIC CONFIGURATION
+    =============================================================================
+    Core section configuration for theme editor
+    - name: Display name in theme editor sidebar
+    - class: CSS class for section styling and functionality
+    - tag: HTML tag for section wrapper
+  {% endcomment %}
   "name": "Test hero slider",
   "class": "dtc-hero-image-slider-test",
   "tag": "section",
+
+  {% comment %}
+    =============================================================================
+    SECTION SETTINGS - SLIDER CONFIGURATION
+    =============================================================================
+    Configurable options for slider behavior
+    - loop_slider: Controls whether slider loops continuously
+    - Default value ensures smooth user experience
+  {% endcomment %}
   "settings": [
+    {% comment %}
+      =============================================================================
+      LOOP SLIDER SETTING
+      =============================================================================
+      Controls continuous loop behavior of slider
+      - type: "checkbox": Boolean toggle in theme editor
+      - id: "loop_slider": Internal identifier for Liquid access
+      - label: "Loop slider": User-friendly label in theme editor
+      - default: true: Default enabled state for smooth experience
+    {% endcomment %}
     {
       "type": "checkbox",
       "id": "loop_slider",
@@ -39,31 +189,104 @@
       "default": true
     }
   ],
+
+  {% comment %}
+    =============================================================================
+    SECTION BLOCKS - HERO SLIDE MANAGEMENT
+    =============================================================================
+    Slide block configuration for dynamic hero content
+    - Merchants can add multiple slide blocks
+    - Each block represents one hero slide
+    - All slides are displayed in carousel sequence
+  {% endcomment %}
   "blocks": [
+    {% comment %}
+      =============================================================================
+      SLIDE BLOCK TYPE
+      =============================================================================
+      Individual hero slide block with content and image
+      - name: "Slide": Display name in theme editor
+      - type: "slide": Internal identifier for block type
+      - settings: Configurable options for slide content
+    {% endcomment %}
     {
       "name": "Slide",
       "type": "slide",
       "settings": [
+        {% comment %}
+          =============================================================================
+          SLIDE IMAGE SETTING
+          =============================================================================
+          Hero slide background image selection
+          - type: "image_picker": Image selector in theme editor
+          - id: "image": Internal identifier for Liquid access
+          - label: "Image": User-friendly label in theme editor
+          - Visual background for hero slide
+        {% endcomment %}
         {
           "type": "image_picker",
           "id": "image",
           "label": "Image"
         },
+
+        {% comment %}
+          =============================================================================
+          SLIDE TITLE SETTING
+          =============================================================================
+          Main heading for hero slide
+          - type: "text": Simple text input field
+          - id: "title": Internal identifier for Liquid access
+          - label: "Title": User-friendly label in theme editor
+          - Displayed prominently on slide
+        {% endcomment %}
         {
           "type": "text",
           "id": "title",
           "label": "Title"
         },
+
+        {% comment %}
+          =============================================================================
+          SLIDE DESCRIPTION SETTING
+          =============================================================================
+          Descriptive text below slide title
+          - type: "textarea": Multi-line text input field
+          - id: "description": Internal identifier for Liquid access
+          - label: "Description": User-friendly label in theme editor
+          - Supports longer descriptive content
+        {% endcomment %}
         {
           "type": "textarea",
           "id": "description",
           "label": "Description"
         },
+
+        {% comment %}
+          =============================================================================
+          BUTTON LABEL SETTING
+          =============================================================================
+          Text displayed on call-to-action button
+          - type: "text": Simple text input field
+          - id: "button_label": Internal identifier for Liquid access
+          - label: "Button Label": User-friendly label in theme editor
+          - Displayed on CTA button (e.g., "Shop Now", "Learn More")
+        {% endcomment %}
         {
           "type": "text",
           "id": "button_label",
           "label": "Button Label"
         },
+
+        {% comment %}
+          =============================================================================
+          BUTTON LINK SETTING
+          =============================================================================
+          Destination URL for call-to-action button
+          - type: "url": URL input field with validation
+          - id: "button_link": Internal identifier for Liquid access
+          - label: "Button link": User-friendly label in theme editor
+          - Links to collection, product, or external page
+        {% endcomment %}
         {
           "type": "url",
           "id": "button_link",
@@ -72,6 +295,17 @@
       ]
     }
   ],
+
+  {% comment %}
+    =============================================================================
+    SECTION PRESETS - DEFAULT CONFIGURATION
+    =============================================================================
+    Default section configuration for easy addition to pages
+    - name: "TESTING dtc hero image slider": Display name when adding section to page
+    - Provides starting point for merchants to customize
+    - All blocks start empty by default
+    - Testing designation indicates experimental functionality
+  {% endcomment %}
   "presets": [
     {
       "name": "TESTING dtc hero image slider"

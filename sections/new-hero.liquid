@@ -1,15 +1,119 @@
+{% comment %}
+  =============================================================================
+  NEW HERO SECTION - HERO IMAGE SLIDESHOW WITH CONTENT OVERLAY
+  =============================================================================
+  Hero section with multiple hero blocks for slideshow functionality
+  - Loads dedicated CSS file for hero styling
+  - Iterates through hero blocks for dynamic content
+  - Each block contains image, title, description, and CTA button
+  - Responsive design with desktop-optimized layout
+  - Links to collection pages or product pages
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  EXTERNAL CSS ASSET LOADING
+  =============================================================================
+  Loads dedicated CSS file for new hero section styling
+  - new-hero.css: Section-specific stylesheet
+  - asset_url filter: Generates proper asset URL
+  - stylesheet_tag: Renders as <link> tag for CSS loading
+{% endcomment %}
 {{ 'new-hero.css' | asset_url | stylesheet_tag }}
 
+{% comment %}
+  =============================================================================
+  HERO DESKTOP CONTAINER
+  =============================================================================
+  Main container for hero section layout
+  - new-hero-desktop__container: Primary wrapper for hero content
+  - Contains all hero blocks and responsive layout
+{% endcomment %}
 <div class="new-hero-desktop__container">
+  {% comment %}
+    =============================================================================
+    HERO CONTENT CONTAINER
+    =============================================================================
+    Wrapper for all hero content blocks
+    - new-hero-desktop__content-container: Container for hero blocks
+    - Loops through section blocks for dynamic content
+  {% endcomment %}
   <div class="new-hero-desktop__content-container">
+  {% comment %}
+    =============================================================================
+    HERO BLOCKS ITERATION
+    =============================================================================
+    Loops through all hero blocks defined in theme editor
+    - section.blocks: Array of hero blocks from theme editor
+    - block: Individual hero block with settings
+    - Each block represents one hero slide
+  {% endcomment %}
   {% for block in section.blocks %}
+    {% comment %}
+      =============================================================================
+      INDIVIDUAL HERO CONTENT BLOCK
+      =============================================================================
+      Single hero block with image and content overlay
+      - new-hero-desktop__content: Individual hero block styling
+      - Contains image, title, description, and CTA button
+    {% endcomment %}
     <div class="new-hero-desktop__content">
+      {% comment %}
+        =============================================================================
+        HERO IMAGE LINK
+        =============================================================================
+        Clickable hero image that links to specified URL
+        - block.settings.url: Link destination from theme editor
+        - new-hero-desktop__content-image: Image styling class
+        - block.settings.image: Hero image from theme editor
+        - image_url: width: 800: Optimized image with 800px width
+        - alt="Hero Image": Accessibility alt text
+        - loading="lazy": Lazy loading for performance
+      {% endcomment %}
       <a class="new-hero-desktop__content-image" href="{{ block.settings.url }}">
         <img class="new-hero-desktop__content-image" src="{{ block.settings.image | image_url: width: 800 }}" alt="Hero Image" width="auto" height="auto" loading="lazy" />
       </a>
-        <div class="new-hero-desktop__content-wrapper">
+
+      {% comment %}
+        =============================================================================
+        HERO CONTENT OVERLAY WRAPPER
+        =============================================================================
+        Container for text content overlaid on hero image
+        - new-hero-desktop__content-wrapper: Content overlay styling
+        - Contains title, description, and call-to-action button
+      {% endcomment %}
+      <div class="new-hero-desktop__content-wrapper">
+        {% comment %}
+          =============================================================================
+          HERO TITLE
+          =============================================================================
+          Main heading for hero section
+          - new-hero-desktop__content-title: Title styling class
+          - block.settings.title: Hero title from theme editor
+          - richtext: Supports rich text formatting
+        {% endcomment %}
         <h1 class="new-hero-desktop__content-title">{{ block.settings.title }}</h1>
+
+        {% comment %}
+          =============================================================================
+          HERO DESCRIPTION
+          =============================================================================
+          Descriptive text below hero title
+          - new-hero-desktop__content-description: Description styling class
+          - block.settings.description: Hero description from theme editor
+          - text: Simple text input for description
+        {% endcomment %}
         <p class="new-hero-desktop__content-description">{{ block.settings.description }}</p>
+
+        {% comment %}
+          =============================================================================
+          CALL-TO-ACTION BUTTON
+          =============================================================================
+          Clickable button linking to specified URL
+          - new-hero-desktop__cta: CTA button styling class
+          - block.settings.url: Link destination from theme editor
+          - block.settings.cta_text: Button text from theme editor
+        {% endcomment %}
         <a class="new-hero-desktop__cta" href="{{ block.settings.url }}">{{ block.settings.cta_text }}</a>
       </div>
     </div>
@@ -18,36 +122,127 @@
   
 </div>
 
+{% comment %}
+  =============================================================================
+  NEW HERO SECTION SCHEMA - CONFIGURATION & CUSTOMIZATION
+  =============================================================================
+  Theme editor configuration for new hero section
+  - name: Section name displayed in theme editor
+  - tag: "section": HTML tag for section wrapper
+  - class: "slideshow": CSS class for slideshow functionality
+  - blocks: Hero block configuration for merchants
+  - presets: Default section configuration
+{% endcomment %}
 {% schema %}
 {
+  {% comment %}
+    =============================================================================
+    SCHEMA BASIC CONFIGURATION
+    =============================================================================
+    Core section configuration for theme editor
+    - name: Display name in theme editor sidebar
+    - tag: HTML tag for section wrapper
+    - class: CSS class for styling and functionality
+  {% endcomment %}
   "name": "New Hero",
   "tag": "section",
   "class": "slideshow",
+
+  {% comment %}
+    =============================================================================
+    SECTION BLOCKS - HERO CONTENT MANAGEMENT
+    =============================================================================
+    Hero block configuration for dynamic content
+    - Merchants can add multiple hero blocks
+    - Each block represents one hero slide
+    - All blocks are displayed in sequence
+  {% endcomment %}
   "blocks": [
+    {% comment %}
+      =============================================================================
+      HERO BLOCK TYPE
+      =============================================================================
+      Individual hero block with image and content
+      - name: "Block": Display name in theme editor
+      - type: "block": Internal identifier for block type
+      - settings: Configurable options for hero content
+    {% endcomment %}
     {
       "name": "Block",
       "type": "block",
       "settings": [
+        {% comment %}
+          =============================================================================
+          HERO IMAGE SETTING
+          =============================================================================
+          Hero background image selection
+          - type: "image_picker": Image selector in theme editor
+          - id: "image": Internal identifier for Liquid access
+          - label: "Image": User-friendly label in theme editor
+        {% endcomment %}
         {
           "type": "image_picker",
           "id": "image",
           "label": "Image"
         },
+
+        {% comment %}
+          =============================================================================
+          HERO TITLE SETTING
+          =============================================================================
+          Hero heading text with rich text support
+          - type: "richtext": Rich text editor for formatted content
+          - id: "title": Internal identifier for Liquid access
+          - label: "Title": User-friendly label in theme editor
+          - Supports HTML formatting and styling
+        {% endcomment %}
         {
           "type": "richtext",
           "id": "title",
           "label": "Title"
         },
+
+        {% comment %}
+          =============================================================================
+          HERO DESCRIPTION SETTING
+          =============================================================================
+          Hero description text below title
+          - type: "text": Simple text input field
+          - id: "description": Internal identifier for Liquid access
+          - label: "Description": User-friendly label in theme editor
+        {% endcomment %}
         {
           "type": "text",
           "id": "description",
           "label": "Description"
         },
+
+        {% comment %}
+          =============================================================================
+          CALL-TO-ACTION URL SETTING
+          =============================================================================
+          Link destination for hero CTA button
+          - type: "url": URL input field with validation
+          - id: "url": Internal identifier for Liquid access
+          - label: "CTA Url": User-friendly label in theme editor
+          - Links to collection, product, or external page
+        {% endcomment %}
         {
           "type": "url",
           "id": "url",
           "label": "CTA Url"
         },
+
+        {% comment %}
+          =============================================================================
+          CALL-TO-ACTION TEXT SETTING
+          =============================================================================
+          Button text for hero call-to-action
+          - type: "text": Simple text input field
+          - id: "cta_text": Internal identifier for Liquid access
+          - label: "CTA Text": User-friendly label in theme editor
+          - Displayed on the CTA button (e.g., "Shop Now", "Learn More")
+        {% endcomment %}
         {
           "type": "text",
           "id": "cta_text",
@@ -56,6 +251,16 @@
       ]
     }
   ],
+
+  {% comment %}
+    =============================================================================
+    SECTION PRESETS - DEFAULT CONFIGURATION
+    =============================================================================
+    Default section configuration for easy addition to pages
+    - name: "New Hero": Display name when adding section to page
+    - Provides starting point for merchants to customize
+    - All settings start empty by default
+  {% endcomment %}
   "presets": [
     {
       "name": "New Hero"

@@ -1,51 +1,253 @@
+{% comment %}
+  =============================================================================
+  NEW HERO MOBILE SECTION - MOBILE-OPTIMIZED HERO WITH WAVE IMAGE
+  =============================================================================
+  Mobile-specific hero section with wave image overlay and content
+  - Loads shared CSS file for hero styling
+  - Mobile-optimized layout with wave image decoration
+  - Single hero block with image, title, description, and CTA
+  - Responsive design optimized for mobile devices
+  - Wave image overlay for visual appeal
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  EXTERNAL CSS ASSET LOADING
+  =============================================================================
+  Loads shared CSS file for hero styling (used by both mobile and desktop)
+  - new-hero.css: Shared stylesheet for hero sections
+  - asset_url filter: Generates proper asset URL
+  - stylesheet_tag: Renders as <link> tag for CSS loading
+{% endcomment %}
 {{ 'new-hero.css' | asset_url | stylesheet_tag }}
 
+{% comment %}
+  =============================================================================
+  HERO MOBILE CONTAINER
+  =============================================================================
+  Main container for mobile hero section layout
+  - hero-mobile__container: Primary wrapper for mobile hero content
+  - Contains hero image, wave overlay, and content text
+{% endcomment %}
 <div class="hero-mobile__container">
+  {% comment %}
+    =============================================================================
+    HERO MOBILE CONTENT CONTAINER
+    =============================================================================
+    Wrapper for all mobile hero content elements
+    - hero-mobile__content-container: Container for hero layout
+    - Contains image container and text content
+  {% endcomment %}
   <div class="hero-mobile__content-container">
+    {% comment %}
+      =============================================================================
+      HERO IMAGES CONTAINER
+      =============================================================================
+      Container for hero background image and wave overlay
+      - hero-mobile__content-images-container: Wrapper for image layers
+      - Contains wave image overlay and hero background image
+      - Wave image appears on top of hero image for visual effect
+    {% endcomment %}
     <div class="hero-mobile__content-images-container">
+      {% comment %}
+        =============================================================================
+        WAVE IMAGE OVERLAY
+        =============================================================================
+        Decorative wave image overlay for visual appeal
+        - hero-mobile__content-wave-image: Wave image styling class
+        - new-hero-mobile-wave.png: Static wave image asset
+        - file_img_url: 'large': Generates URL for wave image
+        - loading="lazy": Lazy loading for performance
+        - width="auto" height="auto": Responsive image sizing
+      {% endcomment %}
       <img class="hero-mobile__content-wave-image" src="{{ 'new-hero-mobile-wave.png' | file_img_url: 'large' }}" loading="lazy" width="auto" height="auto" />
+
+      {% comment %}
+        =============================================================================
+        HERO BACKGROUND IMAGE
+        =============================================================================
+        Main hero background image from theme editor
+        - hero-mobile__content-image: Hero image styling class
+        - section.settings.image: Hero image from theme editor
+        - image_url: width: 600: Optimized image with 600px width for mobile
+        - alt="Hero image": Accessibility alt text
+        - loading="lazy": Lazy loading for performance
+        - width="auto" height="auto": Responsive image sizing
+      {% endcomment %}
       <img class="hero-mobile__content-image" src="{{ section.settings.image | image_url: width: 600 }}" alt="Hero image" width="auto" height="auto" loading="lazy" />
     </div>
+
+    {% comment %}
+      =============================================================================
+      HERO CONTENT TEXT AREA
+      =============================================================================
+      Container for hero text content overlaid on images
+      - hero-mobile__content: Text content wrapper styling
+      - Contains title, description, and call-to-action button
+      - Positioned over hero images for text readability
+    {% endcomment %}
     <div class="hero-mobile__content">
+      {% comment %}
+        =============================================================================
+        HERO TITLE
+        =============================================================================
+        Main heading for mobile hero section
+        - hero-mobile__content-title: Title styling class
+        - section.settings.title: Hero title from theme editor
+        - richtext: Supports rich text formatting
+      {% endcomment %}
       <h1 class="hero-mobile__content-title">{{ section.settings.title }}</h1>
+
+      {% comment %}
+        =============================================================================
+        HERO DESCRIPTION
+        =============================================================================
+        Descriptive text below hero title
+        - hero-mobile__content-description: Description styling class
+        - section.settings.description: Hero description from theme editor
+        - text: Simple text input for description
+      {% endcomment %}
       <p class="hero-mobile__content-description">{{ section.settings.description }}</p>
+
+      {% comment %}
+        =============================================================================
+        CALL-TO-ACTION BUTTON
+        =============================================================================
+        Clickable button linking to specified URL
+        - hero-mobile__content-cta: CTA button styling class
+        - section.settings.cta-url: Link destination from theme editor
+        - section.settings.cta-text: Button text from theme editor
+      {% endcomment %}
       <a class='hero-mobile__content-cta'href="{{ section.settings.cta-url }}">{{ section.settings.cta-text }}</a>
     </div>
   </div>
 </div>
 
+{% comment %}
+  =============================================================================
+  NEW HERO MOBILE SECTION SCHEMA - CONFIGURATION & CUSTOMIZATION
+  =============================================================================
+  Theme editor configuration for mobile hero section
+  - name: Section name displayed in theme editor
+  - tag: "section": HTML tag for section wrapper
+  - class: "slideshow": CSS class for slideshow functionality
+  - settings: Configurable options for mobile hero content
+  - presets: Default section configuration
+{% endcomment %}
 {% schema %}
 {
+  {% comment %}
+    =============================================================================
+    SCHEMA BASIC CONFIGURATION
+    =============================================================================
+    Core section configuration for theme editor
+    - name: Display name in theme editor sidebar
+    - tag: HTML tag for section wrapper
+    - class: CSS class for styling and functionality
+  {% endcomment %}
   "name": "New Hero Mobile",
   "tag": "section",
   "class": "slideshow",
+
+  {% comment %}
+    =============================================================================
+    SECTION SETTINGS - MOBILE HERO CUSTOMIZATION
+    =============================================================================
+    Configurable options available to merchants in theme editor
+    - All settings are required for proper mobile hero display
+    - Single hero configuration (no blocks, unlike desktop version)
+    - Mobile-optimized image sizing and layout
+  {% endcomment %}
   "settings": [
+    {% comment %}
+      =============================================================================
+      HERO IMAGE SETTING
+      =============================================================================
+      Hero background image selection for mobile
+      - type: "image_picker": Image selector in theme editor
+      - id: "image": Internal identifier for Liquid access
+      - label: "Image": User-friendly label in theme editor
+      - Optimized for mobile display with 600px width
+    {% endcomment %}
     {
       "type": "image_picker",
       "id": "image",
       "label": "Image"
     },
+
+    {% comment %}
+      =============================================================================
+      HERO TITLE SETTING
+      =============================================================================
+      Hero heading text with rich text support
+      - type: "richtext": Rich text editor for formatted content
+      - id: "title": Internal identifier for Liquid access
+      - label: "Title": User-friendly label in theme editor
+      - Supports HTML formatting and styling
+    {% endcomment %}
     {
       "type": "richtext",
       "id": "title",
       "label": "Title"
     },
+
+    {% comment %}
+      =============================================================================
+      HERO DESCRIPTION SETTING
+      =============================================================================
+      Hero description text below title
+      - type: "text": Simple text input field
+      - id: "description": Internal identifier for Liquid access
+      - label: "Description": User-friendly label in theme editor
+    {% endcomment %}
     {
       "type": "text",
       "id": "description",
       "label": "Description"
     },
+
+    {% comment %}
+      =============================================================================
+      CALL-TO-ACTION URL SETTING
+      =============================================================================
+      Link destination for hero CTA button
+      - type: "url": URL input field with validation
+      - id: "cta-url": Internal identifier for Liquid access
+      - label: "CTA Url": User-friendly label in theme editor
+      - Links to collection, product, or external page
+    {% endcomment %}
     {
       "type": "url",
       "id": "cta-url",
       "label": "CTA Url"
     },
+
+    {% comment %}
+      =============================================================================
+      CALL-TO-ACTION TEXT SETTING
+      =============================================================================
+      Button text for hero call-to-action
+      - type: "text": Simple text input field
+      - id: "cta-text": Internal identifier for Liquid access
+      - label: "CTA Text": User-friendly label in theme editor
+      - Displayed on the CTA button (e.g., "Shop Now", "Learn More")
+    {% endcomment %}
     {
       "type": "text",
       "id": "cta-text",
       "label": "CTA Text"
     }
   ],
+
+  {% comment %}
+    =============================================================================
+    SECTION PRESETS - DEFAULT CONFIGURATION
+    =============================================================================
+    Default section configuration for easy addition to pages
+    - name: "New Hero Mobile": Display name when adding section to page
+    - Provides starting point for merchants to customize
+    - All settings start empty by default
+  {% endcomment %}
   "presets": [
     {
       "name": "New Hero Mobile"

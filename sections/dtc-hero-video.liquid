@@ -1,12 +1,67 @@
+{% comment %}
+  =============================================================================
+  DTC HERO VIDEO SECTION - ADVANCED VIDEO HERO WITH RESPONSIVE CONTROLS
+  =============================================================================
+  Advanced hero section with video background and responsive design controls
+  - Video fallback system with desktop/mobile video and image options
+  - Responsive height controls with aspect ratio management
+  - Dynamic heading tag selection (H1/H2) for SEO optimization
+  - Complex CSS styling for responsive video and image display
+  - Mobile-first design with desktop enhancements
+  - Used for high-impact hero sections with video content
+  - Part of the DTC Pages CRO group's advanced testing initiatives
+{% endcomment %}
 
+{% comment %}
+  =============================================================================
+  VIDEO FALLBACK LOGIC
+  =============================================================================
+  Determines which video files to use based on availability
+  - section.settings.video: Primary video setting (legacy)
+  - section.settings.video_file: Desktop video file
+  - section.settings.mobile_video_file: Mobile video file
+  - desktop_video: Desktop video with mobile fallback
+  - mobile_video: Mobile video with desktop fallback
+  - Ensures video content is always available when configured
+{% endcomment %}
 {%- if section.settings.video == blank -%}
   {%- assign desktop_video = section.settings.video_file | default: section.settings.mobile_video_file -%}
   {%- assign mobile_video = section.settings.mobile_video_file | default: section.settings.video_file -%}
 {%- endif -%}
+
+{% comment %}
+  =============================================================================
+  IMAGE ASSIGNMENTS
+  =============================================================================
+  Assigns image files for different device types
+  - desktop_image: Desktop-specific image file
+  - mobile_image: Mobile-specific image file
+  - Used for fallback when video is not available
+{% endcomment %}
 {% assign desktop_image = section.settings.image_file %}
 {% assign mobile_image = section.settings.mobile_image_file %}
+
+{% comment %}
+  =============================================================================
+  MEDIA TYPE DETERMINATION
+  =============================================================================
+  Determines whether to display video or image content
+  - section.settings.media_type: Media type selection from theme editor
+  - Controls whether video or image is displayed
+  - Enables merchants to choose content type per section
+{% endcomment %}
 {% assign media_type = section.settings.media_type %}
 
+{% comment %}
+  =============================================================================
+  DYNAMIC HEADING TAG SELECTION
+  =============================================================================
+  Dynamically selects heading tag for SEO optimization
+  - heading_tag: Default H2 tag for section headings
+  - section.settings.heading_h1: Boolean setting for H1 usage
+  - H1 tags should be used sparingly per page for SEO
+  - Allows merchants to control heading hierarchy
+{% endcomment %}
 {%- liquid
   assign heading_tag = 'h2'
   if section.settings.heading_h1
@@ -14,6 +69,17 @@
   endif
 -%}
 
+{% comment %}
+  =============================================================================
+  RESPONSIVE HEIGHT CSS STYLING
+  =============================================================================
+  Dynamic CSS for responsive video height and layout controls
+  - video-container--responsive: Responsive height container class
+  - height: auto: Allows content to determine height
+  - padding-bottom: 0: Removes default padding
+  - display: flex: Enables flexible layout
+  - Before/after pseudo-elements for aspect ratio maintenance
+{% endcomment %}
 {%- style -%}
   {%- if section.settings.height == 'responsive' -%}
     .video-container--responsive {
@@ -33,12 +99,32 @@
       display: table;
       clear: both;
     }
-    {% comment %} Set video height constraints {% endcomment %}
+
+    {% comment %}
+      =============================================================================
+      MOBILE VIDEO HEIGHT CONSTRAINTS
+      =============================================================================
+      Sets maximum height for mobile video display
+      - video_max_height_mobile: Custom height setting from theme editor
+      - #section-id-{{ section.id }}: Section-specific targeting
+      - .video-container: Video container element
+      - max-height: Limits video height on mobile devices
+    {% endcomment %}
     {%- if section.settings.video_max_height_mobile != blank -%}
       #section-id-{{ section.id }} .video-container {
         max-height: {{ section.settings.video_max_height_mobile }};
       }
     {%- endif -%}
+
+    {% comment %}
+      =============================================================================
+      DESKTOP VIDEO HEIGHT CONSTRAINTS
+      =============================================================================
+      Sets maximum height for desktop video display
+      - video_max_height_desktop: Custom height setting from theme editor
+      - @media (min-width: 768px): Desktop breakpoint
+      - Responsive height control for larger screens
+    {% endcomment %}
     {%- if section.settings.video_max_height_desktop != blank -%}
       @media (min-width: 768px) {
         #section-id-{{ section.id }} .video-container {
@@ -46,15 +132,46 @@
         }
       }
     {%- endif -%}
+
+    {% comment %}
+      =============================================================================
+      MOBILE ASPECT RATIO CALCULATION
+      =============================================================================
+      Calculates padding-top for mobile aspect ratio maintenance
+      - video_aspect_ratio_mobile: Aspect ratio setting from theme editor
+      - divided_by: Converts aspect ratio to percentage
+      - times: 100.0: Converts to CSS percentage value
+      - Maintains video proportions on mobile devices
+    {% endcomment %}
     #section-id-{{ section.id }} .video-container--responsive:before {
       padding-top: {{ 100.0 | divided_by: section.settings.video_aspect_ratio_mobile | times: 100.0 }}%;
     }
 
+    {% comment %}
+      =============================================================================
+      DTC SECTION VIDEO LAYOUT STYLING
+      =============================================================================
+      Custom styling for DTC section video elements
+      - dtc-section-background-video: DTC-specific video container
+      - .video-container__video-element: Video element wrapper
+      - display: flex: Enables flexible layout
+      - justify-content: center: Centers video content
+    {% endcomment %}
     .dtc-section-background-video .video-container__video-element{
         display: flex;
         justify-content: center;
     }
 
+    {% comment %}
+      =============================================================================
+      IMAGE DISPLAY CONTROLS
+      =============================================================================
+      Controls image display for different device types
+      - video-container__video-element-image--image: General image class
+      - video-container__video-element-image--desktop: Desktop-only image
+      - display: block/none: Controls image visibility
+      - Enables responsive image switching
+    {% endcomment %}
     .video-container__video-element-image--image{
       display: block;
     }
@@ -62,19 +179,62 @@
     .video-container__video-element-image--desktop{
       display: none;
     }
+
+    {% comment %}
+      =============================================================================
+      DESKTOP-ONLY VIDEO HIDING
+      =============================================================================
+      Hides desktop-only video elements on mobile
+      - dtc-desktop-only: CSS class for desktop-only content
+      - display: none: Hides element on mobile devices
+      - Prevents unnecessary video loading on mobile
+    {% endcomment %}
     .dtc-section-background-video .video-container__video-element.dtc-desktop-only{
       display:none;
     }
+
+    {% comment %}
+      =============================================================================
+      MOBILE VIDEO STYLING
+      =============================================================================
+      Mobile-specific video styling for optimal display
+      - dtc-mobile-only: CSS class for mobile-only content
+      - width: 100%: Full width video on mobile
+      - height: 100%: Full height video on mobile
+      - object-fit: cover: Maintains aspect ratio while filling container
+    {% endcomment %}
     .dtc-mobile-only video{
       width:100%;
       height:100%;
       object-fit:cover;
     }
+
+    {% comment %}
+      =============================================================================
+      MOBILE IMAGE ALT STYLING
+      =============================================================================
+      Styling for mobile alternative images
+      - dtc-image-alt: Alternative image class
+      - width: 100%: Full width image
+      - object-fit: cover: Maintains aspect ratio
+      - height: Uses mobile video max height setting
+    {% endcomment %}
     .dtc-image-alt{
         width:100%;
         object-fit:cover;
         height: {{ section.settings.video_max_height_mobile }};
       }
+
+    {% comment %}
+      =============================================================================
+      DESKTOP LAYOUT STYLING
+      =============================================================================
+      Desktop-specific layout and styling controls
+      - @media (min-width: 768px): Desktop breakpoint
+      - flex-direction: row-reverse: Reverses layout order
+      - align-items: stretch: Stretches elements to full height
+      - height: Uses desktop video max height setting
+    {% endcomment %}
     @media (min-width: 768px) {
       .dtc-section-background-video > div{
         display: flex;

@@ -1,5 +1,41 @@
+{% comment %}
+  =============================================================================
+  DTC FEATURED COLLECTION SECTION - ADVANCED PRODUCT DISPLAY SYSTEM
+  =============================================================================
+  Advanced featured collection section with multiple layout options and customization
+  - External CSS loading for upsell feature styling
+  - Dynamic CSS generation for title alignment and background colors
+  - Wave divider integration with customizable positioning and colors
+  - Multiple layout options: rows, columns, and carousel
+  - Responsive grid system with configurable product counts
+  - Animation controls with different entrance effects
+  - Related products metafield integration
+  - Carousel functionality with Swiper.js integration
+  - Used for DTC Pages CRO group's product display testing
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  EXTERNAL CSS ASSET LOADING
+  =============================================================================
+  Loads dedicated CSS file for DTC upsell feature styling
+  - dtc-upsell-feature.css: Section-specific stylesheet
+  - asset_url filter: Generates proper asset URL
+  - stylesheet_tag: Renders as <link> tag for CSS loading
+{% endcomment %}
 {{ 'dtc-upsell-feature.css' | asset_url | stylesheet_tag }}
 
+{% comment %}
+  =============================================================================
+  DYNAMIC TITLE ALIGNMENT CSS
+  =============================================================================
+  Generates CSS for title alignment based on theme editor setting
+  - section.settings.title_alignment: Alignment option from theme editor
+  - 'center': Centers title and section heading
+  - section-id-{{ section.id }}: Section-specific CSS targeting
+  - flex-wrap, align-items, justify-content: Flexbox layout controls
+  - flex-direction: column: Stacks title elements vertically
+{% endcomment %}
 {% style %}
   {% if section.settings.title_alignment == 'center' %}
     .section-id-{{ section.id }}h2 {
@@ -16,6 +52,16 @@
   {% endif %}
 {% endstyle %}
 
+{% comment %}
+  =============================================================================
+  DYNAMIC BACKGROUND COLOR CSS
+  =============================================================================
+  Generates CSS for custom background color when specified
+  - section.settings.color_bg: Background color from theme editor
+  - unless blank: Only applies when color is specified
+  - section-id-{{ section.id }}: Section-specific CSS targeting
+  - background-color: Sets custom background color
+{% endcomment %}
 {% style %}
   {% unless section.settings.color_bg == blank %}
     .section-id-{{ section.id }}{
@@ -25,6 +71,18 @@
   {% endunless %}
 {% endstyle %}
 
+{% comment %}
+  =============================================================================
+  WAVE DIVIDER INTEGRATION
+  =============================================================================
+  Renders wave divider with customizable positioning and colors
+  - section.settings.wave: Wave position setting from theme editor
+  - "none": No wave divider displayed
+  - render 'wave-styles': External snippet for wave styling
+  - wave_position: Passes wave position to snippet
+  - section_id: Passes section ID for CSS targeting
+  - fill_color: Passes background color for wave styling
+{% endcomment %}
 {%- if section.settings.wave != "none" -%}
   {%- render 'wave-styles' 
     , wave_position: section.settings.wave,
@@ -32,6 +90,18 @@
     fill_color: section.settings.color_bg -%}
 {%- endif -%}
 
+{% comment %}
+  =============================================================================
+  ROWS LAYOUT GRID CLASS ASSIGNMENT
+  =============================================================================
+  Determines CSS grid classes based on grid setting for rows layout
+  - section.settings.layout == 'rows': Only applies to rows layout
+  - section.settings.grid: Grid columns setting (2, 3, or 4)
+  - column half: 2-column grid (50% width each)
+  - column third: 3-column grid (33.33% width each)
+  - column quarter: 4-column grid (25% width each)
+  - product_class: CSS class for responsive grid columns
+{% endcomment %}
 {%- if section.settings.layout == 'rows' -%}
   {%- if section.settings.grid == 2 -%}
     {%- assign product_class = 'column half' -%}
@@ -42,16 +112,51 @@
   {%- endif -%}
 {%- endif -%}
 
+{% comment %}
+  =============================================================================
+  MAXIMUM PRODUCT COUNT CALCULATION
+  =============================================================================
+  Calculates maximum number of products to display
+  - section.settings.grid: Number of columns
+  - section.settings.rows: Number of rows
+  - times: Multiplies grid by rows for total capacity
+  - section.settings.max_products: Custom limit from theme editor
+  - at_most: Applies custom limit if specified
+  - max_products: Final product count for display
+{% endcomment %}
 {%- assign max_products = section.settings.grid | times: section.settings.rows -%}
 {%- if section.settings.max_products > 0 -%}
   {%- assign max_products = max_products | at_most: section.settings.max_products -%}
 {%- endif -%}
 
+{% comment %}
+  =============================================================================
+  ANIMATION TYPE SELECTION
+  =============================================================================
+  Selects animation type based on layout setting
+  - animation_type: CSS animation class for entrance effects
+  - cc-fade-in-up: Default animation for rows layout
+  - cc-fade-in: Animation for columns layout
+  - section.settings.layout: Layout type from theme editor
+  - Controls how products animate into view
+{% endcomment %}
 {% assign animation_type = "cc-fade-in-up" %}
 {%- if section.settings.layout == "columns" -%}
   {% assign animation_type = "cc-fade-in" %}
 {%- endif -%}
 
+{% comment %}
+  =============================================================================
+  RELATED PRODUCTS METAFIELD INTEGRATION
+  =============================================================================
+  Checks for related products metafield integration
+  - use_related_products_metafield: Boolean flag for metafield usage
+  - section.settings.related_products_metafield: Setting from theme editor
+  - product != blank: Ensures product context exists
+  - product.metafields.custom.related_products.value: Metafield value
+  - split: ',': Splits comma-separated product handles
+  - related_products_list: Array of related product handles
+{% endcomment %}
 {%- assign use_related_products_metafield = false -%}
 {%- if section.settings.related_products_metafield and product != blank and product.metafields.custom.related_products.value -%}
   {%- assign related_products_list = product.metafields.custom.related_products | split: ',' -%}
@@ -60,17 +165,59 @@
   {%- endif -%}
 {%- endif -%}
 
+{% comment %}
+  =============================================================================
+  CAROUSEL LAYOUT CONTAINER
+  =============================================================================
+  Opens carousel container when carousel layout is selected
+  - section.settings.layout == 'carousel': Carousel layout check
+  - product-slider: CSS class for carousel container
+  - Only rendered when carousel layout is active
+{% endcomment %}
 {% if section.settings.layout == 'carousel' %}
   <div class="product-slider">
   {% endif %}
 
+  {% comment %}
+    =============================================================================
+    MAIN SECTION CONTAINER
+    =============================================================================
+    Primary container for featured collection section
+    - wide-container half-gutter: Full-width container with reduced spacing
+    - section-id-{{ section.id }}: Section-specific CSS targeting
+    - use-alt-bg: Alternative background color class when enabled
+    - data-section-type: JavaScript hook for section functionality
+    - data-components: Component initialization data
+    - data-cc-animate: Animation trigger for section entrance
+  {% endcomment %}
   <div
     class="wide-container half-gutter section-id-{{ section.id }} {% if section.settings.alternate_bg_color %}use-alt-bg {% endif %}"
     data-section-type="dtc-featured-collection"
     data-components="product-block"
     data-cc-animate>
+
+    {% comment %}
+      =============================================================================
+      SECTION HEADING CONTAINER
+      =============================================================================
+      Container for section title, body text, and view all link
+      - section-heading: Heading wrapper styling class
+      - data-cc-animate: Animation trigger for heading entrance
+      - Conditional display based on title or view all setting
+    {% endcomment %}
     {% if section.settings.title != blank or section.settings.show_view_all %}
       <div class="section-heading" data-cc-animate>
+        {% comment %}
+          =============================================================================
+          SECTION TITLE
+          =============================================================================
+          Main heading for featured collection section
+          - section.settings.title: Title text from theme editor
+          - h2 class: Consistent heading styling
+          - data-cc-animate-click: Animation trigger for title interaction
+          - collections[section.settings.collection].url: Collection page link
+          - escape: Escapes HTML in title for security
+        {% endcomment %}
         {% if section.settings.title != blank %}
           <h2 class="h2">
             <a data-cc-animate-click href="{{ collections[section.settings.collection].url }}">
@@ -81,10 +228,30 @@
           <div></div>
         {% endif %}
 
+        {% comment %}
+          =============================================================================
+          SECTION BODY TEXT
+          =============================================================================
+          Descriptive text below section title
+          - section.settings.body_text: Body text from theme editor
+          - Supports HTML content for rich formatting
+          - Optional content for additional context
+        {% endcomment %}
         {% if section.settings.body_text != blank %}
           {{ section.settings.body_text }}
         {% endif %}
 
+        {% comment %}
+          =============================================================================
+          VIEW ALL LINK
+          =============================================================================
+          Link to view all products in collection
+          - section.settings.show_view_all: Boolean setting for link visibility
+          - data-cc-animate-click: Animation trigger for link interaction
+          - view-all-link: CSS class for link styling
+          - collections.general.view_all: Localized "View All" text
+          - collections[section.settings.collection].url: Collection page destination
+        {% endcomment %}
         {% if section.settings.show_view_all %}
           <a
             data-cc-animate-click
@@ -96,6 +263,18 @@
       </div>
     {% endif %}
 
+    {% comment %}
+      =============================================================================
+      CAROUSEL CONTAINER
+      =============================================================================
+      Swiper.js carousel container for carousel layout
+      - section.settings.layout == 'carousel': Carousel layout check
+      - swiper-container: Required class for Swiper.js functionality
+      - product-list: Product list styling class
+      - product-list--{{ section.settings.layout }}: Layout-specific styling
+      - data-products-in-view: Number of products visible in carousel
+      - section.settings.grid: Grid setting determines visible products
+    {% endcomment %}
     {% if section.settings.layout == 'carousel' %}
       <div class="swiper-container product-list product-list--{{ section.settings.layout }}"data-products-in-view="{{ section.settings.grid }}">
 
@@ -183,6 +362,15 @@
     {% endif %}
   </div>
 
+  {% comment %}
+    =============================================================================
+    CAROUSEL LAYOUT CLOSING TAG
+    =============================================================================
+    Closes carousel container when carousel layout is selected
+    - section.settings.layout == 'carousel': Carousel layout check
+    - product-slider: CSS class for carousel container
+    - Only rendered when carousel layout is active
+  {% endcomment %}
   {% if section.settings.layout == 'carousel' %}
   </div>
 {% endif %}
