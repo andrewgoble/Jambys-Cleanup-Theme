@@ -1,3 +1,27 @@
+{% comment %}
+  =============================================================================
+  WHY WE MADE THIS SECTION
+  =============================================================================
+  Dynamic content section that displays brand story and FAQ content
+  - Integrates with product collection metafields for dynamic content
+  - Shows video, image, title, subtitle, and FAQ content
+  - Conditional rendering based on metafield availability
+  - Customizable styling with color schemes and background images
+  - Responsive design with mobile/desktop optimizations
+  - Uses collection metafields for content management
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  METAFIELD DATA EXTRACTION & VALIDATION
+  =============================================================================
+  Extracts and validates metafield data from product collections
+  - Iterates through product.collections to find relevant metafields
+  - Extracts title, subtitle, video, image, and FAQ content
+  - Validates required fields before showing section
+  - Uses custom metafields for content management
+  - Breaks loop when first valid collection is found
+{% endcomment %}
 {% liquid
 assign video = "" 
 assign image = "" 
@@ -5,51 +29,177 @@ assign title_with_line_breaks = ""
 assign subtitle_with_line_breaks = "" 
 assign faqs = "" 
 assign show_section = false 
+
+{% comment %}
+  =============================================================================
+  COLLECTION METAFIELD ITERATION
+  =============================================================================
+  Loops through product collections to find metafield content
+  - product.collections: Array of collections containing the current product
+  - collection.metafields.custom.wwmt_section_title: Required title metafield
+  - Only processes collections with the required title metafield
+  - Extracts all related metafield content from the first valid collection
+{% endcomment %}
 for collection in product.collections 
+  {% comment %}
+    =============================================================================
+    TITLE METAFIELD VALIDATION
+    =============================================================================
+    Checks for required section title metafield
+    - wwmt_section_title: Required metafield for section display
+    - newline_to_br: Converts line breaks to HTML br tags
+    - title_with_line_breaks: Stores formatted title with line breaks
+    - This is the primary requirement for section visibility
+  {% endcomment %}
   if collection.metafields.custom.wwmt_section_title 
     assign title_with_line_breaks = collection.metafields.custom.wwmt_section_title | newline_to_br 
  
+    {% comment %}
+      =============================================================================
+      DEFAULT VIDEO METAFIELD EXTRACTION
+      =============================================================================
+      Extracts default video from collection metafields
+      - wwmt_default_video: Video metafield for section display
+      - video: Variable to store extracted video content
+      - Used as background or featured video in the section
+    {% endcomment %}
     if collection.metafields.custom.wwmt_default_video 
       assign video = collection.metafields.custom.wwmt_default_video 
     endif 
    
+    {% comment %}
+      =============================================================================
+      DEFAULT IMAGE METAFIELD EXTRACTION
+      =============================================================================
+      Extracts default image from collection metafields
+      - wwmt_default_image: Image metafield for section display
+      - image: Variable to store extracted image content
+      - Used as background or featured image in the section
+    {% endcomment %}
     if collection.metafields.custom.wwmt_default_image 
       assign image = collection.metafields.custom.wwmt_default_image 
     endif 
    
    
+    {% comment %}
+      =============================================================================
+      SUBTITLE METAFIELD EXTRACTION
+      =============================================================================
+      Extracts optional subtitle from collection metafields
+      - wwmt_section_subtitle: Optional subtitle metafield
+      - subtitle_with_line_breaks: Stores formatted subtitle with line breaks
+      - newline_to_br: Converts line breaks to HTML br tags
+    {% endcomment %}
     if collection.metafields.custom.wwmt_section_subtitle 
       assign subtitle_with_line_breaks = collection.metafields.custom.wwmt_section_subtitle | newline_to_br 
     endif 
 
+    {% comment %}
+      =============================================================================
+      FAQ METAFIELD EXTRACTION
+      =============================================================================
+      Extracts FAQ content from collection metafields
+      - wwmt_fields: FAQ content metafield (rich text or list)
+      - faqs: Variable to store extracted FAQ content
+      - .value: Accesses the actual metafield value content
+      - Used to display FAQ section below main content
+    {% endcomment %}
     if collection.metafields.custom.wwmt_fields != blank 
       assign faqs = collection.metafields.custom.wwmt_fields.value 
     endif 
 
+    {% comment %}
+      =============================================================================
+      LOOP TERMINATION
+      =============================================================================
+      Breaks loop after finding first valid collection
+      - Prevents processing multiple collections unnecessarily
+      - Ensures consistent content from single collection
+      - Optimizes performance by avoiding unnecessary iterations
+    {% endcomment %}
     break 
   endif 
 endfor 
 
+{% comment %}
+  =============================================================================
+  SECTION VISIBILITY VALIDATION
+  =============================================================================
+  Determines whether section should be displayed
+  - title_with_line_breaks: Required title content
+  - video: Required video content
+  - subtitle_with_line_breaks: Required subtitle content
+  - All three fields must be present for section to display
+  - show_section: Boolean flag controlling section visibility
+{% endcomment %}
 if title_with_line_breaks != blank and video != blank and subtitle_with_line_breaks != blank  
   assign show_section = true    
 endif
 %}
 
-
+{% comment %}
+  =============================================================================
+  CONDITIONAL SECTION RENDERING
+  =============================================================================
+  Only renders section when all required content is available
+  - show_section: Boolean flag from metafield validation
+  - Prevents empty section display
+  - Ensures content quality and user experience
+{% endcomment %}
 {% if show_section %}
   
+  {% comment %}
+    =============================================================================
+    DYNAMIC STYLING & CUSTOMIZATION
+    =============================================================================
+    CSS styles for section appearance and responsive behavior
+    - why-we-made-this: Base section styling class
+    - Custom color schemes and background image support
+    - Responsive padding and typography controls
+    - Mobile-specific optimizations
+  {% endcomment %}
   {% style %}
+    {% comment %}
+      =============================================================================
+      BASE SECTION STYLING
+      =============================================================================
+      Default spacing and layout for the section
+      - padding-top/bottom: 4rem vertical spacing
+      - margin-bottom: 8rem bottom margin for content separation
+      - Provides consistent spacing across different content types
+    {% endcomment %}
     .why-we-made-this {
       padding-top: 4rem;
       padding-bottom: 4rem;
       margin-bottom: 8rem;
     }
+    {% comment %}
+      =============================================================================
+      CUSTOM COLOR SCHEME STYLING
+      =============================================================================
+      Dynamic color scheme based on theme editor settings
+      - color_scheme: Theme color scheme selection (custom vs predefined)
+      - color_bg: Custom background color when using custom scheme
+      - color_text: Custom text color when using custom scheme
+      - section-id-{{ section.id }}: Unique identifier for section-specific styling
+    {% endcomment %}
     {% if section.settings.color_scheme == "custom" %}
       .section-id-{{ section.id }} {
         background: {{ section.settings.color_bg }};
         --cust-text-color: {{ section.settings.color_text }};
       }
 
+      {% comment %}
+        =============================================================================
+        AUTO BUTTON STYLE HOVER EFFECTS
+        =============================================================================
+        Automatic button hover styling based on color scheme
+        - button_style: 'auto' for automatic hover effects
+        - Hover background: Uses text color as background
+        - Hover text: Uses background color as text
+        - Hover border: Uses background color for border
+        - Creates high contrast hover states automatically
+      {% endcomment %}
       {% if section.settings.button_style == 'auto' %}
         #section-id-{{ section.id }} .button:hover {
           background-color: {{ section.settings.color_text }};
@@ -59,6 +209,17 @@ endif
       {% endif %}
     {% endif %}
 
+    {% comment %}
+      =============================================================================
+      BACKGROUND IMAGE STYLING
+      =============================================================================
+      Custom background image with responsive behavior
+      - bg_image: Background image from theme editor settings
+      - background-attachment: fixed for parallax effect on desktop
+      - background-size: cover for full coverage
+      - background-repeat: no-repeat to prevent tiling
+      - padding: 5rem for content spacing around background
+    {% endcomment %}
     {% unless section.settings.bg_image == blank %}
       .section-id-{{ section.id }} {
         background-attachment: fixed;
@@ -67,10 +228,31 @@ endif
         padding: 5rem;
       }
 
+      {% comment %}
+        =============================================================================
+        LAZY LOADED BACKGROUND IMAGE
+        =============================================================================
+        Background image with lazy loading for performance
+        - lazy-background: CSS class for lazy loading
+        - background-image: Direct URL to high-resolution image
+        - width: 2000: High-resolution image for all screen sizes
+        - Ensures crisp display on high-DPI displays
+      {% endcomment %}
       .section-id-{{ section.id }}.lazy-background {
         background-image: url("{{ section.settings.bg_image | image_url: width: 2000 }}");
       }
 
+      {% comment %}
+        =============================================================================
+        TEXT SHADOW FOR BACKGROUND IMAGES
+        =============================================================================
+        Text shadows for better readability over background images
+        - h2: Heading text shadow for emphasis
+        - p: Paragraph text shadow for readability
+        - kansasnew: Custom serif font family
+        - text-shadow: 2px 2px 5px with semi-transparent black
+        - Ensures text remains readable over complex backgrounds
+      {% endcomment %}
       #section-id-{{ section.id }} h2 {
         font-family: kansasnew,serif;
         text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
@@ -79,6 +261,16 @@ endif
         text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
       }
 
+      {% comment %}
+        =============================================================================
+        MOBILE BACKGROUND IMAGE OPTIMIZATION
+        =============================================================================
+        Mobile-specific background image adjustments
+        - max-width: 768px: Mobile breakpoint
+        - padding: Reduced padding for mobile devices
+        - background-attachment: initial to disable parallax on mobile
+        - Prevents performance issues and improves mobile experience
+      {% endcomment %}
       @media(max-width: 768px) {
           .section-id-{{ section.id }} {
             padding: 50px 0 0;
@@ -88,11 +280,30 @@ endif
       
     {% endunless %}
 
+    {% comment %}
+      =============================================================================
+      TYPOGRAPHY CUSTOMIZATION
+      =============================================================================
+      Dynamic typography settings from theme editor
+      - font_weight: Font weight setting from theme editor
+      - font_size: Font size setting in pixels
+      - section-id-{{ section.id }}: Unique identifier for section-specific styling
+    {% endcomment %}
     .section-id-{{ section.id }} {
       font-weight: {{ section.settings.font_weight }};
       font-size: {{ section.settings.font_size }}px;
     }
 
+    {% comment %}
+      =============================================================================
+      DESKTOP IMAGE LAYOUT OPTIMIZATION
+      =============================================================================
+      Desktop-specific image layout adjustments
+      - min-width: 768px: Desktop breakpoint
+      - image-with-text__image: Image container styling
+      - padding: 3rem vertical padding for desktop layout
+      - image-with-text__image__inner: Inner image wrapper styling
+    {% endcomment %}
     @media(min-width: 768px) {
       .image-with-text__image {
         padding: 3rem 0;
@@ -359,6 +570,61 @@ endif
   </div>
 {% endif %}
 
+{% comment %}
+  =============================================================================
+  SCHEMA CONFIGURATION SUMMARY
+  =============================================================================
+  Theme editor configuration for the comprehensive "Why We Made This" section
+  
+  **SECTION OVERVIEW:**
+  This is a complex, dynamic section that integrates with product collection metafields
+  to display brand story content, FAQ sections, and customizable media layouts.
+  
+  **KEY FEATURES:**
+  - Dynamic content from collection metafields (title, subtitle, video, image, FAQs)
+  - Conditional rendering based on metafield availability
+  - Interactive FAQ accordion with image switching
+  - Responsive design with mobile/desktop optimizations
+  - Customizable color schemes and background images
+  - Wave divider options for visual separation
+  - Bullet point blocks for additional content
+  - Video integration with fallback images
+  
+  **METAFIELD INTEGRATION:**
+  - wwmt_section_title: Required title for section display
+  - wwmt_default_video: Video content for section
+  - wwmt_default_image: Image content for section
+  - wwmt_section_subtitle: Optional subtitle content
+  - wwmt_fields: FAQ content in rich text format
+  
+  **LAYOUT OPTIONS:**
+  - Image position: Left or right positioning
+  - Media size: Cover (fill) or contain (natural) sizing
+  - Text width: 30-70% customizable text area width
+  - Text alignment: Left, center, or right alignment
+  - Mobile title positioning: Above or below image
+  
+  **STYLING CUSTOMIZATION:**
+  - Color schemes: Standard, alternate, or custom colors
+  - Typography: Font size (12-24px) and weight (100-900)
+  - Background images with parallax effects
+  - Wave dividers for visual separation
+  - Custom bullet point icons
+  
+  **INTERACTIVE ELEMENTS:**
+  - FAQ accordion with image switching
+  - Button styles: Primary, secondary, auto, or link
+  - Hover effects and animations
+  - Responsive image handling
+  - Video playback controls
+  
+  **RESPONSIVE BEHAVIOR:**
+  - Mobile-optimized layouts
+  - Disabled parallax on mobile for performance
+  - Responsive typography scaling
+  - Mobile-specific title positioning
+  - Touch-friendly accordion interactions
+{% endcomment %}
 {% schema %}
 {
   "name": "Why we made this",
