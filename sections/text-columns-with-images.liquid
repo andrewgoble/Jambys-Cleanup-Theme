@@ -1,3 +1,26 @@
+{% comment %}
+  =============================================================================
+  TEXT COLUMNS WITH IMAGES SECTION
+  =============================================================================
+  Flexible content section displaying text and images in column layout
+  - Supports 1-3 columns with customizable image and text content
+  - Dynamic product type detection for collection-specific content
+  - Metafield integration for dynamic image and caption display
+  - Responsive layout with configurable image widths and shapes
+  - Wave styling options and background color customization
+  - Product type normalization for proper collection linking
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  DYNAMIC BACKGROUND COLOR STYLING
+  =============================================================================
+  Customizable background color from section settings
+  - color_bg: Background color setting from theme editor
+  - section-id-{{ section.id }}: Unique identifier for section-specific styling
+  - Only applies when color_bg setting is not blank
+  - Allows merchants to customize section appearance
+{% endcomment %}
 {% style %}
   {% unless section.settings.color_bg == blank %}
      .section-id-{{ section.id }} {
@@ -5,23 +28,66 @@
      }
   {% endunless %}
 
+{% comment %}
+  =============================================================================
+  DYNAMIC TYPOGRAPHY STYLING
+  =============================================================================
+  Customizable font weight and size from section settings
+  - font_weight: Font weight setting (normal, bold, etc.)
+  - font_size: Font size in pixels from theme editor
+  - Applies to entire section for consistent typography
+{% endcomment %}
   .section-id-{{ section.id }} {
      font-weight: {{ section.settings.font_weight }};
      font-size: {{ section.settings.font_size }}px;
   }
 
+{% comment %}
+  =============================================================================
+  ANIMATION CONTAINER OVERFLOW FIX
+  =============================================================================
+  Ensures proper animation display when animations are enabled
+  - cc-animate-enabled: Class applied when animations are active
+  - shopify-section: Shopify's section wrapper class
+  - position: relative for proper stacking context
+  - overflow: visible to show animations that extend beyond container
+{% endcomment %}
   .cc-animate-enabled .shopify-section {
     position: relative;
     overflow: visible;
   }
 {% endstyle %}
 
+{% comment %}
+  =============================================================================
+  WAVE STYLING INTEGRATION
+  =============================================================================
+  Optional decorative wave borders for visual interest
+  - wave: Wave position setting (none/top/bottom/both)
+  - wave-styles: Snippet for rendering wave SVG elements
+  - wave_position: Passes wave position to wave-styles snippet
+  - section_id: Unique section identifier for styling
+  - fill_color: Wave color matches section background color
+{% endcomment %}
 {%- if section.settings.wave != "none" -%}
   {%- render 'wave-styles', 
     wave_position: section.settings.wave, 
     section_id: section.id,
     fill_color: section.settings.color_bg -%}
 {%- endif -%}
+
+{% comment %}
+  =============================================================================
+  PRODUCT TYPE NORMALIZATION
+  =============================================================================
+  Converts product types to collection handles for proper linking
+  - product_type: Product type converted to handle format
+  - handleize filter: Converts text to URL-friendly format
+  - Special handling for specific product types:
+    - House Hoodie → House Hoodies (plural for collection)
+    - JamTee → JamTees (plural for collection)
+  - Double Cozy Cloak and Cozy Cloak get special handling
+{% endcomment %}
 {% assign product_type = product.type | handleize %}
 {% if product.type == 'House Hoodie' %}
   {% assign product_type = 'House Hoodies' | handleize %}
@@ -30,12 +96,55 @@
   {% assign product_type = 'JamTees' | handleize %}
 {% endif %}
 
+{% comment %}
+  =============================================================================
+  SPECIAL PRODUCT TYPE HANDLING
+  =============================================================================
+  Empty conditional for special product types that need custom logic
+  - Double Cozy Cloak and Cozy Cloak products
+  - Placeholder for future special handling requirements
+{% endcomment %}
 {% if product.type == 'Double Cozy Cloak' or product.type == 'Cozy Cloak' %}
   
 {% endif %}
+
+{% comment %}
+  =============================================================================
+  COLLECTION ASSIGNMENT
+  =============================================================================
+  Assigns collection based on normalized product type
+  - collection: Collection object for current product type
+  - collections[product_type]: Looks up collection by handle
+  - Used for metafield content and related product information
+{% endcomment %}
 {% assign collection = collections[product_type] %}
 
+{% comment %}
+  =============================================================================
+  MAIN SECTION CONTAINER
+  =============================================================================
+  Primary container with section identification and styling
+  - id="section-id-{{ section.id }}": Unique section identifier
+  - text-columns-with-images: Base section class
+  - section-id-{{ section.id }}: CSS class for section-specific styling
+  - half-gutter: Reduced spacing for tighter layout
+  - section-spacing: Consistent vertical spacing between sections
+  - use-alt-bg: Optional alternate background color class
+  - data-cc-animate: JavaScript animation trigger for entrance effects
+{% endcomment %}
 <div id="section-id-{{ section.id }}" class="text-columns-with-images section-id-{{ section.id }} half-gutter section-spacing {% if section.settings.alternate_bg_color %}use-alt-bg{% endif %}" data-cc-animate>
+
+{% comment %}
+  =============================================================================
+  DYNAMIC IMAGE WIDTH STYLING
+  =============================================================================
+  CSS styles for customizable image widths per block
+  - Loops through all blocks to set individual image widths
+  - block.settings.image_width: Width setting from theme editor
+  - #block-id-{{ block.id }}: Unique identifier for each block
+  - .text-column__image: Image container class
+  - max-width: Constrains image width to specified value
+{% endcomment %}
   {% style %}
     {%- for block in section.blocks -%}
     #section-id-{{ section.id }} #block-id-{{ block.id }} .text-column__image {
@@ -44,6 +153,18 @@
     {%- endfor -%}
   {% endstyle %}
 
+{% comment %}
+  =============================================================================
+  SECTION HEADING & TITLE
+  =============================================================================
+  Section title with configurable alignment and container width
+  - section-heading: Container for title and spacing
+  - section-heading--with-spacing: Additional spacing class
+  - align-{{ section.settings.text_alignment }}: Dynamic text alignment
+  - wide-container: Full-width container option
+  - container container--large: Standard large container option
+  - data-cc-animate: Animation trigger for title entrance
+{% endcomment %}
   {% if section.settings.title != blank %}
     <div class="section-heading section-heading--with-spacing
       align-{{ section.settings.text_alignment }}
@@ -57,17 +178,62 @@
     </div>
   {% endif %}
 
+{% comment %}
+  =============================================================================
+  CONTENT CONTAINER WRAPPER
+  =============================================================================
+  Dynamic container wrapper based on full-width setting
+  - wide-container: Full-width layout option
+  - container container--large: Standard large container option
+  - Controls overall content width and spacing
+{% endcomment %}
   {% if section.settings.full_width %}
     <div class="wide-container">
   {% else %}
     <div class="container container--large">
   {% endif %}
 
+{% comment %}
+  =============================================================================
+  FLEXIBLE COLUMN LAYOUT
+  =============================================================================
+  Dynamic column layout based on number of blocks
+  - flexible-layout: Base layout container class
+  - flexible-layout--variable-columns: Variable column support
+  - flexible-layout--columns-{{ section.blocks.size }}: Dynamic column count
+  - align-{{ section.settings.text_alignment }}: Dynamic text alignment
+  - Responsive grid that adapts to block count
+{% endcomment %}
     <div class="flexible-layout flexible-layout--variable-columns flexible-layout--columns-{{ section.blocks.size }} align-{{ section.settings.text_alignment }}">
       {% for block in section.blocks %}
+{% comment %}
+  =============================================================================
+  INDIVIDUAL COLUMN BLOCK
+  =============================================================================
+  Individual column container with animation and styling
+  - id="block-id-{{ block.id }}": Unique block identifier
+  - column text-column: Base column styling classes
+  - align-{{ section.settings.text_alignment }}: Dynamic text alignment
+  - block.shopify_attributes: Shopify block attributes for theme editor
+  - data-cc-animate="cc-fade-in-up": Animation trigger for entrance
+  - data-cc-animate-delay: Staggered animation delay based on block index
+{% endcomment %}
         <div id="block-id-{{ block.id }}" class="column text-column align-{{ section.settings.text_alignment }}" {{ block.shopify_attributes }}
              data-cc-animate="cc-fade-in-up" data-cc-animate-delay="{{ forloop.index | times: 0.15 }}s">
           
+{% comment %}
+  =============================================================================
+  METAFIELD IMAGE & TEXT ASSIGNMENT
+  =============================================================================
+  Dynamic content assignment based on block position
+  - metafield_image: Image from collection metafields
+  - metafield_text: Caption text from collection metafields
+  - forloop.index: Current block position (1, 2, or 3)
+  - collection.metafields.product: Product metafields namespace
+  - column_1_image, column_2_image, column_3_image: Image metafields
+  - column_1_caption, column_2_caption, column_3_caption: Caption metafields
+  - Provides dynamic content based on product type and block position
+{% endcomment %}
           {% assign metafield_image = blank %}
           {% if forloop.index == 1 %}
             {% assign metafield_image = collection.metafields.product.column_1_image | image_url %}
@@ -80,10 +246,33 @@
             {% assign metafield_text = collection.metafields.product.column_3_caption %}
           {% endif %}
           
+{% comment %}
+  =============================================================================
+  IMAGE DISPLAY LOGIC
+  =============================================================================
+  Conditional image rendering based on block settings and metafields
+  - block.settings.enable_image: Boolean to show/hide image
+  - text-column__image: Image container class
+  - text-column__image--shape-{{ section.settings.media_shape }}: Dynamic image shape
+  - Conditional link wrapping for clickable images
+  - aria-label: Accessibility label for linked images
+{% endcomment %}
           {% if block.settings.enable_image %}
             <div class="text-column__image text-column__image--shape-{{ section.settings.media_shape }}">
               {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}" {% if block.settings.title %}aria-label="{{ block.settings.title | escape }}"{% endif %}>{%- endif -%}
 
+{% comment %}
+  =============================================================================
+  IMAGE SOURCE PRIORITY LOGIC
+  =============================================================================
+  Hierarchical image source selection with fallbacks
+  - Priority 1: Metafield images (collection-specific content)
+  - Priority 2: Block settings images (theme editor content)
+  - Priority 3: Video content (if no images available)
+  - Fallback: Empty state with minimal height
+  - responsive-image: Snippet for optimized image rendering
+  - inline-video: Snippet for video content display
+{% endcomment %}
               {%- if block.settings.image == blank and block.settings.video == blank and collection.metafields.product.column_1_image == blank -%}
                 {% style %}
                   .section-id-{{ section.id }} {
@@ -103,16 +292,53 @@
             </div>
           {% endif %}
 
+{% comment %}
+  =============================================================================
+  COLUMN TITLE DISPLAY
+  =============================================================================
+  Displays column title if provided in block settings
+  - block.settings.title: Title text from theme editor
+  - text-column__title: Title styling class
+  - align-{{ section.settings.text_alignment }}: Dynamic text alignment
+  - Only renders when title is not blank
+{% endcomment %}
           {% if block.settings.title != blank %}
             <h3 class="text-column__title align-{{ section.settings.text_alignment }}">{{ block.settings.title }}</h3>
           {% endif %}
 
+{% comment %}
+  =============================================================================
+  COLUMN TEXT CONTENT
+  =============================================================================
+  Displays text content with priority for metafields over block settings
+  - Priority 1: metafield_text (collection-specific content)
+  - Priority 2: block.settings.text (theme editor content)
+  - text-column__text: Text content styling class
+  - rte: Rich text editor styling for formatted content
+  - align-{{ section.settings.text_alignment }}: Dynamic text alignment
+  - Ensures metafield content takes precedence when available
+{% endcomment %}
           {% if metafield_text != blank %}
           <div class="text-column__text rte align-{{ section.settings.text_alignment }}">{{ metafield_text }}</div>
           {% elsif block.settings.text != blank %}
             <div class="text-column__text rte align-{{ section.settings.text_alignment }}">{{ block.settings.text }}</div>
           {% endif %}
 
+{% comment %}
+  =============================================================================
+  CALL-TO-ACTION BUTTON
+  =============================================================================
+  Displays call-to-action button when label is provided
+  - button-row: Button container with proper spacing
+  - inherit-colors: Inherits color scheme from section
+  - align-{{ section.settings.text_alignment }}: Dynamic button alignment
+  - data-cc-animate-click: Animation trigger for click effects
+  - Dynamic button styling based on section settings:
+    - link: Link-style button
+    - primary: Primary button style
+    - secondary: Secondary button style
+  - href: Links to block.settings.link URL
+{% endcomment %}
           {% if block.settings.button_label != blank %}
             <div class="button-row inherit-colors align-{{ section.settings.text_alignment }}">
               <a data-cc-animate-click
@@ -129,6 +355,17 @@
 </div>
 
 
+{% comment %}
+  =============================================================================
+  SCHEMA CONFIGURATION
+  =============================================================================
+  Theme editor configuration for text columns with images section
+  - name: Section name displayed in theme editor
+  - class: CSS class for section-specific styling
+  - settings: Global section settings for appearance and behavior
+  - blocks: Block types that can be added to this section
+  - presets: Default section configuration for easy addition
+{% endcomment %}
 {% schema %}
 {
   "name": "Text columns with media",
