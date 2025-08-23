@@ -1,3 +1,27 @@
+{% comment %}
+  =============================================================================
+  PRESS SLIDER SECTION
+  =============================================================================
+  Interactive press/media coverage display section with accordion functionality
+  - Uses HTML details/summary elements for native accordion behavior
+  - Displays press logos/images with expandable text content
+  - Customizable background colors and wave divider options
+  - JavaScript-enhanced interaction for single-open accordion behavior
+  - Responsive design with lazy-loaded images
+  - Supports multiple press/media coverage items
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  DYNAMIC BACKGROUND COLOR STYLING
+  =============================================================================
+  Optional custom background color from theme editor settings
+  - section.settings.color_bg: Custom background color setting
+  - shopify-section-{{ section.id }}: Unique section identifier for styling
+  - background-color: CSS property for custom background
+  - Only applies when color_bg setting is not blank
+  - Allows merchants to customize section appearance
+{% endcomment %}
 {%- unless section.settings.color_bg == blank -%}
   {%- style -%}
      #shopify-section-{{ section.id }} {
@@ -6,6 +30,19 @@
    {%- endstyle -%}
 {%- endunless -%}
 
+{% comment %}
+  =============================================================================
+  WAVE DIVIDER INTEGRATION
+  =============================================================================
+  Optional decorative wave borders for visual interest
+  - wave: Wave position setting (none/top/bottom/both)
+  - wave-styles: Snippet for rendering wave SVG elements
+  - wave_position: Passes wave position to wave-styles snippet
+  - section_id: Unique section identifier for styling
+  - fill_color: Wave color matches section background color
+  - Creates seamless integration between waves and background
+  - Only renders when wave setting is not "none"
+{% endcomment %}
 {%- if section.settings.wave != "none" -%}
   {%- render 'wave-styles', 
               wave_position: section.settings.wave, 
@@ -13,23 +50,128 @@
               fill_color: section.settings.color_bg -%}
 {%- endif -%}
 
+{% comment %}
+  =============================================================================
+  MAIN PRESS SLIDER CONTAINER
+  =============================================================================
+  Primary container with section identification and styling
+  - section-id-{{ section.id }}: Unique identifier for section-specific styling
+  - press-slider: Base styling class for press slider functionality
+  - Contains all press/media coverage items as accordion elements
+{% endcomment %}
 <div class="section-id-{{ section.id }} press-slider">
+  {% comment %}
+    =============================================================================
+    PRESS BLOCKS ITERATION
+    =============================================================================
+    Loops through all press blocks assigned to this section
+    - section.blocks: Array of all blocks assigned to this section
+    - block: Individual press block object with type and settings
+    - Each block represents one press/media coverage item
+    - Creates accordion-style expandable content for each item
+  {% endcomment %}
   {% for block in section.blocks %}
+  {% comment %}
+    =============================================================================
+    PRESS SLIDE ACCORDION ITEM
+    =============================================================================
+    Individual press item using HTML details/summary for accordion behavior
+    - press-slide: Base styling class for individual press items
+    - details: HTML element for expandable content functionality
+    - open: Attribute for first item to be expanded by default
+    - forloop.first: Liquid variable to identify first iteration
+    - Provides native accordion behavior without JavaScript dependency
+  {% endcomment %}
   <details class="press-slide"{% if forloop.first %} open{% endif %}>
+    {% comment %}
+      =============================================================================
+      PRESS ITEM SUMMARY/HEADER
+      =============================================================================
+      Clickable header with press logo/image and interaction trigger
+      - summary: HTML element for accordion header functionality
+      - data-show-quote: Custom data attribute for JavaScript interaction
+      - Contains press logo/image and serves as clickable trigger
+      - Expands/collapses associated content when clicked
+    {% endcomment %}
     <summary data-show-quote>
+      {% comment %}
+        =============================================================================
+        PRESS LOGO/IMAGE DISPLAY
+        =============================================================================
+        Press logo or image with responsive sizing and optimization
+        - block.settings.image: Image from theme editor settings
+        - image_url filter: Generates optimized image URL
+        - width: 240: Fixed width for consistent layout
+        - alt: Image alt text for accessibility
+        - loading="lazy": Lazy loading for performance optimization
+        - press-img: CSS class for press image styling
+      {% endcomment %}
       <img src="{{ block.settings.image | image_url: width: 240 }}"
           alt="{{ block.settings.image.alt | escape }}"
           loading="lazy"
           class="press-img" />
     </summary>
+    
+    {% comment %}
+      =============================================================================
+      PRESS CONTENT TEXT
+      =============================================================================
+      Expandable text content for press/media coverage details
+      - press-text: CSS class for text content styling
+      - block.settings.text: Rich text content from theme editor
+      - Displays when accordion item is expanded
+      - Contains press coverage details, quotes, or descriptions
+    {% endcomment %}
     <span class="press-text">{{ block.settings.text }}</span>
   </details>
   {% endfor %}
 </div>
+
+{% comment %}
+  =============================================================================
+  ACCORDION INTERACTION JAVASCRIPT
+  =============================================================================
+  JavaScript for enhanced accordion behavior and single-open functionality
+  - window.addEventListener: Global click event listener
+  - data-show-quote: Custom data attribute selector for interaction
+  - Single-open behavior: Closes other open items when one is clicked
+  - removeAttribute('open'): Closes accordion items programmatically
+  - Enhances native HTML details/summary behavior
+{% endcomment %}
 <script>
+  {% comment %}
+    =============================================================================
+    GLOBAL CLICK EVENT HANDLER
+    =============================================================================
+    Listens for clicks on press slide elements
+    - window.addEventListener: Global event listener for all clicks
+    - function(e): Event handler function with event object
+    - element: Target element that was clicked
+    - Checks if clicked element has showQuote data attribute
+  {% endcomment %}
   window.addEventListener('click', function(e){
     const element = e.target;
+    {% comment %}
+      =============================================================================
+      PRESS SLIDE INTERACTION DETECTION
+      =============================================================================
+      Identifies clicks on press slide summary elements
+      - 'showQuote' in element.dataset: Checks for custom data attribute
+      - element.parentElement.parentElement: Navigates to press-slide container
+      - querySelectorAll('.press-slide'): Finds all press slide elements
+      - Enables single-open accordion behavior
+    {% endcomment %}
     if ('showQuote' in element.dataset) {
+      {% comment %}
+        =============================================================================
+        SINGLE-OPEN ACCORDION LOGIC
+        =============================================================================
+        Closes all other open accordion items
+        - forEach: Iterates through all press slide elements
+        - slide != element: Excludes the clicked item from closing
+        - removeAttribute('open'): Closes accordion items
+        - Ensures only one press item is open at a time
+      {% endcomment %}
       element.parentElement.parentElement.querySelectorAll('.press-slide').forEach(slide => {
         if (slide != element) {
           slide.removeAttribute('open');
@@ -38,6 +180,52 @@
     }
   });
 </script>
+
+{% comment %}
+  =============================================================================
+  SCHEMA CONFIGURATION SUMMARY
+  =============================================================================
+  Theme editor configuration for the press slider section
+  
+  **SECTION OVERVIEW:**
+  Interactive press/media coverage display section using HTML accordion elements.
+  Displays press logos with expandable text content and customizable styling options.
+  
+  **KEY FEATURES:**
+  - Native HTML accordion functionality (details/summary)
+  - Single-open accordion behavior with JavaScript enhancement
+  - Customizable background colors and wave dividers
+  - Lazy-loaded press logos/images
+  - Responsive design with optimized image sizing
+  
+  **SECTION SETTINGS:**
+  - wave: Wave divider options (none/top/bottom/both, default: none)
+  - color_bg: Custom background color (default: #ffffff)
+  
+  **BLOCK SETTINGS (per press item):**
+  - text: Rich text content for press coverage details
+  - image: Press logo or media image (240px width recommended)
+  - link: Optional URL for press item (currently unused in template)
+  - collection: Optional collection reference (currently unused in template)
+  
+  **INTERACTION BEHAVIOR:**
+  - First press item opens by default
+  - Click to expand/collapse individual items
+  - Single-open behavior: Only one item open at a time
+  - Native HTML accordion with JavaScript enhancement
+  
+  **ACCESSIBILITY FEATURES:**
+  - Semantic HTML structure with details/summary
+  - Alt text support for press images
+  - Keyboard accessible accordion functionality
+  - Screen reader friendly content structure
+  
+  **PERFORMANCE OPTIMIZATIONS:**
+  - Lazy loading for press images
+  - Optimized image sizing (240px width)
+  - Efficient JavaScript event handling
+  - Minimal DOM manipulation
+{% endcomment %}
 {% schema %}
 {
   "name": "Press Slideshow",
