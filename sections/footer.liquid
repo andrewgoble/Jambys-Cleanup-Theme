@@ -1,4 +1,13 @@
 
+{% comment %}
+  =============================================================================
+  FOOTER SECTION - WAVE STYLES & MAIN CONTAINER
+  =============================================================================
+  Footer section with optional wave styling and dynamic block-based layout
+  - wave: Optional wave decoration (top/bottom/none) with custom fill color
+  - data-section-type: JavaScript hook for footer functionality
+  - section-id: Unique CSS class for section-specific styling
+{% endcomment %}
 {% if section.settings.wave != "none" %}
   {%- render 'wave-styles',
     wave_position: section.settings.wave,
@@ -8,10 +17,32 @@
 {% endif %}
 
 <div data-section-type="footer" class="section-id-{{ section.id }}">
+{% comment %}
+  =============================================================================
+  MAIN FOOTER BLOCKS - DYNAMIC CONTENT AREA
+  =============================================================================
+  Dynamic footer content using Shopify blocks system
+  - wide-container: Full-width layout with proper spacing
+  - role="navigation": Semantic landmark for screen readers
+  - aria-label: Accessible description of footer navigation
+  - data-num-blocks: JavaScript hook for responsive layout adjustments
+  - Block types: menu, text, newsletter with different configurations
+{% endcomment %}
   {% if section.blocks != blank %}
     <div class="wide-container section-footer__row-container" role="navigation" aria-label="{{ 'layout.footer.navigation_aria_label' | t | escape }}">
       <div class="section-footer__row section-footer__row--blocks" data-num-blocks="{{ section.blocks.size }}">
         {% for block in section.blocks %}
+{% comment %}
+  =============================================================================
+  MENU BLOCK TYPE - NAVIGATION LINKS
+  =============================================================================
+  Footer menu block displaying navigation links from Shopify linklists
+  - title: Optional block heading with word count-based styling
+  - menu: Linklist reference for dynamic menu generation
+  - data-acsb-custom-trigger: Accessibility service integration for 'Accessibility' link
+  - data-cc-animate-click: JavaScript animation hook for click interactions
+  - no-wrap: CSS class to prevent text wrapping for short titles/links
+{% endcomment %}
           {% if block.type == 'menu' %}
             <div class="section-footer__row__col section-footer__menu-block" {{ block.shopify_attributes }}>
               {% if block.settings.title != blank %}
@@ -35,6 +66,18 @@
               {% endif %}
             </div>
 
+{% comment %}
+  =============================================================================
+  TEXT BLOCK TYPE - CONTENT & MEDIA
+  =============================================================================
+  Footer text block with optional content, images, and social icons
+  - title: Optional block heading with word count-based styling
+  - text: Rich text content area for custom messaging
+  - image: Optional image with responsive sizing and lazy loading
+  - image_width: Custom width setting for image display
+  - show_social_icons: Toggle for social media icon display
+  - social_icons: Dynamic icon sizing (30px or 46px based on theme setting)
+{% endcomment %}
           {% elsif block.type == 'text' %}
             <div class="section-footer__row__col section-footer__text-block {% if block.settings.text != blank %}section-footer__text-block--with-text{% endif %}">
               {% if block.settings.title != blank %}
@@ -69,6 +112,17 @@
               {% endif %}
             </div>
 
+{% comment %}
+  =============================================================================
+  NEWSLETTER BLOCK TYPE - EMAIL SIGNUP & SOCIAL
+  =============================================================================
+  Footer newsletter block with email signup and optional social icons
+  - title: Optional block heading with word count-based styling
+  - text: Descriptive text above the signup form
+  - show_social_icons_newsletter: Toggle for social media icons in newsletter block
+  - social_icons: Dynamic icon sizing (30px or 46px based on theme setting)
+  - Note: Newsletter form is currently commented out, using Klaviyo integration instead
+{% endcomment %}
           {% elsif block.type == 'newsletter' %}
             <div class="section-footer__row__col section-footer__newsletter-block">
               {% if block.settings.title != blank %}
@@ -94,6 +148,16 @@
 
 
 
+{% comment %}
+  =============================================================================
+  KLAVIYO NEWSLETTER INTEGRATION
+  =============================================================================
+  Third-party email marketing integration replacing native Shopify newsletter
+  - klaviyo-form-TqwXDs: Klaviyo form container with custom styling
+  - Custom CSS: Button height (26px) and input border-radius (4px) overrides
+  - Note: Native Shopify newsletter form is commented out below
+  - Integration: Klaviyo handles email collection, validation, and list management
+{% endcomment %}
               <div class="signup-form">
                 
                 <style>
@@ -137,11 +201,32 @@
     </div>
   {% endif %}
 
+{% comment %}
+  =============================================================================
+  LOWER FOOTER - LOCALIZATION & PAYMENT ICONS
+  =============================================================================
+  Secondary footer row with payment methods, lower menu, and localization
+  - showing_localization: Boolean flag for locale/currency selector visibility
+  - Locale selector: Shows when shop has multiple published locales
+  - Currency selector: Shows when shop has multiple enabled currencies
+  - Dynamic CSS class: Adds --with-localization modifier when selectors are visible
+{% endcomment %}
   {%- assign showing_localization = false -%}
   {%- if section.settings.show_locale_selector and shop.published_locales.size > 1 -%}{%- assign showing_localization = true -%}{%- endif -%}
   {%- if section.settings.show_currency_selector and shop.enabled_currencies.size > 1 -%}{%- assign showing_localization = true -%}{%- endif -%}
   <div class="wide-container section-footer__row-container {% if showing_localization %}section-footer__row-container--with-localization{% endif %}">
     <div class="section-footer__row section-footer__row-lower">
+{% comment %}
+  =============================================================================
+  PAYMENT ICONS - SHOP & CUSTOM PAYMENT METHODS
+  =============================================================================
+  Payment method display with Shopify-enabled types and custom icons
+  - show_payment_icons: Toggle for payment method visibility
+  - shop.enabled_payment_types: Dynamic list of enabled payment methods
+  - payment_type_svg_tag: Shopify's built-in payment method SVG icons
+  - custom_payment_icon: Optional custom payment method image (120px width)
+  - Alt text: Uses custom icon alt text or falls back to shop name
+{% endcomment %}
       <div class="section-footer__row__col">
         {% if section.settings.show_payment_icons %}
           <div class="section-footer__payment-icons">
@@ -160,6 +245,15 @@
           </div>
 
         {% endif %}
+{% comment %}
+  =============================================================================
+  LOWER MENU - SECONDARY NAVIGATION
+  =============================================================================
+  Secondary footer navigation menu below payment icons
+  - lower_menu: Linklist reference for secondary navigation links
+  - data-cc-animate-click: JavaScript animation hook for click interactions
+  - Styling: Separate from main footer blocks for distinct visual treatment
+{% endcomment %}
         {% if section.settings.lower_menu != blank %}
           <div class="section-footer__lower-menu">
             <ul class="section-footer__lower-menu__list">
@@ -174,6 +268,17 @@
           </div>
         {% endif %}
       </div>
+{% comment %}
+  =============================================================================
+  LOCALIZATION & COPYRIGHT - RIGHT SIDE FOOTER
+  =============================================================================
+  Right-side footer content with language/currency selectors and copyright
+  - show_locale_selector: Toggle for language selection dropdown
+  - show_currency_selector: Toggle for currency selection dropdown
+  - localization snippet: Renders language/currency selector with 'footer' prefix
+  - copyright: Dynamic year with shop name link to homepage
+  - powered_by_link: Shopify's required attribution link
+{% endcomment %}
       <div class="section-footer__row__col">
         {% if section.settings.show_locale_selector or section.settings.show_currency_selector %}
           <div class="section-footer__localization">
