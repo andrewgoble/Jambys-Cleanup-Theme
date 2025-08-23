@@ -1,3 +1,30 @@
+{% comment %}
+  =============================================================================
+  JUNIP REVIEWS SECTION
+  =============================================================================
+  Third-party review system integration using Junip platform
+  - Displays customer reviews and ratings for products and store
+  - Configurable layout options (list or grid display)
+  - Multiple review types (all, product, or store reviews)
+  - Optional review summary display
+  - Customizable number of reviews (3-20)
+  - Hidden by default for JavaScript-based rendering
+  - Integrates with Junip's review management system
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  JUNIP REVIEWS CONTAINER
+  =============================================================================
+  Main container for Junip review system integration
+  - junip-review-section: Base styling class for Junip reviews
+  - style="display: none": Hidden by default for JavaScript initialization
+  - data-layout: Layout preference (list or grid) for Junip system
+  - data-reviews-type: Type of reviews to display (all, product, or store)
+  - data-show-summary: Boolean flag for review summary visibility
+  - data-reviews-count: Number of reviews to display (3-20)
+  - All data attributes are passed to Junip's JavaScript system
+{% endcomment %}
 <span
  class="junip-review-section"
  style="display: none"
@@ -5,8 +32,71 @@
  data-reviews-type={{ section.settings.reviewsType }}
  data-show-summary={{ section.settings.showSummary }}
  data-reviews-count={{ section.settings.reviewsCount }}>
+  
+  {% comment %}
+    =============================================================================
+    JUNIP REVIEWS WRAPPER
+    =============================================================================
+    Inner wrapper for Junip review content
+    - junip-review-section-wrapper: Content container for reviews
+    - Populated by Junip's JavaScript system
+    - Contains actual review content and ratings
+    - Handles dynamic content loading and display
+  {% endcomment %}
   <span class="junip-review-section-wrapper"></span>
 </span>
+
+{% comment %}
+  =============================================================================
+  SCHEMA CONFIGURATION SUMMARY
+  =============================================================================
+  Theme editor configuration for the Junip reviews section
+  
+  **SECTION OVERVIEW:**
+  Third-party review system integration using Junip platform for customer feedback.
+  Provides configurable display options for different review types and layouts.
+  
+  **KEY FEATURES:**
+  - Junip review system integration
+  - Configurable layout options (list/grid)
+  - Multiple review type filtering
+  - Optional review summary display
+  - Customizable review count limits
+  - JavaScript-based content rendering
+  
+  **SECTION SETTINGS:**
+  - layout: Review display layout (list/grid, default: list)
+  - reviewsType: Review type filtering (all/product_reviews/store_reviews, default: all)
+  - showSummary: Toggle review summary display (default: true)
+  - reviewsCount: Number of reviews to show (3-20, default: 10)
+  
+  **LAYOUT OPTIONS:**
+  - list: Vertical list layout for reviews
+  - grid: Grid-based layout for review display
+  
+  **REVIEW TYPE FILTERS:**
+  - all: Shows all available reviews
+  - product_reviews: Shows only product-specific reviews
+  - store_reviews: Shows only general store reviews
+  
+  **JUNIP INTEGRATION:**
+  - Uses data attributes for configuration
+  - JavaScript-based content rendering
+  - Hidden by default for dynamic loading
+  - Integrates with Junip's review management platform
+  
+  **DISPLAY BEHAVIOR:**
+  - Hidden initially (display: none)
+  - JavaScript populates content based on settings
+  - Responsive design through Junip's system
+  - Dynamic content loading and updates
+  
+  **CONFIGURATION NOTES:**
+  - All settings are passed as data attributes
+  - Junip JavaScript reads these attributes for configuration
+  - Content is rendered client-side by Junip system
+  - Theme provides configuration, Junip handles display
+{% endcomment %}
 {% schema %}
 {
   "name": "Site & product reviews",
