@@ -1,30 +1,137 @@
+{% comment %}
+  =============================================================================
+  GALLERY SECTION - RESPONSIVE IMAGE & VIDEO GRID DISPLAY
+  =============================================================================
+  Flexible gallery section with configurable grid layouts and media types
+  - Supports both images and videos with fallback handling
+  - Responsive design with mobile/desktop height controls
+  - Configurable grid layouts (1-4 columns)
+  - Optional carousel mode for mobile devices
+  - Overlay text support with titles, subtitles, and buttons
+  - Full-width and contained layout options
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  MAIN GALLERY CONTAINER
+  =============================================================================
+  Primary gallery container with dynamic styling and animation
+  - section-id-{{ section.id }}: Unique identifier for section-specific styling
+  - use-alt-bg: Optional alternate background color class
+  - data-section-type="gallery": JavaScript hook for gallery functionality
+  - data-cc-animate: Animation trigger for entrance effects
+{% endcomment %}
 <div id="section-id-{{ section.id }}" class=" {% if section.settings.alternate_bg_color %}use-alt-bg {% endif %}" data-section-type="gallery" data-cc-animate>
+  {% comment %}
+    =============================================================================
+    RESPONSIVE GALLERY STYLING
+    =============================================================================
+    Dynamic CSS for responsive gallery layout and positioning
+    - mobile_image_height: Height setting for mobile devices
+    - desktop_image_height: Height setting for desktop devices (768px+)
+    - mobile_image_position: Background position for mobile images
+    - desktop_image_position: Background position for desktop images
+    - title_size: Base title size with responsive scaling
+    - Responsive breakpoints: 768px (tablet), 992px (desktop)
+  {% endcomment %}
   {% style %}
+    {% comment %}
+      =============================================================================
+      MOBILE GALLERY ITEM HEIGHT
+      =============================================================================
+      Sets consistent height for gallery items on mobile devices
+      - mobile_image_height: Height setting from theme editor
+      - Applies to all gallery items for uniform appearance
+      - Ensures consistent layout across different image sizes
+    {% endcomment %}
     #section-id-{{ section.id }} .gallery__item {
       height: {{ section.settings.mobile_image_height }}px;
     }
 
+    {% comment %}
+      =============================================================================
+      MOBILE IMAGE POSITIONING LOOP
+      =============================================================================
+      Sets background position for each gallery item on mobile
+      - Loops through all gallery blocks to set individual positioning
+      - block.settings.mobile_image_position: Position from theme editor
+      - Conditional handling for images vs videos
+      - forloop.index: Unique identifier for each gallery item
+    {% endcomment %}
     {% for block in section.blocks %}
       {% if block.settings.video == blank %}
+        {% comment %}
+          =============================================================================
+          IMAGE BACKGROUND POSITIONING
+          =============================================================================
+          Sets background position for image-based gallery items
+          - gallery__item-{{ forloop.index }}: Unique item identifier
+          - gallery__image: Image container class
+          - background-position: Controls image positioning within container
+        {% endcomment %}
         #section-id-{{ section.id }} .gallery__item-{{ forloop.index }} .gallery__image {
           background-position: {{ block.settings.mobile_image_position }};
         }
       {% else %}
+        {% comment %}
+          =============================================================================
+          VIDEO FALLBACK IMAGE POSITIONING
+          =============================================================================
+          Sets background position for video fallback images
+          - video-container__fallback: Fallback image when video fails
+          - background-position: Controls fallback image positioning
+        {% endcomment %}
         #section-id-{{ section.id }} .gallery__item-{{ forloop.index }} .video-container__fallback {
           background-position: {{ block.settings.mobile_image_position }};
         }
 
+        {% comment %}
+          =============================================================================
+          VIDEO OBJECT POSITIONING
+          =============================================================================
+          Sets positioning for video elements on mobile
+          - video: HTML5 video element
+          - object-position: Controls video positioning within container
+        {% endcomment %}
         #section-id-{{ section.id }} .gallery__item-{{ forloop.index }} video {
           object-position: {{ block.settings.mobile_image_position }};
         }
       {% endif %}
     {% endfor %}
 
+    {% comment %}
+      =============================================================================
+      DESKTOP RESPONSIVE STYLES (768px+)
+      =============================================================================
+      Desktop-specific styles for tablet and larger devices
+      - Height overrides for desktop gallery items
+      - Desktop image positioning for each gallery item
+      - Medium screen title sizing (70% of desktop size)
+      - Ensures proper layout on larger screens
+    {% endcomment %}
     @media (min-width: 768px) {
+      {% comment %}
+        =============================================================================
+        DESKTOP GALLERY ITEM HEIGHT
+        =============================================================================
+        Overrides mobile height with desktop height setting
+        - desktop_image_height: Height setting from theme editor
+        - Applies to devices 768px and wider
+        - Provides optimal viewing on larger screens
+      {% endcomment %}
       #section-id-{{ section.id }} .gallery__item {
         height: {{ section.settings.desktop_image_height }}px;
       }
 
+      {% comment %}
+        =============================================================================
+        DESKTOP IMAGE POSITIONING LOOP
+        =============================================================================
+        Sets background position for each gallery item on desktop
+        - Same logic as mobile but with desktop positioning values
+        - block.settings.desktop_image_position: Desktop position setting
+        - Maintains individual item positioning control
+      {% endcomment %}
       {% for block in section.blocks %}
         {% if block.settings.video == blank %}
           #section-id-{{ section.id }} .gallery__item-{{ forloop.index }} .gallery__image {
@@ -41,12 +148,30 @@
         {% endif %}
       {% endfor %}
 
+      {% comment %}
+        =============================================================================
+        MEDIUM SCREEN TITLE SIZING
+        =============================================================================
+        Scaled typography for tablet devices
+        - title_size_medium: 70% of desktop title size
+        - Ensures readability on medium screens
+        - Prevents text from being too large on tablets
+      {% endcomment %}
       #section-id-{{ section.id }} .line-1 {
         {%- assign title_size_medium = section.settings.title_size | times: 0.7 -%}
         font-size: {{ title_size_medium }}px;
       }
     }
 
+    {% comment %}
+      =============================================================================
+      LARGE DESKTOP TITLE SIZING (992px+)
+      =============================================================================
+      Full-size typography for desktop devices
+      - title_size: Full title size from section settings
+      - Applies to devices 992px and wider
+      - Provides optimal readability on large screens
+    {% endcomment %}
     @media (min-width: 992px) {
       #section-id-{{ section.id }} .line-1 {
         font-size: {{ section.settings.title_size }}px;
@@ -54,14 +179,52 @@
     }
   {% endstyle %}
 
+  {% comment %}
+    =============================================================================
+    GALLERY CONTENT CONTAINER
+    =============================================================================
+    Conditional container for non-full-width galleries
+    - wide-container: Contained width layout option
+    - half-gutter: Reduced spacing for tighter layout
+    - section-spacing: Consistent vertical spacing
+    - Only renders when full_width setting is disabled
+  {% endcomment %}
   {%- unless section.settings.full_width -%}<div class="wide-container half-gutter section-spacing">{%- endunless -%}
 
+    {% comment %}
+      =============================================================================
+      OPTIONAL SECTION TITLE
+      =============================================================================
+      Conditional title display based on theme editor setting
+      - section.settings.title: Custom title from theme editor
+      - section-heading: Container for title styling
+      - wide-container: Full-width container for title
+      - section-spacing: Consistent spacing around title
+      - section-spacing--top-only: Top-only spacing variant
+      - data-cc-animate: Animation hook for title appearance
+    {% endcomment %}
     {% if section.settings.title != blank %}
       <div class="section-heading wide-container section-spacing section-spacing--top-only" data-cc-animate>
         <h2 class="h2">{{ section.settings.title | escape }}</h2>
       </div>
     {% endif %}
 
+    {% comment %}
+      =============================================================================
+      MAIN GALLERY GRID CONTAINER
+      =============================================================================
+      Primary gallery grid with dynamic classes and layout options
+      - cc-gallery: Base gallery styling class
+      - gallery--grid-{{ grid }}: Grid layout class (1-4 columns)
+      - needs-alt-logo: Triggers alternate logo for dark overlays
+      - gallery--with-margins: Adds spacing between gallery items
+      - gallery--mobile-carousel: Enables mobile carousel mode
+      - slick-slider-overlay-dots: Carousel navigation styling
+      - gallery--with-vertical-outer-padding: Full-width margin option
+      - gallery--not-full-width: Contained width indicator
+      - gallery--with-title: Title presence indicator
+      - data-grid: JavaScript data attribute for grid configuration
+    {% endcomment %}
     <div class="cc-gallery
       gallery--grid-{{ section.settings.grid }}
       {% if section.settings.full_width and section.settings.enable_margin == false %}needs-alt-logo{% endif %}
@@ -72,26 +235,96 @@
       {% if section.settings.title != blank %} gallery--with-title{% endif %}"
       data-grid="{{ section.settings.grid }}">
 
+      {% comment %}
+        =============================================================================
+        GALLERY ROW CONTAINER
+        =============================================================================
+        Row container for gallery grid layout
+        - gallery__row: Base row styling class
+        - Contains gallery items for proper grid organization
+        - Supports dynamic row creation based on grid settings
+      {% endcomment %}
       <div class="gallery__row">
+        {% comment %}
+          =============================================================================
+          GALLERY BLOCKS LOOP
+          =============================================================================
+          Iterates through all gallery blocks and renders them
+          - section.blocks: Array of all blocks assigned to this section
+          - block: Individual gallery block object with type and settings
+          - forloop.index0: Zero-based loop index for calculations
+          - forloop.index: One-based loop index for display
+        {% endcomment %}
         {%- for block in section.blocks -%}
 
+          {% comment %}
+            =============================================================================
+            GRID LAYOUT CALCULATIONS
+            =============================================================================
+            Calculates grid positioning and row management
+            - forloop_mod_grid: Modulo calculation for grid positioning
+            - modulo: section.settings.grid: Determines when to start new row
+            - Used for dynamic row creation and grid layout
+          {% endcomment %}
           {%- liquid
             assign forloop_mod_grid = forloop.index0 | modulo: section.settings.grid
 
+            {% comment %}
+              =============================================================================
+              HEADING TAG DETERMINATION
+              =============================================================================
+              Sets appropriate heading tag based on block settings
+              - heading_tag: Default heading level (h2)
+              - block.settings.heading_h1: Boolean to promote heading to h1
+              - Used for SEO and document structure hierarchy
+              - H1 should only be used once per page for main page heading
+            {% endcomment %}
             assign heading_tag = "h2"
             if block.settings.heading_h1
               assign heading_tag = "h1"
             endif
           -%}
 
+          {% comment %}
+            =============================================================================
+            DYNAMIC ROW CREATION
+            =============================================================================
+            Creates new gallery rows based on grid layout
+            - forloop.index0 > 0: Not the first item
+            - forloop_mod_grid == 0: Start of new grid row
+            - Closes previous row and opens new one
+            - gallery__row--{{ forloop.index }}: Unique row identifier
+            - {{ block.shopify_attributes }}: Required for theme editor
+          {% endcomment %}
           {%- if forloop.index0 > 0 and forloop_mod_grid == 0 -%}
             </div><div class="gallery__row gallery__row--{{ forloop.index }}" {{ block.shopify_attributes }}>
           {%- endif -%}
+
+          {% comment %}
+            =============================================================================
+            OVERLAY TEXT VISIBILITY CHECK
+            =============================================================================
+            Determines if overlay text should be displayed
+            - show_overlay_text: Boolean flag for overlay visibility
+            - Checks for title, subheading, or button content
+            - Only shows overlay when content is available
+          {% endcomment %}
           {%- assign show_overlay_text = false -%}
           {%- if block.settings.title != blank or block.settings.subheading != blank or block.settings.button_label != blank -%}
             {%- assign show_overlay_text = true -%}
           {%- endif -%}
 
+          {% comment %}
+            =============================================================================
+            GALLERY ITEM CONTAINER
+            =============================================================================
+            Individual gallery item with dynamic classes and styling
+            - data-cc-animate: Animation hook for item appearance
+            - gallery__item: Base item styling class
+            - gallery__item-{{ forloop.index }}: Unique item identifier
+            - gallery__item--enlarged: Optional enlarged item styling
+            - image-overlay: Overlay styling class
+          {% endcomment %}
           <div
             data-cc-animate
             class="gallery__item
