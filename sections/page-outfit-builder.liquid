@@ -23,30 +23,30 @@
 
   {% comment %} START {% endcomment %}
   <div class="step-start js-start outfit-builder-step js-outfit-builder-step">
-    <div class="outfit-builder-picture js-outfit-builder-picture" style="background-color:{{section.settings.start_bg_color}};">
+    <div class="outfit-builder-picture js-outfit-builder-picture" style="background-color:{{ section.settings.start_bg_color }};">
       <div class="outfit-single-picture">
         <div class="outfit-builder-savings">
           <div class="savings-layout">
-            <span class="discount-value">{{section.settings.discount_value}}</span>
-            <span class="discount-label">{{section.settings.discount_label}}</span>
+            <span class="discount-value">{{ section.settings.discount_value }}</span>
+            <span class="discount-label">{{ section.settings.discount_label }}</span>
           </div>
         </div>
         <div class="mobile-star-wrapper" ecl="true">
           <div class="mobile-star-container" ecl="true">
             {% include 'icon-builder-star' %}
-            <span class="discount-value" style="" ecl="true">{{section.settings.discount_value}}</span>
-            <span class="discount-label" ecl="true">{{section.settings.discount_label}}</span>
+            <span class="discount-value" style="" ecl="true">{{ section.settings.discount_value }}</span>
+            <span class="discount-label" ecl="true">{{ section.settings.discount_label }}</span>
           </div>
         </div>
-        <img src="{{section.settings.start_image | img_url: 'master'}}" alt="{{section.settings.start_image.alt}}" class="desktop-only" />
-        <img src="{{section.settings.start_image_mob | img_url: 'master'}}" alt="{{section.settings.start_image_mob.alt}}" class="mobile-only" />
+        <img src="{{ section.settings.start_image | image_url }}" alt="{{ section.settings.start_image.alt }}" class="desktop-only" />
+        <img src="{{ section.settings.start_image_mob | image_url }}" alt="{{ section.settings.start_image_mob.alt }}" class="mobile-only" />
       </div>
     </div>
     <div class="outfit-builder-details step-start js-start">
       <div class="outfit-start-title outfit-title">
-        <h1>{{section.settings.start_title}}</h1>
-        <div class="start-text start-text-desktop">{{section.settings.start_text}}</div>
-        <div class="start-text start-text-mobile">{{section.settings.start_text_mob}}</div>
+        <h1>{{ section.settings.start_title }}</h1>
+        <div class="start-text start-text-desktop">{{ section.settings.start_text }}</div>
+        <div class="start-text start-text-mobile">{{ section.settings.start_text_mob }}</div>
       </div>
       <div class="outfit-start-info">
         <h2 class="choose-title">Choose</h2>
@@ -74,7 +74,7 @@
         </div>
         <div class="button to-choose-top js-to-choose-top js-button-height">
           Start Building Your Outfit
-          <img src="{{'icon-next-arrow.svg' | file_url }}" class="next_step" alt="next step" />
+          <img src="{{ 'icon-next-arrow.svg' | file_url }}" class="next_step" alt="next step" />
         </div>
       </div>
     </div>
@@ -91,7 +91,7 @@
       <div class="outfit-gallery">
         {% assign product_top_short = section.settings.product_top_short %}
         {% assign product = all_products[product_top_short] %}
-        {% assign current_variant = product.selected_or_first_available_variant %}
+        
         <div class="outfit-content-gallery top">
         {% render 'builder-images-slider', product: product %}
         </div>
@@ -150,7 +150,7 @@
       <div class="outfit-gallery">
         {% assign product_bottom_short = section.settings.product_bottom_short %}
         {% assign product = all_products[product_bottom_short] %}
-        {% assign current_variant = product.selected_or_first_available_variant %}
+        
         <div class="outfit-content-gallery bottom">
           {% render 'builder-images-slider', product: product %}
         </div>
@@ -207,12 +207,12 @@
       <div class="outfit-success">
         <div class="outfit-builder-savings">
           <div class="savings-layout">
-            <span class="discount-value">{{section.settings.discount_value}}</span>
-            <span class="discount-label">{{section.settings.discount_label}}</span>
+            <span class="discount-value">{{ section.settings.discount_value }}</span>
+            <span class="discount-label">{{ section.settings.discount_label }}</span>
           </div>
         </div>
-        <img src="{{section.settings.review_image | img_url: 'master'}}" alt="{{section.settings.review_image.alt}}" class="desktop-only" />
-        <img src="{{section.settings.review_image_mob | img_url: 'master'}}" alt="{{section.settings.review_image_mob.alt}}" class="mobile-only" />
+        <img src="{{ section.settings.review_image | image_url }}" alt="{{ section.settings.review_image.alt }}" class="desktop-only" />
+        <img src="{{ section.settings.review_image_mob | image_url }}" alt="{{ section.settings.review_image_mob.alt }}" class="mobile-only" />
       </div>
     </div>
     <div class="outfit-builder-details js-outfit-builder-details">
@@ -225,17 +225,17 @@
           </ul>
         </div>
         <div class="outfit-review-title outfit-title outfit-review-title-desktop">
-          <h1>{{section.settings.review_title}}</h1>
-          <div class="review-subtitle">{{section.settings.review_subtitle}}</div>
+          <h1>{{ section.settings.review_title }}</h1>
+          <div class="review-subtitle">{{ section.settings.review_subtitle }}</div>
         </div>
         <div class="outfit-review-title outfit-title outfit-review-title-mobile">
-          <h1>{{section.settings.review_title_mob}}</h1>
+          <h1>{{ section.settings.review_title_mob }}</h1>
         </div>
         <div class="outfit-review-info">
           <div class="review-item review-item-top js-review-item-top">
             <div class="review-item-details">
               <div class="review-item-picture top">
-                <img src="{{'outfit-top-temp.jpg' | file_url }}" alt="Top Selection" />
+                <img src="{{ 'outfit-top-temp.jpg' | file_url }}" alt="Top Selection" />
               </div>
               <div class="review-item-specific">
                 <h3 class="js-top-title">JamTee</h3>
@@ -249,7 +249,7 @@
           <div class="review-item review-item-bottom js-review-item-bottom">
             <div class="review-item-details">
               <div class="review-item-picture bottom">
-                <img src="{{ 'outfit-bottom-temp.jpg' | file_url}}" alt="Bottom Selection" />
+                <img src="{{ 'outfit-bottom-temp.jpg' | file_url }}" alt="Bottom Selection" />
               </div>
               <div class="review-item-specific">
                 <h3 class="js-bottom-title">Long Jambys</h3>
@@ -415,7 +415,7 @@
       var $newPrice = $parentContainer.find(".js-new-price");
 
       if (variantDetails?.[previousSelectedSize]?.price) {
-        $oldPrice.html(window.formatMoney(variantDetails[previousSelectedSize].price, {% raw %}"${{amount_no_decimals}}"{% endraw%}));
+        $oldPrice.html(window.formatMoney(variantDetails[previousSelectedSize].price, {% raw %}"${{amount_no_decimals}}"{% endraw %}));
         $newPrice.html(window.formatMoney(variantDetails[previousSelectedSize].price * discountAmount));
       }
     });
@@ -647,286 +647,287 @@
 
 {% schema %}
 {
-   "name":"Outfit Builder",
-   "settings":[
-      {
-         "type":"header",
-         "content":"Global"
-      },
-      {
-         "type":"textarea",
-         "id":"guarantee",
-         "label":"Guarantee",
-         "default":"Jambys has a 77-day no-question-guarantee on your first product."
-      },
-      {
-         "type":"text",
-         "id":"discount_value",
-         "label":"Discount Value"
-      },
-      {
-         "type":"text",
-         "id":"discount_amount",
-         "label":"Discount Amount",
-         "info": "Numbers only",
-         "default": "15"
-      },
-      {
-         "type":"text",
-         "id":"discount_label",
-         "label":"Discount Label"
-      },
-      {
-         "type":"header",
-         "content":"Start"
-      },
-      {
-         "type":"image_picker",
-         "id":"start_image",
-         "label":"Start Image"
-      },
-      {
-        "type": "color",
-        "id": "start_bg_color",
-        "label": "Background Color Gap",
-        "default": "#7B85E3",
-        "info": "To fill gap from end of photo to footer"
-      },
-      {
-         "type":"image_picker",
-         "id":"start_image_mob",
-         "label":"Start Image Mobile"
-      },
-      {
-         "type":"textarea",
-         "id":"start_title",
-         "label":"Start Title",
-         "default":"Build Your Outfit"
-      },
-      {
-         "type":"textarea",
-         "id":"start_text",
-         "label":"Start Text"
-      },
-      {
-         "type":"textarea",
-         "id":"start_text_mob",
-         "label":"Start Text Mobile"
-      },
-      {
-         "type":"header",
-         "content":"Tops"
-      },
-      {
-        "type": "range",
-        "id": "carousel_height",
-        "min": 0,
-        "max": 100,
-        "step": 5,
-        "unit": "%",
-        "label": "Mobile Height of Model Carousel",
-        "default": 70
-      },
-      {
-        "type": "range",
-        "id": "carousel_height_desktop",
-        "min": 600,
-        "max": 800,
-        "step": 5,
-        "unit": "px",
-        "label": "Desktop Height of Model Carousel",
-        "default": 700
-      },
-      {
-         "type":"collection",
-         "id":"collection_top_short",
-         "label":"Short Tops"
-      },
-      {
-         "type":"collection",
-         "id":"collection_top_long",
-         "label":"Long Tops"
-      },
-      {
-         "type":"product",
-         "id":"product_top_short",
-         "label":"Top (short)"
-      },
-      {
-         "type":"product",
-         "id":"product_top_long",
-         "label":"Top (long)"
-      },
-      {
-         "type":"textarea",
-         "id":"top_text",
-         "label":"Text (short)"
-      },
-      {
-         "type":"textarea",
-         "id":"top_text_long",
-         "label":"Text (long)"
-      },
-      {
-         "type":"header",
-         "content":"Bottoms"
-      },
-      {
-         "type":"product",
-         "id":"product_bottom_short",
-         "label":"Bottom (short)"
-      },
-      {
-         "type":"product",
-         "id":"product_bottom_long",
-         "label":"Bottom (long)"
-      },
-      {
-         "type":"collection",
-         "id":"collection_bottom_short",
-         "label":"Short Bottoms"
-      },
-      {
-         "type":"collection",
-         "id":"collection_bottom_long",
-         "label":"Long Bottoms"
-      },
-      {
-         "type":"textarea",
-         "id":"bottom_text",
-         "label":"Text"
-      },
-      {
-         "type":"textarea",
-         "id":"bottom_text_long",
-         "label":"Text (long)"
-      },
-      {
-         "type":"header",
-         "content":"Review"
-      },
-      {
-         "type":"image_picker",
-         "id":"review_image",
-         "label":"Review Image"
-      },
-      {
-         "type":"image_picker",
-         "id":"review_image_mob",
-         "label":"Review Image Mobile"
-      },
-      {
-         "type":"text",
-         "id":"review_title",
-         "label":"Review Title"
-      },
-      {
-         "type":"textarea",
-         "id":"review_subtitle",
-         "label":"Review Subtitle"
-      },
-      {
-         "type":"text",
-         "id":"review_title_mob",
-         "label":"Review Title Mobile"
-      },
-      {
-        "type": "header",
-        "content": "Size Chart"
-      },
-      {
-        "type": "richtext",
-        "id": "size_top_desktop",
-        "label": "Top sizing desktop",
-        "default": "<p>Fit is standard. Size up if you want a bigger, looser fit. If you’re in doubt, we always suggest sizing up, but with the way the material stretches, there’s plenty of forgiveness. Still stuck? Just email us some more info or DM us a screenshot on Instagram. We make returns free and easy to make sure you end up with the perfect Jambys!</p>"
-      },
-      {
-        "type": "richtext",
-        "id": "size_top_mobile",
-        "label": "Top sizing mobile",
-        "default": "<p>Still not sure or gifting? Just email us some more info or DM us an Instagram screenshot.</p>"
-      },
-      {
-        "type": "richtext",
-        "id": "size_bottom_desktop",
-        "label": "Bottom sizing desktop",
-        "default": "<p>If you're in doubt between sizes, size down for a feel closer to boxers, and size up for a feel closer to shorts. Don't worry: we make exchanges super easy. Still not sure or gifting? Just <a href=\"mailto:hello@jambys.com\">email us</a>&nbsp;some more info or <a title=\"Jambys Instagram\" href=\"https://www.instagram.com/jambys/\" target=\"_blank\" rel=\"noopener\">DM us an Instagram screenshot</a>. Whatever works. We don't rest until you have the perfect Jambys.</p>"
-      },
-      {
-        "type": "richtext",
-        "id": "size_bottom_mobile",
-        "label": "Bottom sizing mobile",
-        "default": "<p>Still not sure or gifting? Just email us some more info or DM us an Instagram screenshot.</p>"
-      }
-   ],
-	 "blocks": [
-		{
-			"type": "tops-generic",
-			"name": "Tops Guide",
-			"settings": [
-				{
-					"type": "text",
-					"id": "col_1",
-					"label": "Column 1"
-				},
-				{
-					"type": "text",
-					"id": "col_2",
-					"label": "Column 2"
-				},
-				{
-					"type": "text",
-					"id": "col_3",
-					"label": "Column 3"
-				},
-				{
-					"type": "text",
-					"id": "col_4",
-					"label": "Column 4"
-				},
-				{
-					"type": "text",
-					"id": "col_5",
-					"label": "Column 5"
-				}
-			]
-		},
-		{
-			"type": "bottom-generic",
-			"name": "Bottoms Guid",
-			"settings": [
-				{
-					"type": "text",
-					"id": "col_1",
-					"label": "Column 1"
-				},
-				{
-					"type": "text",
-					"id": "col_2",
-					"label": "Column 2"
-				},
-				{
-					"type": "text",
-					"id": "col_3",
-					"label": "Column 3"
-				},
-				{
-					"type": "text",
-					"id": "col_4",
-					"label": "Column 4"
-				},
-				{
-					"type": "text",
-					"id": "col_5",
-					"label": "Column 5"
-				}
-			]
-		}
-	],
+  "name": "Outfit Builder",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Global"
+    },
+    {
+      "type": "textarea",
+      "id": "guarantee",
+      "label": "Guarantee",
+      "default": "Jambys has a 77-day no-question-guarantee on your first product."
+    },
+    {
+      "type": "text",
+      "id": "discount_value",
+      "label": "Discount Value"
+    },
+    {
+      "type": "text",
+      "id": "discount_amount",
+      "label": "Discount Amount",
+      "info": "Numbers only",
+      "default": "15"
+    },
+    {
+      "type": "text",
+      "id": "discount_label",
+      "label": "Discount Label"
+    },
+    {
+      "type": "header",
+      "content": "Start"
+    },
+    {
+      "type": "image_picker",
+      "id": "start_image",
+      "label": "Start Image"
+    },
+    {
+      "type": "color",
+      "id": "start_bg_color",
+      "label": "Background Color Gap",
+      "default": "#7B85E3",
+      "info": "To fill gap from end of photo to footer"
+    },
+    {
+      "type": "image_picker",
+      "id": "start_image_mob",
+      "label": "Start Image Mobile"
+    },
+    {
+      "type": "textarea",
+      "id": "start_title",
+      "label": "Start Title",
+      "default": "Build Your Outfit"
+    },
+    {
+      "type": "textarea",
+      "id": "start_text",
+      "label": "Start Text"
+    },
+    {
+      "type": "textarea",
+      "id": "start_text_mob",
+      "label": "Start Text Mobile"
+    },
+    {
+      "type": "header",
+      "content": "Tops"
+    },
+    {
+      "type": "range",
+      "id": "carousel_height",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Mobile Height of Model Carousel",
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "carousel_height_desktop",
+      "min": 600,
+      "max": 800,
+      "step": 5,
+      "unit": "px",
+      "label": "Desktop Height of Model Carousel",
+      "default": 700
+    },
+    {
+      "type": "collection",
+      "id": "collection_top_short",
+      "label": "Short Tops"
+    },
+    {
+      "type": "collection",
+      "id": "collection_top_long",
+      "label": "Long Tops"
+    },
+    {
+      "type": "product",
+      "id": "product_top_short",
+      "label": "Top (short)"
+    },
+    {
+      "type": "product",
+      "id": "product_top_long",
+      "label": "Top (long)"
+    },
+    {
+      "type": "textarea",
+      "id": "top_text",
+      "label": "Text (short)"
+    },
+    {
+      "type": "textarea",
+      "id": "top_text_long",
+      "label": "Text (long)"
+    },
+    {
+      "type": "header",
+      "content": "Bottoms"
+    },
+    {
+      "type": "product",
+      "id": "product_bottom_short",
+      "label": "Bottom (short)"
+    },
+    {
+      "type": "product",
+      "id": "product_bottom_long",
+      "label": "Bottom (long)"
+    },
+    {
+      "type": "collection",
+      "id": "collection_bottom_short",
+      "label": "Short Bottoms"
+    },
+    {
+      "type": "collection",
+      "id": "collection_bottom_long",
+      "label": "Long Bottoms"
+    },
+    {
+      "type": "textarea",
+      "id": "bottom_text",
+      "label": "Text"
+    },
+    {
+      "type": "textarea",
+      "id": "bottom_text_long",
+      "label": "Text (long)"
+    },
+    {
+      "type": "header",
+      "content": "Review"
+    },
+    {
+      "type": "image_picker",
+      "id": "review_image",
+      "label": "Review Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "review_image_mob",
+      "label": "Review Image Mobile"
+    },
+    {
+      "type": "text",
+      "id": "review_title",
+      "label": "Review Title"
+    },
+    {
+      "type": "textarea",
+      "id": "review_subtitle",
+      "label": "Review Subtitle"
+    },
+    {
+      "type": "text",
+      "id": "review_title_mob",
+      "label": "Review Title Mobile"
+    },
+    {
+      "type": "header",
+      "content": "Size Chart"
+    },
+    {
+      "type": "richtext",
+      "id": "size_top_desktop",
+      "label": "Top sizing desktop",
+      "default": "<p>Fit is standard. Size up if you want a bigger, looser fit. If you’re in doubt, we always suggest sizing up, but with the way the material stretches, there’s plenty of forgiveness. Still stuck? Just email us some more info or DM us a screenshot on Instagram. We make returns free and easy to make sure you end up with the perfect Jambys!</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "size_top_mobile",
+      "label": "Top sizing mobile",
+      "default": "<p>Still not sure or gifting? Just email us some more info or DM us an Instagram screenshot.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "size_bottom_desktop",
+      "label": "Bottom sizing desktop",
+      "default": "<p>If you're in doubt between sizes, size down for a feel closer to boxers, and size up for a feel closer to shorts. Don't worry: we make exchanges super easy. Still not sure or gifting? Just <a href=\"mailto:hello@jambys.com\">email us</a>&nbsp;some more info or <a title=\"Jambys Instagram\" href=\"https://www.instagram.com/jambys/\" target=\"_blank\" rel=\"noopener\">DM us an Instagram screenshot</a>. Whatever works. We don't rest until you have the perfect Jambys.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "size_bottom_mobile",
+      "label": "Bottom sizing mobile",
+      "default": "<p>Still not sure or gifting? Just email us some more info or DM us an Instagram screenshot.</p>"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tops-generic",
+      "name": "Tops Guide",
+      "settings": [
+        {
+          "type": "text",
+          "id": "col_1",
+          "label": "Column 1"
+        },
+        {
+          "type": "text",
+          "id": "col_2",
+          "label": "Column 2"
+        },
+        {
+          "type": "text",
+          "id": "col_3",
+          "label": "Column 3"
+        },
+        {
+          "type": "text",
+          "id": "col_4",
+          "label": "Column 4"
+        },
+        {
+          "type": "text",
+          "id": "col_5",
+          "label": "Column 5"
+        }
+      ]
+    },
+    {
+      "type": "bottom-generic",
+      "name": "Bottoms Guid",
+      "settings": [
+        {
+          "type": "text",
+          "id": "col_1",
+          "label": "Column 1"
+        },
+        {
+          "type": "text",
+          "id": "col_2",
+          "label": "Column 2"
+        },
+        {
+          "type": "text",
+          "id": "col_3",
+          "label": "Column 3"
+        },
+        {
+          "type": "text",
+          "id": "col_4",
+          "label": "Column 4"
+        },
+        {
+          "type": "text",
+          "id": "col_5",
+          "label": "Column 5"
+        }
+      ]
+    }
+  ],
   "presets": [
     {
       "name": "Outfit Builder",
-      "settings": {}
+      "settings": {
+      }
     }
   ]
 }

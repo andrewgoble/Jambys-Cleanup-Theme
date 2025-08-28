@@ -1,9 +1,45 @@
+{% comment %}
+  =============================================================================
+  HERO VIDEO SECTION
+  =============================================================================
+  Full-width hero section with background video and overlay content
+  - Supports both hosted videos and video files
+  - Responsive video sizing with mobile/desktop breakpoints
+  - Overlay content with headings, text, and call-to-action buttons
+  - Reviews banner integration with customizable colors
+  - Multiple height options (fixed, responsive, custom)
+  - Video aspect ratio management for different screen sizes
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  VIDEO SOURCE ASSIGNMENT
+  =============================================================================
+  Determines video sources for desktop and mobile devices
+  - video_desktop_breakpoint: Breakpoint for switching between video sources
+  - desktop_video: Video source for desktop devices (768px+)
+  - mobile_video: Video source for mobile devices (under 768px)
+  - Fallback logic: Uses mobile video as desktop fallback if no desktop video
+  - section.settings.video: Hosted video URL from theme editor
+  - section.settings.video_file: Uploaded video file for desktop
+  - section.settings.mobile_video_file: Uploaded video file for mobile
+{% endcomment %}
 {%- assign video_desktop_breakpoint = 480 -%}
 {%- if section.settings.video == blank -%}
   {%- assign desktop_video = section.settings.video_file | default: section.settings.mobile_video_file -%}
   {%- assign mobile_video = section.settings.mobile_video_file | default: section.settings.video_file -%}
 {%- endif -%}
 
+{% comment %}
+  =============================================================================
+  HEADING TAG DETERMINATION
+  =============================================================================
+  Sets appropriate heading tag based on section settings
+  - heading_tag: Default heading level (h2)
+  - section.settings.heading_h1: Boolean to promote heading to h1
+  - Used for SEO and document structure hierarchy
+  - H1 should only be used once per page for main page heading
+{% endcomment %}
 {%- liquid
   assign heading_tag = 'h2'
   if section.settings.heading_h1
@@ -11,6 +47,21 @@
   endif
 -%}
 
+{% comment %}
+  =============================================================================
+  RESPONSIVE VIDEO STYLES
+  =============================================================================
+  CSS styles for responsive video container and sizing
+  - video-container--responsive: Responsive video container class
+  - height: auto with padding-bottom for aspect ratio maintenance
+  - display: flex for flexible content layout
+  - :before pseudo-element for aspect ratio calculations
+  - :after pseudo-element for clearfix (clear: both)
+  - video_max_height_mobile: Maximum height constraint for mobile
+  - video_max_height_desktop: Maximum height constraint for desktop
+  - video_aspect_ratio_mobile: Aspect ratio for mobile devices
+  - video_aspect_ratio_desktop: Aspect ratio for desktop devices
+{% endcomment %}
 {%- style -%}
   {%- if section.settings.height == 'responsive' -%}
     .video-container--responsive {
@@ -43,15 +94,43 @@
         }
       }
     {%- endif -%}
+    {% comment %}
+      =============================================================================
+      MOBILE ASPECT RATIO CALCULATION
+      =============================================================================
+      Sets padding-top for mobile aspect ratio using CSS pseudo-element
+      - Uses 100.0 divided by aspect ratio multiplied by 100.0
+      - Creates responsive height based on video dimensions
+      - Applies to mobile devices (default behavior)
+    {% endcomment %}
     #section-id-{{ section.id }} .video-container--responsive:before {
       padding-top: {{ 100.0 | divided_by: section.settings.video_aspect_ratio_mobile | times: 100.0 }}%;
     }
 
+    {% comment %}
+      =============================================================================
+      DESKTOP ASPECT RATIO CALCULATION
+      =============================================================================
+      Sets padding-top for desktop aspect ratio using media query
+      - Applies to devices 768px and wider
+      - Uses desktop-specific aspect ratio setting
+      - Overrides mobile aspect ratio for larger screens
+    {% endcomment %}
     @media (min-width: 768px) {
       #section-id-{{ section.id }} .video-container--responsive:before {
         padding-top: {{ 100.0 | divided_by: section.settings.video_aspect_ratio_desktop | times: 100.0 }}%;
       }
     }
+    {% comment %}
+      =============================================================================
+      VIDEO POSITIONING IN RESPONSIVE CONTAINER
+      =============================================================================
+      Absolute positioning for video within responsive container
+      - position: absolute for full container coverage
+      - top, left, right, bottom: 0 for full container fill
+      - width and height: 100% for complete coverage
+      - Ensures video fills entire container regardless of aspect ratio
+    {% endcomment %}
     #section-id-{{ section.id }} .video-container--responsive .video-container__video {
       position: absolute;
       top: 0;
@@ -61,12 +140,36 @@
       width: 100%;
       height: 100%;
     }
+    {% comment %}
+      =============================================================================
+      OVERLAY CONTENT POSITIONING
+      =============================================================================
+      Relative positioning for overlay content in responsive mode
+      - position: relative for proper stacking context
+      - width: 100% for full container width
+      - padding: 20px for content spacing
+      - Ensures overlay content is properly positioned over video
+    {% endcomment %}
     #section-id-{{ section.id }} .overlay-type {
       position: relative;
       width: 100%;
       padding: 20px;
     }
   {%- endif -%}
+  
+  {% comment %}
+    =============================================================================
+    REVIEWS BANNER STYLING
+    =============================================================================
+    Styling for customer reviews banner above hero content
+    - hero-video__reviews-banner: Main banner container
+    - width: 100% for full section width
+    - padding: 12px for internal spacing
+    - display: flex for horizontal content alignment
+    - justify-content: center for horizontal centering
+    - align-items: center for vertical centering
+    - font-size: 16px for readable text size
+  {% endcomment %}
   .hero-video__reviews-banner {
     width: 100%;
     padding: 12px;
@@ -75,6 +178,18 @@
     align-items: center;
     font-size: 16px;
   }
+  
+  {% comment %}
+    =============================================================================
+    REVIEW STARS DISPLAY
+    =============================================================================
+    Styling for star rating display in reviews banner
+    - hero-video__reviews-banner__stars: Container for star icons
+    - display: flex for horizontal star alignment
+    - SVG stars with consistent sizing and spacing
+    - margin-right: 0.25em for star spacing
+    - width and height: 0.75em for proportional star size
+  {% endcomment %}
   .hero-video__reviews-banner__stars {
     display: flex;
   }
@@ -83,6 +198,19 @@
     width: 0.75em;
     height: 0.75em;
   }
+  
+  {% comment %}
+    =============================================================================
+    REVIEWS BANNER TEXT
+    =============================================================================
+    Styling for review text in reviews banner
+    - hero-video__reviews-banner__text: Text content styling
+    - margin-left: 0.5em for spacing from stars
+    - font-weight: 600 for semi-bold emphasis
+    - line-height: 1 for tight text spacing
+    - white-space: nowrap to prevent text wrapping
+    - margin-top: -1px for fine-tuned vertical alignment
+  {% endcomment %}
   .hero-video__reviews-banner__text {
     margin-left: 0.5em;
     font-weight: 600;
@@ -90,6 +218,18 @@
     white-space: nowrap;
     margin-top: -1px;
   }
+  
+  {% comment %}
+    =============================================================================
+    SECTION-SPECIFIC REVIEWS BANNER STYLING
+    =============================================================================
+    Customizable colors for reviews banner per section
+    - Uses section ID for unique styling per section instance
+    - reviews_banner_background_color: Custom background color
+    - reviews_banner_text_color: Custom text color
+    - color_to_hex filter converts theme color settings to hex values
+    - Allows merchants to customize banner appearance per section
+  {% endcomment %}
   #section-id-{{ section.id }} .hero-video__reviews-banner {
     {%- if section.settings.reviews_banner_background_color != blank -%}
       background-color: {{ section.settings.reviews_banner_background_color | color_to_hex }};
@@ -349,7 +489,6 @@
             assign placeholder_image = section.settings.placeholder_image
             assign max_width = max_width | default: placeholder_image.width
             assign image_widths = '360,540,600,768,900,1080' | split: ','
-            assign widths = ''
           -%}
           {%- capture image_widths -%}
               {%- for width in image_widths -%}
@@ -465,7 +604,7 @@
       "type": "text",
       "label": "Desktop Video link",
       "info": "Supports mp4, YouTube and Vimeo.",
-      "default": "https:\/\/www.youtube.com\/watch?v=_9VUPq3SxOc"
+      "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
     },
     {
       "id": "video_file",
@@ -809,7 +948,8 @@
   "presets": [
     {
       "name": "Hero video",
-      "settings": {}
+      "settings": {
+      }
     }
   ]
 }

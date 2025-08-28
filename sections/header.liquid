@@ -1,3 +1,10 @@
+{% comment %}
+  =============================================================================
+  HEADER SECTION - EXTERNAL DEPENDENCIES & ASSETS
+  =============================================================================
+  Load Swiper.js for mobile navigation and carousel functionality
+  Include best-seller.css for header-specific styling
+{% endcomment %}
 <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 <link
   rel="stylesheet"
@@ -6,6 +13,13 @@
 
 {{ 'best-seller.css' | asset_url | stylesheet_tag }}
 
+{% comment %}
+  =============================================================================
+  ANNOUNCEMENT SYSTEM CONFIGURATION
+  =============================================================================
+  Check if announcement block exists and determine if carousel announcement should be shown
+  This controls the display of promotional messages at the top of the header
+{% endcomment %}
 {% assign announcement_block = section.blocks | where: 'type', 'announcement' | first %}
 {% assign show_new_annoucement = false %}
 {% if announcement_block %}
@@ -13,6 +27,14 @@
     {% assign show_new_annoucement = true %}
   {% endif %}
 {% endif %}
+{% comment %}
+  =============================================================================
+  DYNAMIC LOGO STYLING & RESPONSIVE BEHAVIOR
+  =============================================================================
+  Apply logo dimensions from theme settings with responsive breakpoints
+  If no logo image is set, calculate font size based on logo width settings
+  Mobile: 768px and below, Desktop: 769px and above
+{% endcomment %}
 <style type="text/css">
     {% if section.settings.logo != blank %}
       .logo img { width: {{ section.settings.mobile_logo_width | escape }}px; }
@@ -34,9 +56,9 @@
     .cc-announcement .cc-announcement__inner.mobile-only {
         font-size: {{ section.settings.announcement_text_size_mobile }}px;
     }
-    {%  if section.settings.custom_header_color  %}
+    {% if section.settings.custom_header_color %}
       .header-custom-color{
-        background-color: {{section.settings.custom_header_color }};
+        background-color: {{ section.settings.custom_header_color }};
       }
     {% endif %}
 
@@ -506,7 +528,7 @@
   }
   .slider-announcement .swiper-button-next, .slider-announcement .swiper-button-prev{
     background: none;
-    color: {{announcement_block.settings.carousel_arrows_color}};
+    color: {{ announcement_block.settings.carousel_arrows_color }};
   }
   @media (min-width: 769px) {
     .slider-announcement .swiper-button-next{
@@ -538,7 +560,7 @@
   }
   {% if section.settings.font_color_intelligems == blank or section.settings.font_color_intelligems != 'rgba(0,0,0,0)' %}
     .intelligems-announcement-bar .ig-dp-message span{
-      color: {{  section.settings.font_color_intelligems }} !important;
+      color: {{ section.settings.font_color_intelligems }} !important;
     }
   {% else %}  
     .intelligems-announcement-bar .ig-dp-message span{
@@ -665,17 +687,17 @@
           <div class="swiper-wrapper ">
             {% if announcement_block.settings.desktop_announcement_text_1 != blank %}
               <div class="swiper-slide">
-                <div class="annoucement-text-container"> <p>{{announcement_block.settings.desktop_announcement_text_1 }}</p></div>
+                <div class="annoucement-text-container"> <p>{{ announcement_block.settings.desktop_announcement_text_1 }}</p></div>
               </div>  
             {% endif %}
             {% if announcement_block.settings.desktop_announcement_text_2 != blank %}
               <div class="swiper-slide">
-                <div class="annoucement-text-container">{{announcement_block.settings.desktop_announcement_text_2 }}</div>
+                <div class="annoucement-text-container">{{ announcement_block.settings.desktop_announcement_text_2 }}</div>
               </div>  
             {% endif %}
             {% if announcement_block.settings.desktop_announcement_text_3 != blank %}
               <div class="swiper-slide">
-                <div class="annoucement-text-container">{{announcement_block.settings.desktop_announcement_text_3 }}</div>
+                <div class="annoucement-text-container">{{ announcement_block.settings.desktop_announcement_text_3 }}</div>
               </div>  
             {% endif %}
           </div>      
@@ -725,6 +747,15 @@
     {% endif %}
   {%- endcapture -%}
 
+{% comment %}
+  =============================================================================
+  MAIN HEADER CONTAINER & NAVIGATION STRUCTURE
+  =============================================================================
+  Primary header wrapper with schema.org markup for SEO
+  Dynamic CSS classes based on theme settings for navigation behavior
+  Responsive positioning: inline (scrolls with page), sticky, or peek (fixed)
+  Opacity controls: transparent, opaque, or opaque on scroll
+{% endcomment %}
   <div data-section-type="header" itemscope itemtype="http://schema.org/Organization">
     <div
       id="site-control"
@@ -749,6 +780,14 @@
           <ig-volume-progress-bar-widget></ig-volume-progress-bar-widget>
         </div>
       {% endif %}
+{% comment %}
+  =============================================================================
+  NAVIGATION ELEMENTS & HEADER LAYOUT
+  =============================================================================
+  Main navigation container with mobile menu toggle, logo, and right-side elements
+  Mobile menu button opens the page-menu modal navigation
+  Inline links and logo are positioned between menu and right-side elements
+{% endcomment %}
       <div class="links site-control__inner header-custom-color" id="nav-root">
         <a
           class="menu"
@@ -766,6 +805,16 @@
 
         {{ logo_html }}
 
+{% comment %}
+  =============================================================================
+  RIGHT-SIDE NAVIGATION ELEMENTS
+  =============================================================================
+  Localization selectors (language/currency) - only shown with inline desktop navigation
+  Search functionality - disguised as cart icon for mobile optimization
+  Account access - customer account link when accounts are enabled
+  Cart drawer toggle - main shopping cart with item count display
+  Cart icon variations: basket1 or basket2 based on theme settings
+{% endcomment %}
         <div class="nav-right-side">
           {% if section.settings.desktop_navigation == 'inline' %}
             {% if section.settings.show_locale_selector or section.settings.show_currency_selector %}
@@ -869,7 +918,7 @@
                         </li>
                       {% endif %}
                       {% for childlink in linklists[block.settings.category_link_list].links %}
-                        <li class="child_links {% if childlink.active %}link_active{% endif %} {{block.settings.category_link_list}}-original">
+                        <li class="child_links {% if childlink.active %}link_active{% endif %} {{ block.settings.category_link_list }}-original">
                           <a href="{{ childlink.url }}">
                             <span class="sub_menu_font dtc-submenu__font">{{ childlink.title | escape }}</span>
                           </a>
@@ -918,7 +967,7 @@
                               <a href="{{ block.settings.product_1.url }}">
                                 <img
                                   loading="lazy"
-                                  src="{{ block.settings.product_1.featured_image | image_url}}"
+                                  src="{{ block.settings.product_1.featured_image | image_url }}"
                                   width="150"
                                   height="166"
                                 >
@@ -1129,7 +1178,7 @@
                               <a href="{{ block.settings.product_1_custom.url }}">
                                 <img
                                   loading="lazy"
-                                  src="{{ block.settings.product_1_custom.featured_image | image_url}}"
+                                  src="{{ block.settings.product_1_custom.featured_image | image_url }}"
                                   width="150"
                                   height="166"
                                 >
@@ -1233,7 +1282,7 @@
           </div>
           {% if section.settings.sub_nav_quote != blank %}
             <div>
-              {{ section.settings.sub_nav_quote }}&nbsp;<img src="{{ section.settings.sub_tagline | img_url: "50x" }}">
+              {{ section.settings.sub_nav_quote }}&nbsp;<img src="{{ section.settings.sub_tagline | image_url: width: 50 }}">
             </div>
           {% endif %}
 
@@ -1448,7 +1497,7 @@
             {% if section.settings.sub_nav_quote != blank %}
               <div>
                 {{ section.settings.sub_nav_quote -}}
-                &nbsp;<img src="{{ section.settings.sub_tagline | img_url: "50x" }}">
+                &nbsp;<img src="{{ section.settings.sub_tagline | image_url: width: 50 }}">
               </div>
             {% endif %}
 

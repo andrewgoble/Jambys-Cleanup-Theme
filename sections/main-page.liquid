@@ -1,11 +1,65 @@
+{% comment %}
+  =============================================================================
+  MAIN PAGE SECTION - STATIC PAGE CONTENT DISPLAY
+  =============================================================================
+  Simple page content section for displaying static page information
+  - Renders page title and content from Shopify admin
+  - Responsive layout with centered content container
+  - Rich text editor (RTE) support for formatted content
+  - Staggered animations for enhanced user experience
+  - Minimal configuration with focus on content display
+  - Used for About Us, Contact, Policies, and other static pages
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  PAGE CONTAINER & LAYOUT
+  =============================================================================
+  Main page container with responsive layout and spacing
+  - central: Centers content within page width constraints
+  - content: Applies consistent content styling
+  - py-medium: Vertical padding for proper spacing
+  - Responsive design that adapts to different screen sizes
+{% endcomment %}
 <div class="central content py-medium">
+  {% comment %}
+    =============================================================================
+    PAGE TITLE DISPLAY
+    =============================================================================
+    Page heading with consistent styling and animation
+    - feature-header: Consistent heading styling across theme
+    - page.title: Page title from Shopify admin settings
+    - data-cc-animate: JavaScript animation trigger for entrance effects
+    - H1 tag for proper page hierarchy and SEO
+  {% endcomment %}
   <h1 class="feature-header" data-cc-animate>{{ page.title }}</h1>
 
+  {% comment %}
+    =============================================================================
+    PAGE CONTENT RENDERING
+    =============================================================================
+    Rich text content area with enhanced styling and animations
+    - rte: Rich text editor styling for consistent typography
+    - page.content: Page content from Shopify admin (supports HTML)
+    - data-cc-animate: Animation hook for content appearance
+    - data-cc-animate-delay="0.2s": Staggered animation timing
+    - Supports formatted text, images, links, and basic HTML
+  {% endcomment %}
   <div class="rte" data-cc-animate data-cc-animate-delay="0.2s">
     {{ page.content }}
   </div>
 </div>
 
+{% comment %}
+  =============================================================================
+  PAGE SECTION SCHEMA - CONFIGURATION & CUSTOMIZATION
+  =============================================================================
+  Theme editor configuration for page section
+  - name: Section name displayed in theme editor
+  - Minimal configuration for simple page content display
+  - No additional settings required for basic functionality
+  - Automatically added to page templates
+{% endcomment %}
 {% schema %}
 {
   "name": "Page"

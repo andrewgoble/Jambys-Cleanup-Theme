@@ -1,16 +1,83 @@
+{% comment %}
+  =============================================================================
+  MARQUEE TEXT SECTION
+  =============================================================================
+  Animated text marquee with continuous scrolling effect
+  - CSS-powered text animation with customizable speed
+  - Responsive typography with mobile/desktop optimizations
+  - Hover pause functionality for user interaction
+  - Accessibility support with reduced motion preferences
+  - Customizable colors, fonts, and repetition settings
+  - Uses CSS transforms for smooth, performant animations
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  DYNAMIC STYLING & ANIMATION
+  =============================================================================
+  CSS styles for marquee appearance, typography, and animation behavior
+  - background_color: Custom background color from theme editor
+  - text_color: Custom text color from theme editor
+  - Custom font handling with fallback support
+  - Responsive typography scaling
+  - CSS animation properties for smooth scrolling
+  - Hover effects and accessibility considerations
+{% endcomment %}
 {%- style -%}
+  {% comment %}
+    =============================================================================
+    SECTION BACKGROUND & TEXT COLORS
+    =============================================================================
+    Dynamic color scheme based on theme editor settings
+    - TextMarquee-{{ section.id }}: Unique identifier for section-specific styling
+    - background-color: Custom background color when provided
+    - color: Custom text color when provided
+    - Allows merchants to customize section appearance
+  {% endcomment %}
   #TextMarquee-{{ section.id }} {
     background-color: {{ section.settings.background_color }};
     color: {{ section.settings.text_color }};
   }
+  
+  {% comment %}
+    =============================================================================
+    MARQUEE CONTAINER STYLING
+    =============================================================================
+    Base marquee container with typography and spacing
+    - text-marquee: Main marquee container class
+    - width: 100%: Full width container
+    - overflow: hidden: Hides overflow content for clean edges
+    - Custom font handling with theme settings fallback
+    - Responsive typography with mobile-first approach
+  {% endcomment %}
   .text-marquee {
     width: 100%;
     overflow: hidden;
+    {% comment %}
+      =============================================================================
+      CUSTOM HEADING FONT INTEGRATION
+      =============================================================================
+      Applies custom heading font if specified in theme settings
+      - settings.custom_heading_font_name: Custom font family name
+      - settings.custom_heading_font_weight: Custom font weight
+      - font-style: normal: Ensures consistent font styling
+      - Provides flexibility for brand-specific typography
+    {% endcomment %}
     {% if settings.custom_heading_font_name %}
       font-family: {{ settings.custom_heading_font_name }};
       font-weight: {{ settings.custom_heading_font_weight }};
       font-style: normal;
     {% else %}
+      {% comment %}
+        =============================================================================
+        DEFAULT THEME FONT FALLBACK
+        =============================================================================
+        Uses theme default heading font when no custom font is specified
+        - settings.type_heading_font: Default theme heading font
+        - fallback_families: CSS fallback font families
+        - weight/style: Font weight and style from theme settings
+        - Ensures consistent typography across the theme
+      {% endcomment %}
       font-family: {{ settings.type_heading_font }}, {{ settings.type_heading_font.fallback_families }};
       font-weight: {{ settings.type_heading_font.weight }};
       font-style: {{ settings.type_heading_font.style }};
@@ -20,6 +87,17 @@
     padding-top: 1.5rem;
     padding-bottom: 1.25rem;
   }
+  
+  {% comment %}
+    =============================================================================
+    DESKTOP RESPONSIVE ADJUSTMENTS
+    =============================================================================
+    Desktop-specific styling for larger screens
+    - min-width: 768px: Desktop breakpoint
+    - padding: Increased vertical padding for desktop
+    - font-size: Larger typography for desktop readability
+    - Provides optimal viewing experience on larger screens
+  {% endcomment %}
   @media (min-width: 768px) {
     .text-marquee {
       padding-top: 2rem;
@@ -27,9 +105,35 @@
       font-size: 1.75rem;
     }
   }
+  
+  {% comment %}
+    =============================================================================
+    MARQUEE INNER CONTAINER
+    =============================================================================
+    Flexbox container for marquee content positioning
+    - text-marquee__inner: Inner content wrapper
+    - display: flex: Enables flexbox layout for content
+    - Provides foundation for animated content positioning
+  {% endcomment %}
   .text-marquee__inner {
     display: flex;
   }
+  
+  {% comment %}
+    =============================================================================
+    MARQUEE CONTENT ANIMATION
+    =============================================================================
+    Animated content container with CSS animation properties
+    - text-marquee__content: Animated content wrapper
+    - animation-timing-function: linear: Smooth, consistent animation
+    - animation-iteration-count: infinite: Continuous looping
+    - will-change: transform: Optimizes animation performance
+    - flex-shrink: 0: Prevents content shrinking during animation
+    - display: flex: Flexbox layout for content items
+    - align-items: center: Vertically centers content
+    - animation-duration: Dynamic duration from CSS variable
+    - animation-play-state: running: Default animation state
+  {% endcomment %}
   .text-marquee__content {
     animation-timing-function: linear;
     animation-iteration-count: infinite;
@@ -40,22 +144,77 @@
     animation-duration: var(--marquee-animation-duration);
     animation-play-state: running;
   }
+  
+  {% comment %}
+    =============================================================================
+    MARQUEE ITEM STYLING
+    =============================================================================
+    Individual marquee item layout and spacing
+    - text-marquee__content > *: Direct children of content container
+    - flex: 0 0 auto: Prevents item shrinking and growing
+    - display: inline-block: Inline block display for text items
+    - margin-left: 1rem: Consistent spacing between items
+    - Ensures proper spacing and layout of marquee elements
+  {% endcomment %}
   .text-marquee__content > * {
     flex: 0 0 auto;
     display: inline-block;
     margin-left: 1rem;
   }
+  
+  {% comment %}
+    =============================================================================
+    LEFT-TO-RIGHT ANIMATION
+    =============================================================================
+    CSS animation for left-to-right text scrolling
+    - text-marquee__content--left: Left animation variant class
+    - animation-name: textMarqueeLeft: References keyframe animation
+    - Creates smooth scrolling effect from right to left
+  {% endcomment %}
   .text-marquee__content--left {
     animation-name: textMarqueeLeft;
   }
+  
+  {% comment %}
+    =============================================================================
+    HOVER PAUSE FUNCTIONALITY
+    =============================================================================
+    Pauses animation on hover for better user interaction
+    - text-marquee:hover: Hover state selector
+    - animation-play-state: paused: Pauses animation on hover
+    - Improves user experience by allowing content reading
+  {% endcomment %}
   .text-marquee:hover .text-marquee__content {
     animation-play-state: paused;
   }
+  
+  {% comment %}
+    =============================================================================
+    ACCESSIBILITY: REDUCED MOTION SUPPORT
+    =============================================================================
+    Respects user's reduced motion preferences
+    - prefers-reduced-motion: CSS media query for accessibility
+    - text-marquee--paused: Paused state class
+    - animation-play-state: paused: Pauses animation for accessibility
+    - Ensures compliance with accessibility standards
+  {% endcomment %}
   @media (prefers-reduced-motion) {
     .text-marquee--paused .text-marquee__content {
       animation-play-state: paused;
     }
   }
+  
+  {% comment %}
+    =============================================================================
+    MARQUEE ANIMATION KEYFRAMES
+    =============================================================================
+    CSS keyframe animation for smooth text scrolling
+    - textMarqueeLeft: Animation name for left scrolling
+    - 0%: Starting position (no translation)
+    - 100%: Ending position (full left translation)
+    - translate3d: Hardware-accelerated 3D transform
+    - Creates smooth, performant scrolling animation
+  {% endcomment %}
   @keyframes textMarqueeLeft {
     0% {
       transform: translateZ(0);
@@ -66,6 +225,18 @@
   }
 {%- endstyle -%}
 
+{% comment %}
+  =============================================================================
+  ANIMATION SPEED CALCULATION
+  =============================================================================
+  Calculates animation duration based on content and speed settings
+  - item_count: Total number of items including repetitions
+  - section.blocks.size: Number of content blocks
+  - section.settings.repetitions: Number of times to repeat content
+  - speed_multiplier: Speed setting from theme editor (0 = default)
+  - speed: Calculated animation duration in seconds
+  - Base duration: 6 seconds per item, divided by speed multiplier
+{% endcomment %}
 {%- assign item_count = section.blocks.size | times: section.settings.repetitions -%}
 {%- assign speed_multiplier = section.settings.speed | default: 1 -%}
 {%- if speed_multiplier == 0 -%}
@@ -73,18 +244,68 @@
 {%- else -%}
   {%- assign speed = 6 | times: item_count | divided_by: speed_multiplier -%}
 {%- endif -%}
+
+{% comment %}
+  =============================================================================
+  MAIN MARQUEE CONTAINER
+  =============================================================================
+  Primary container with section identification and animation setup
+  - id="TextMarquee-{{ section.id }}": Unique section identifier
+  - class="text-marquee__container": Container styling class
+  - Provides foundation for marquee content and animation
+{% endcomment %}
 <div
   id="TextMarquee-{{ section.id }}"
   class="text-marquee__container"
 >
+  {% comment %}
+    =============================================================================
+    MARQUEE INTERACTION CONTAINER
+    =============================================================================
+    Interactive marquee with click-to-pause functionality
+    - text-marquee: Main marquee class with interaction
+    - onclick: Toggles paused state on click
+    - text-marquee--paused: CSS class for paused state
+    - --marquee-animation-duration: CSS custom property for animation speed
+    - Dynamic speed control from calculated duration
+  {% endcomment %}
   <div
     class="text-marquee"
     onclick="this.classList.toggle('text-marquee--paused');"
     style="--marquee-animation-duration: {{ speed }}s;"
   >
+    {% comment %}
+      =============================================================================
+      MARQUEE INNER WRAPPER
+      =============================================================================
+      Inner container for animated content positioning
+      - text-marquee__inner: Flexbox wrapper for content
+      - Provides layout foundation for animated content
+    {% endcomment %}
     <div class="text-marquee__inner">
+      {% comment %}
+        =============================================================================
+        MARQUEE CONTENT CAPTURE
+        =============================================================================
+        Captures marquee content for repeated display
+        - marquee_items: Captured content for rendering
+        - text-marquee__content: Animated content container
+        - text-marquee__content--left: Left animation variant
+        - Creates seamless looping content for continuous animation
+      {% endcomment %}
       {%- capture marquee_items -%}
         <div class="text-marquee__content text-marquee__content--left">
+          {% comment %}
+            =============================================================================
+            INDIVIDUAL MARQUEE ITEM CAPTURE
+            =============================================================================
+            Captures individual marquee items with separators
+            - marquee_item: Captured content for repetition
+            - Loops through section blocks for content
+            - text-marquee__item: Individual item styling class
+            - &bull;: Bullet separator between items
+            - Creates consistent spacing and visual separation
+          {% endcomment %}
           {%- capture marquee_item -%}
             {%- for block in section.blocks -%}
               <div class="text-marquee__item">
@@ -93,6 +314,17 @@
               <div>&bull;</div>
             {%- endfor -%}
           {%- endcapture -%}
+          
+          {% comment %}
+            =============================================================================
+            CONTENT REPETITION LOOP
+            =============================================================================
+            Repeats marquee content for seamless looping
+            - section.settings.repetitions: Number of repetitions from theme editor
+            - marquee_item: Captured content to repeat
+            - Ensures continuous animation without gaps
+            - Creates smooth, endless scrolling effect
+          {% endcomment %}
           {%- for i in (1..section.settings.repetitions) -%}
             {{ marquee_item }}
           {%- endfor -%}
@@ -104,6 +336,64 @@
   </div>
 </div>
 
+{% comment %}
+  =============================================================================
+  SCHEMA CONFIGURATION SUMMARY
+  =============================================================================
+  Theme editor configuration for the marquee text section
+  
+  **SECTION OVERVIEW:**
+  Animated text marquee with continuous scrolling effect and interactive controls.
+  Uses CSS animations for smooth, performant text scrolling with accessibility features.
+  
+  **KEY FEATURES:**
+  - CSS-powered text animation with customizable speed
+  - Responsive typography with mobile/desktop optimizations
+  - Hover pause functionality for user interaction
+  - Click-to-pause functionality for better control
+  - Accessibility support with reduced motion preferences
+  - Customizable colors, fonts, and repetition settings
+  
+  **SECTION SETTINGS:**
+  - background_color: Custom background color for section
+  - text_color: Custom text color for marquee content
+  - repetitions: Number of times to repeat content (0-20, default: 2)
+  - speed: Animation speed multiplier (0-3, default: 1)
+  
+  **BLOCK SETTINGS (per text item):**
+  - text: Individual text content for marquee display
+  
+  **ANIMATION SYSTEM:**
+  - Base duration: 6 seconds per item
+  - Speed calculation: (6 × item_count × repetitions) ÷ speed_multiplier
+  - CSS transforms for hardware-accelerated performance
+  - Linear timing function for consistent scrolling
+  - Infinite loop with seamless content repetition
+  
+  **INTERACTIVITY:**
+  - Hover pause: Automatically pauses on hover
+  - Click pause: Toggles paused state on click
+  - Paused state: text-marquee--paused CSS class
+  - Smooth transitions between play/pause states
+  
+  **ACCESSIBILITY FEATURES:**
+  - prefers-reduced-motion: Respects user motion preferences
+  - Automatic pause for reduced motion users
+  - Keyboard accessible click functionality
+  - Screen reader friendly content structure
+  
+  **RESPONSIVE BEHAVIOR:**
+  - Mobile-first design approach
+  - 768px breakpoint for mobile/desktop switching
+  - Adaptive typography scaling
+  - Optimized padding for different screen sizes
+  
+  **PERFORMANCE OPTIMIZATIONS:**
+  - will-change: transform for animation optimization
+  - CSS custom properties for dynamic values
+  - Hardware-accelerated 3D transforms
+  - Efficient content repetition with capture
+{% endcomment %}
 {% schema %}
 {
   "name": "Marquee Text",
@@ -155,7 +445,8 @@
   "presets": [
     {
       "name": "Marquee Text",
-      "settings": {}
+      "settings": {
+      }
     }
   ]
 }

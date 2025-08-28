@@ -1,13 +1,89 @@
+{% comment %}
+  =============================================================================
+  MAIN FAQ SECTION
+  =============================================================================
+  Primary FAQ (Frequently Asked Questions) page section with search functionality
+  - Displays page title and content with configurable visibility
+  - Optional FAQ search bar with real-time filtering
+  - Sidebar integration for expandable content sections
+  - Configurable text alignment and layout options
+  - Integrates with page content and search functionality
+  - Supports accessibility features and responsive design
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  MAIN FAQ CONTAINER
+  =============================================================================
+  Primary container with section identification and sidebar configuration
+  - central content: Consistent content layout and styling
+  - py-medium: Medium vertical padding for proper spacing
+  - data-section-type="faq": Identifies section type for JavaScript
+  - data-sidebar-enabled: Boolean flag for sidebar visibility
+  - data-sidebar-title: Custom sidebar title for expandable content
+  - Provides foundation for FAQ content and sidebar integration
+{% endcomment %}
 <div class="central content py-medium" data-section-type="faq" data-sidebar-enabled="{{ section.settings.show_sidebar }}" data-sidebar-title="{{ section.settings.sidebar_title | escape }}">
+  
+  {% comment %}
+    =============================================================================
+    CONDITIONAL PAGE TITLE DISPLAY
+    =============================================================================
+    Optional page title with configurable alignment and animation
+    - section.settings.show_title: Toggle for title visibility
+    - h1: Semantic heading level for main page title
+    - feature-header: Consistent heading styling across theme
+    - align-{{ section.settings.text_alignment }}: Dynamic text alignment
+    - page.title: Current page title from Shopify
+    - data-cc-animate: JavaScript animation trigger for entrance effects
+    - Only displays when show_title setting is enabled
+  {% endcomment %}
   {% if section.settings.show_title %}<h1 class="feature-header align-{{ section.settings.text_alignment }}" data-cc-animate>{{ page.title }}</h1>{% endif %}
 
+  {% comment %}
+    =============================================================================
+    CONDITIONAL PAGE CONTENT DISPLAY
+    =============================================================================
+    Optional page content with rich text formatting and alignment
+    - section.settings.show_content: Toggle for content visibility
+    - rte: Rich text editor styling for consistent typography
+    - align-{{ section.settings.text_alignment }}: Dynamic text alignment
+    - page.content: Rich text content from Shopify page editor
+    - data-cc-animate: JavaScript animation trigger for entrance effects
+    - Only displays when show_content setting is enabled
+  {% endcomment %}
   {% if section.settings.show_content %}
     <div class="rte align-{{ section.settings.text_alignment }}" data-cc-animate>
       {{ page.content }}
     </div>
   {% endif %}
 
+  {% comment %}
+    =============================================================================
+    FAQ SEARCH FUNCTIONALITY
+    =============================================================================
+    Optional search bar for filtering FAQ content
+    - section.settings.show_search: Toggle for search functionality
+    - inline-mini-form: Compact form styling for search input
+    - inline-mini-form--arrow: Arrow button styling variant
+    - mt-0: No top margin for proper spacing
+    - data-cc-animate: JavaScript animation trigger for entrance effects
+    - Provides real-time search filtering for FAQ content
+  {% endcomment %}
   {% if section.settings.show_search %}
+    {% comment %}
+      =============================================================================
+      SEARCH INPUT FORM
+      =============================================================================
+      Search input field with submit button and accessibility features
+      - inline-mini-form: Compact form layout styling
+      - inline-mini-form--arrow: Arrow button styling variant
+      - faq-search__input: Unique identifier for search input
+      - placeholder: Localized placeholder text for search input
+      - search.terms: Pre-populated search terms from URL
+      - aria-label: Accessible label for screen readers
+      - autocomplete="off": Disables browser autocomplete
+    {% endcomment %}
     <div class="inline-mini-form inline-mini-form--arrow mt-0" data-cc-animate>
       <input type="text"
        id="faq-search__input"
@@ -15,16 +91,93 @@
        value="{{ search.terms | escape }}"
        aria-label="{{ 'faq.search.label' | t | escape }}"
        autocomplete="off" />
+      
+      {% comment %}
+        =============================================================================
+        SEARCH SUBMIT BUTTON
+        =============================================================================
+        Search button with icon and accessibility features
+        - compact no-hover: Button styling classes
+        - type="submit": Form submission button
+        - aria-label: Accessible label for screen readers
+        - general.search.search_button: Localized button text
+        - svg-search: Search icon with customizable stroke width
+        - stroke_width: 2.5: Icon stroke width for visual consistency
+      {% endcomment %}
       <button class="compact no-hover" type="submit" aria-label="{{ 'general.search.search_button' | t | escape }}"
       >{% render 'svg-search', stroke_width: 2.5 %}</button>
     </div>
 
+    {% comment %}
+      =============================================================================
+      NO SEARCH RESULTS MESSAGE
+      =============================================================================
+      Message displayed when search returns no results
+      - faq-search__no_results: Styling class for no results message
+      - faq.search.no_results: Localized message text
+      - Provides user feedback when search yields no matches
+    {% endcomment %}
     <div class="faq-search__no_results">
       {{ 'faq.search.no_results' | t }}
     </div>
   {% endif %}
 </div>
 
+{% comment %}
+  =============================================================================
+  SCHEMA CONFIGURATION SUMMARY
+  =============================================================================
+  Theme editor configuration for the main FAQ section
+  
+  **SECTION OVERVIEW:**
+  Primary FAQ page section with configurable content display, search functionality,
+  and sidebar integration for expandable content sections.
+  
+  **KEY FEATURES:**
+  - Configurable page title and content display
+  - Optional FAQ search functionality with real-time filtering
+  - Sidebar integration for expandable content sections
+  - Customizable text alignment and layout options
+  - Accessibility features and responsive design
+  
+  **SECTION SETTINGS:**
+  - show_title: Toggle page title visibility (default: true)
+  - show_content: Toggle page content visibility (default: true)
+  - text_alignment: Text alignment options (left/center, default: left)
+  - show_search: Toggle FAQ search functionality (default: true)
+  - show_sidebar: Toggle sidebar for expandable content (default: true)
+  - sidebar_title: Custom title for sidebar display
+  
+  **CONTENT DISPLAY OPTIONS:**
+  - Page title: H1 heading with configurable alignment
+  - Page content: Rich text content with consistent styling
+  - Search bar: Real-time FAQ content filtering
+  - Sidebar: Integration with expandable content sections
+  
+  **SEARCH FUNCTIONALITY:**
+  - Real-time content filtering
+  - Pre-populated search terms from URL
+  - Accessible input and button labels
+  - No results message for user feedback
+  
+  **SIDEBAR INTEGRATION:**
+  - Shows sidebar for consecutive expandable content sections
+  - Customizable sidebar title
+  - Integrates with expandable content blocks below
+  - Provides navigation and context for FAQ content
+  
+  **ACCESSIBILITY FEATURES:**
+  - Semantic HTML structure with proper headings
+  - ARIA labels for search functionality
+  - Screen reader friendly content structure
+  - Keyboard accessible form elements
+  
+  **RESPONSIVE BEHAVIOR:**
+  - Mobile-optimized layout and spacing
+  - Consistent content styling across devices
+  - Adaptive text alignment options
+  - Touch-friendly search interface
+{% endcomment %}
 {% schema %}
 {
   "name": "FAQ",

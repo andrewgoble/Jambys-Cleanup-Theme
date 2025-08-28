@@ -163,7 +163,7 @@ html .slider-images .swiper-pagination-bullet-active{
 {%- for block in section.blocks -%}
   {%- case block.type -%}
     {%- when 'block_0' -%}
-    <h4 data-label-item="label-item-{{forloop.index}}" class="{% if forloop.index == 1 %}active{% endif %}">{{ block.settings.collection_label }}</h4>
+    <h4 data-label-item="label-item-{{ forloop.index }}" class="{% if forloop.index == 1 %}active{% endif %}">{{ block.settings.collection_label }}</h4>
   {%- endcase -%}
 {%- endfor -%}
 </div>
@@ -176,14 +176,14 @@ html .slider-images .swiper-pagination-bullet-active{
       {%- assign block_collection = block.settings.collection -%}
       {%- for collection in block_collection -%}
         <div class="swiper-wrapper">
-          {%- for product in collection.products , limit:10 -%}
+          {%- for product in collection.products , limit: 10 -%}
             <div class="swiper-slide">
-              {% render 'product-block-collection', product:product %}
+              {% render 'product-block-collection', product: product %}
             </div>
           {% endfor %}
         </div>
           <div class="wide-container">
-          <a class="dtc-best-sellers__shop-all" href="collections/{{collection.handle}}" class="btn btn--secondary">{{block.settings.link_label}}  </a>
+          <a class="dtc-best-sellers__shop-all" href="collections/{{ collection.handle }}" class="btn btn--secondary">{{ block.settings.link_label }}  </a>
           </div>
         {%- endfor -%}
             <div class="swiper-button-prev swiper-button-prev-{{ forloop.index }}">
@@ -199,7 +199,7 @@ html .slider-images .swiper-pagination-bullet-active{
 </div>
 
 {% schema %}
-  {
+{
   "name": "unisex categories select",
   "class": "unisex-categories-select",
   "tag": "section",
@@ -215,20 +215,20 @@ html .slider-images .swiper-pagination-bullet-active{
       "name": "Collection",
       "type": "block_0",
       "settings": [
-      {
-        "type": "text",
-        "id": "collection_label",
-        "label": "Collection Label"
-      },
-      {
+        {
+          "type": "text",
+          "id": "collection_label",
+          "label": "Collection Label"
+        },
+        {
           "type": "collection_list",
           "id": "collection",
           "label": "Select Collection"
         },
         {
-        "type": "text",
-        "id": "link_label",
-        "label": "Shop all Link Label"
+          "type": "text",
+          "id": "link_label",
+          "label": "Shop all Link Label"
         }
       ]
     }
@@ -238,7 +238,7 @@ html .slider-images .swiper-pagination-bullet-active{
       "name": "unisex categories select"
     }
   ]
-}  
+}
 {% endschema %}
 
 <script>

@@ -1,24 +1,119 @@
-<div class="dtc-hero-slider" data-loop-slider={{section.settings.loop_slider}}>
-<div class="swiper-wrapper">
-{%- for block in section.blocks -%}
-  <div class="swiper-slide">
-    <div class="slide-content">
-      {%- case block.type -%}
-        {%- when 'slide' -%}
-          <div class="slide-content__info">
-            <h1>{{ block.settings.title }}</h1> 
-            <p>{{ block.settings.description }}</p>
-            <a href="{{ block.settings.button_link }}">{{ block.settings.button_label }}</a>
-          </div>
-          {%- assign image = block.settings.image -%}
-          <div class="slide-content__image" style="">
-            <img src="{{ image | img_url: 'master' }}" alt="{{ block.settings.title }}">
-          </div>
-      {%- endcase -%}
-    </div>
+{% comment %}
+  =============================================================================
+  DTC HERO IMAGE SLIDER SECTION
+  =============================================================================
+  Hero section with image slider functionality for DTC (Direct-to-Consumer) pages
+  - Swiper.js-powered image slider with navigation and pagination
+  - Dynamic slide content with titles, descriptions, and call-to-action buttons
+  - Configurable loop functionality for continuous sliding
+  - Responsive design with mobile and desktop optimization
+  - Used for experimental CRO (Conversion Rate Optimization) testing
+  - Part of the DTC Pages CRO group's testing initiatives
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  MAIN SLIDER CONTAINER
+  =============================================================================
+  Primary slider container with Swiper.js integration
+  - dtc-hero-slider: Main slider container class
+  - data-loop-slider: Boolean attribute for continuous loop functionality
+  - section.settings.loop_slider: Loop setting from theme editor
+  - Controls whether slider loops back to first slide after last slide
+{% endcomment %}
+<div class="dtc-hero-slider" data-loop-slider={{ section.settings.loop_slider }}>
+  {% comment %}
+    =============================================================================
+    SWIPER WRAPPER FOR SLIDES
+    =============================================================================
+    Swiper.js wrapper container for individual slide management
+    - swiper-wrapper: Required class for Swiper.js functionality
+    - Contains all individual slide elements
+    - Enables smooth transitions and animations between slides
+  {% endcomment %}
+  <div class="swiper-wrapper">
+    {% comment %}
+      =============================================================================
+      SLIDE BLOCK ITERATION
+      =============================================================================
+      Loops through all slide blocks assigned to this section
+      - section.blocks: Array of all blocks assigned to this section
+      - block: Individual slide block object with type and settings
+      - swiper-slide: Required class for Swiper.js slide functionality
+      - Each block represents one slide in the slider
+    {% endcomment %}
+    {%- for block in section.blocks -%}
+      <div class="swiper-slide">
+        {% comment %}
+          =============================================================================
+          SLIDE CONTENT CONTAINER
+          =============================================================================
+          Container for slide content including text and image
+          - slide-content: Main slide content wrapper
+          - Organizes slide layout and positioning
+        {% endcomment %}
+        <div class="slide-content">
+          {% comment %}
+            =============================================================================
+            SLIDE TYPE HANDLING
+            =============================================================================
+            Case statement for different block types
+            - when 'slide': Standard slide block type
+            - Currently supports only slide type
+            - Extensible for future block types
+          {% endcomment %}
+          {%- case block.type -%}
+            {%- when 'slide' -%}
+              {% comment %}
+                =============================================================================
+                SLIDE TEXT CONTENT
+                =============================================================================
+                Text content area with title, description, and button
+                - slide-content__info: Text content container
+                - h1: Main slide heading (should be used sparingly per page)
+                - block.settings.title: Slide title from theme editor
+                - block.settings.description: Slide description text
+                - block.settings.button_link: Call-to-action button URL
+                - block.settings.button_label: Call-to-action button text
+              {% endcomment %}
+              <div class="slide-content__info">
+                <h1>{{ block.settings.title }}</h1> 
+                <p>{{ block.settings.description }}</p>
+                <a href="{{ block.settings.button_link }}">{{ block.settings.button_label }}</a>
+              </div>
+              
+              {% comment %}
+                =============================================================================
+                SLIDE IMAGE CONTENT
+                =============================================================================
+                Image display area for slide visual content
+                - slide-content__image: Image container
+                - block.settings.image: Image picker from theme editor
+                - image_url filter: Generates optimized image URL
+                - alt attribute: Uses slide title for accessibility
+                - Responsive image sizing and optimization
+              {% endcomment %}
+              {%- assign image = block.settings.image -%}
+              <div class="slide-content__image" style="">
+                <img src="{{ image | image_url }}" alt="{{ block.settings.title }}">
+              </div>
+          {%- endcase -%}
+        </div>
+      </div>
+    {%- endfor -%}
   </div>
-{%- endfor -%}
-</div>
+  
+  {% comment %}
+    =============================================================================
+    SWIPER NAVIGATION ELEMENTS
+    =============================================================================
+    Navigation controls for slider functionality
+    - swiper-pagination: Dot indicators for slide position
+    - swiper-button-prev: Previous slide navigation button
+    - swiper-button-next: Next slide navigation button
+    - These elements are automatically managed by Swiper.js
+    - Provides user control over slide navigation
+  {% endcomment %}
   <!-- If we need pagination -->
   <div class="swiper-pagination"></div>
 
@@ -26,13 +121,27 @@
   <div class="swiper-button-prev"></div>
   <div class="swiper-button-next"></div>
 </div>
+
+{% comment %}
+  =============================================================================
+  SCHEMA CONFIGURATION
+  =============================================================================
+  Theme editor configuration for DTC hero image slider section
+  - name: Section name displayed in theme editor
+  - class: CSS class for section-specific styling
+  - tag: HTML tag for section structure
+  - settings: Global section settings
+  - loop_slider: Boolean for continuous loop functionality
+  - blocks: Block types that can be added to this section
+  - slide: Individual slide block with image, title, description, and button
+{% endcomment %}
 {% schema %}
-  {
+{
   "name": "dtc hero image slider",
   "class": "dtc-hero-image-slider",
   "tag": "section",
   "settings": [
-{
+    {
       "type": "checkbox",
       "id": "loop_slider",
       "label": "Loop slider",
@@ -77,5 +186,5 @@
       "name": "dtc hero image slider"
     }
   ]
-}  
+}
 {% endschema %}

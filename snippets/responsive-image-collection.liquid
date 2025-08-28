@@ -12,7 +12,7 @@
       <img class="rimage__image lazyload fade-in {% if cover %}cover{% endif %}" data-src="{{ image | img_url: initial }}" alt="{{ image.alt | escape }}">
       {% assign initial = false %}
     {% endif %}
-    {% assign img_url = image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+    {% assign img_url = image | image_url: width: 1, height: 1 | replace: '_1x1.', '_{width}x.' %}
     <img class="rimage__image lazyload{% if manual_image_load %}--manual{% endif %} fade-in {% if cover %}cover{% endif %}"
       {% if first and index <= 4 %} loading="eager" fetchpriority="high" {% else %} loading="lazy"{% endif %}
       data-src="{{ img_url }}"
@@ -25,7 +25,7 @@
       {% if cover %}data-parent-fit="cover"{% endif %}>
 
     <noscript>
-      {% assign img_url = image | img_url: '1024x1024' %}
+      {% assign img_url = image | image_url: width: 1024, height: 1024 %}
       <img src="{{ img_url }}" alt="{{ image.alt | escape }}" class="rimage__image">
     </noscript>
   </div>

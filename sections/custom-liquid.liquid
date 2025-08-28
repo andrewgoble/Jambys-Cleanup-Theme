@@ -1,28 +1,74 @@
+{% comment %}
+  =============================================================================
+  CUSTOM LIQUID/HTML SECTION
+  =============================================================================
+  Flexible section for custom Liquid code and HTML content
+  - Allows merchants to add custom code without theme modifications
+  - Supports both Liquid templating and raw HTML
+  - Configurable spacing and container options
+  - Useful for custom functionality, third-party integrations, and testing
+  - Provides flexibility for advanced customization needs
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  MAIN CONTAINER WITH DYNAMIC SPACING
+  =============================================================================
+  Primary container with conditional spacing and container classes
+  - section-spacing: Default vertical spacing between sections
+  - container: Default contained width for content
+  - no_margins: Boolean setting to remove all spacing
+  - data-cc-animate: JavaScript animation trigger for entrance effects
+  - Responsive layout that adapts to custom content
+{% endcomment %}
 <div class="{% unless section.settings.no_margins %}section-spacing container{% endunless %}" data-cc-animate>
+  {% comment %}
+    =============================================================================
+    CUSTOM LIQUID/HTML CONTENT RENDERING
+    =============================================================================
+    Renders custom Liquid code or HTML from section settings
+    - section.settings.custom_liquid: Custom code input from theme editor
+    - Supports Liquid templating language syntax
+    - Can include HTML, CSS, JavaScript, and Liquid filters
+    - Useful for custom widgets, third-party scripts, and advanced layouts
+    - Content is rendered as-is without additional processing
+  {% endcomment %}
   {{ section.settings.custom_liquid }}
 </div>
 
+{% comment %}
+  =============================================================================
+  SCHEMA CONFIGURATION
+  =============================================================================
+  Theme editor configuration for custom liquid section
+  - name: Section name displayed in theme editor
+  - class: CSS class for section-specific styling
+  - settings: Configurable options for merchants
+  - no_margins: Toggle for section spacing removal
+  - custom_liquid: Textarea for custom code input
+  - presets: Default section configuration for easy addition
+{% endcomment %}
 {% schema %}
-  {
-    "name": "Custom Liquid/HTML",
-    "class": "section--custom-html",
-    "settings": [
-      {
-        "type": "checkbox",
-        "id": "no_margins",
-        "label": "No section spacing",
-        "default": false
-      },
-      {
-        "type": "liquid",
-        "id": "custom_liquid",
-        "label": "Custom Liquid/HTML"
-      }
-    ],
-    "presets": [
-      {
-        "name": "Custom Liquid/HTML"
-      }
-    ]
-  }
+{
+  "name": "Custom Liquid/HTML",
+  "class": "section--custom-html",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "no_margins",
+      "label": "No section spacing",
+      "default": false
+    },
+    {
+      "type": "liquid",
+      "id": "custom_liquid",
+      "label": "Custom Liquid/HTML"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Liquid/HTML"
+    }
+  ]
+}
 {% endschema %}

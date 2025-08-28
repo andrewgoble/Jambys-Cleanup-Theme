@@ -1,4 +1,44 @@
+{% comment %}
+  =============================================================================
+  SLIDESHOW SECTION
+  =============================================================================
+  Interactive image slideshow with customizable content and navigation
+  - Supports multiple slide layouts with desktop/mobile image variants
+  - Configurable height options (fixed, responsive, full viewport)
+  - Dynamic overlay content with titles, text, and call-to-action buttons
+  - Responsive typography with mobile/desktop size adjustments
+  - Slick.js integration for smooth transitions and autoplay
+  - Wave styling options and background color customization
+  - Mobile-specific overlay positioning and navigation
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  MAIN SLIDESHOW CONTAINER
+  =============================================================================
+  Primary container with section identification and component setup
+  - id="section-id-{{ section.id }}": Unique section identifier
+  - data-section-type="slideshow": Identifies section type for JavaScript
+  - data-cc-animate: JavaScript animation trigger for entrance effects
+  - needs-alt-logo: Class for alternate logo display on full-width slides
+  - Conditional class based on full_width setting
+{% endcomment %}
 <div id="section-id-{{ section.id }}" data-section-type="slideshow" data-cc-animate {% if section.settings.full_width %}class="needs-alt-logo"{% endif %}>
+
+{% comment %}
+  =============================================================================
+  RESPONSIVE HEIGHT & TYPOGRAPHY STYLES
+  =============================================================================
+  Dynamic CSS for height and typography based on section settings
+  - height: Height setting (fixed, responsive, full viewport)
+  - height_mobile: Fixed height for mobile devices (under 768px)
+  - height_desktop: Fixed height for desktop devices (768px+)
+  - title_size: Base title size for desktop (992px+)
+  - title_size_medium: Scaled title size for medium screens (768px-991px)
+  - Responsive breakpoints: 768px (tablet), 992px (desktop)
+  - rimage-outer-wrapper: Container for responsive images
+  - placeholder-image: Fallback image styling
+{% endcomment %}
   {% style %}
     {%- if section.settings.height == 'fixed' -%}
       #section-id-{{ section.id }} .rimage-outer-wrapper,
@@ -7,12 +47,32 @@
       }
     {%- endif -%}
 
+{% comment %}
+  =============================================================================
+  MOBILE IMAGE POSITIONING
+  =============================================================================
+  Sets background position for mobile images on each slide
+  - Loops through all slides to set individual mobile image positions
+  - block.settings.mobile_image_position: Position setting from theme editor
+  - slide.slide-{{ forloop.index }}: Unique slide identifier
+  - Applies to mobile devices (default behavior)
+{% endcomment %}
     {% for block in section.blocks %}
       #section-id-{{ section.id }} .slide.slide-{{ forloop.index }} .rimage-outer-wrapper {
       background-position: {{ block.settings.mobile_image_position }};
       }
     {% endfor %}
 
+{% comment %}
+  =============================================================================
+  DESKTOP RESPONSIVE STYLES
+  =============================================================================
+  Desktop-specific styles for devices 768px and wider
+  - Fixed height overrides for desktop devices
+  - Desktop image positioning for each slide
+  - Medium screen title sizing (70% of desktop size)
+  - at_least filter: Ensures minimum font size from theme settings
+{% endcomment %}
     @media (min-width: 768px) {
       {%- if section.settings.height == 'fixed' -%}
         #section-id-{{ section.id }} .rimage-outer-wrapper ,
@@ -33,6 +93,15 @@
       {% endfor %}
     }
 
+{% comment %}
+  =============================================================================
+  LARGE DESKTOP TITLE SIZING
+  =============================================================================
+  Full-size typography for large desktop devices (992px+)
+  - title_size: Full title size from block settings
+  - Applies to devices 992px and wider
+  - Provides optimal readability on large screens
+{% endcomment %}
     @media (min-width: 992px) {
       {% for block in section.blocks %}
         #section-id-{{ section.id }} .slide-{{ forloop.index }} .line-1 {
@@ -42,8 +111,33 @@
     }
   {% endstyle %}
 
+{% comment %}
+  =============================================================================
+  CONTENT CONTAINER WRAPPER
+  =============================================================================
+  Conditional container wrapper based on full-width setting
+  - wide-container: Contained width layout option
+  - half-gutter: Reduced spacing for tighter layout
+  - section-spacing: Consistent vertical spacing between sections
+  - Only renders when full_width is false
+{% endcomment %}
   {%- unless section.settings.full_width -%}<div class="wide-container half-gutter section-spacing">{%- endunless -%}
 
+{% comment %}
+  =============================================================================
+  SLIDESHOW COMPONENT CONTAINER
+  =============================================================================
+  Main slideshow container with Slick.js integration
+  - slideshow: Base slideshow styling and functionality
+  - slideshow--navigation-{{ section.settings.slide_navigation }}: Dynamic navigation style
+  - slick-slider-overlay-dots-desktop: Desktop dot navigation styling
+  - slick-slider-dots-light-xs: Light dots for mobile overlay under
+  - slick-slider-overlay-dots: Overlay dots for mobile overlay over
+  - data-transition: Slide transition effect setting
+  - data-autoplay: Autoplay functionality toggle
+  - data-autoplay-speed: Autoplay interval in milliseconds
+  - data-navigation: Navigation type setting
+{% endcomment %}
     <div class="slideshow
         slideshow--navigation-{{ section.settings.slide_navigation }}
         slick-slider-overlay-dots-desktop
@@ -55,6 +149,17 @@
        data-autoplay-speed="{{ section.settings.autoplay_speed }}"
        data-navigation="{{ section.settings.slide_navigation }}">
 
+{% comment %}
+  =============================================================================
+  SLIDE BLOCK ITERATION
+  =============================================================================
+  Loops through all slide blocks to create individual slides
+  - section.blocks: Array of all blocks assigned to this section
+  - block: Individual slide block object with type and settings
+  - show_overlay_text: Boolean flag for overlay content visibility
+  - heading_tag: Dynamic heading tag (h1 or h2) based on settings
+  - Used to conditionally display headings, text, and buttons
+{% endcomment %}
     {% for block in section.blocks %}
       {%- liquid
         assign show_overlay_text = false
@@ -68,24 +173,94 @@
         endif
       -%}
 
+{% comment %}
+  =============================================================================
+  INDIVIDUAL SLIDE CONTAINER
+  =============================================================================
+  Individual slide container with dynamic classes and styling
+  - slide slide-{{ forloop.index }}: Base slide class with unique identifier
+  - height--{{ section.settings.height }}: Dynamic height class
+  - image-overlay: Overlay content container
+  - image-overlay--bg-full: Full background overlay option
+  - overlay-text-static-xs: Mobile overlay positioning class
+  - block.shopify_attributes: Shopify block attributes for theme editor
+{% endcomment %}
       <div class="slide slide-{{ forloop.index }} height--{{ section.settings.height }} image-overlay {% if section.settings.overlay_style_tint %}image-overlay--bg-full{% endif %} {% if section.settings.mobile_overlay_under %}overlay-text-static-xs{% endif %}" {{ block.shopify_attributes }}>
+
+{% comment %}
+  =============================================================================
+  SLIDE LINK WRAPPER
+  =============================================================================
+  Conditional link wrapper for clickable slides
+  - block.settings.slide_link: URL for slide click action
+  - text contains '</a>': Prevents double-wrapping if text already contains links
+  - data-cc-animate-click: Animation trigger for click effects
+  - Only wraps content when slide_link is provided and no existing links
+{% endcomment %}
         {%- unless block.settings.slide_link == blank or block.settings.text contains '</a>' -%}<a data-cc-animate-click href="{{ block.settings.slide_link }}">{%- endunless -%}
 
+{% comment %}
+  =============================================================================
+  DESKTOP IMAGE DISPLAY
+  =============================================================================
+  Desktop image container with responsive image handling
+  - rimage-outer-wrapper: Responsive image container
+  - lazyload--manual: Manual lazy loading control
+  - fade-in: Fade-in animation for smooth loading
+  - fill-viewport: Full viewport height option
+  - desktop-only: Hidden on mobile devices
+  - data-bgset: Responsive image background set
+  - data-sizes: Responsive image sizes
+  - data-parent-fit: Responsive image parent fit
+{% endcomment %}
         {% if block.settings.image != blank %}
           <div class="rimage-outer-wrapper lazyload--manual fade-in {% if section.settings.height == 'full' %}fill-viewport{% endif %} {% if block.settings.mobile_image != blank %}desktop-only{% endif %}"
               data-bgset="{% render 'bgset', image: block.settings.image %}"
               data-sizes="auto"
               data-parent-fit="cover">
+{% comment %}
+  =============================================================================
+  ADAPTIVE HEIGHT ASPECT RATIO
+  =============================================================================
+  Sets padding-top for responsive height based on image aspect ratio
+  - section.settings.height == 'adapt': Responsive height setting
+  - aspect_ratio: Uses first slide's image aspect ratio or defaults to 2.0
+  - padding-top: Calculated percentage for responsive height
+  - rimage-wrapper: Container for aspect ratio calculations
+{% endcomment %}
             {%- if section.settings.height == 'adapt' -%}
               {%- assign aspect_ratio = section.blocks.first.settings.image.aspect_ratio | default: 2.0 -%}
               <div class="rimage-wrapper" style="padding-top:{{ 1 | divided_by: aspect_ratio | times: 100 }}%"></div>
             {%- endif -%}
+
+{% comment %}
+  =============================================================================
+  NOSCRIPT FALLBACK IMAGE
+  =============================================================================
+  Fallback image display when JavaScript is disabled
+  - rimage-wrapper: Container with calculated aspect ratio
+  - padding-top: Responsive height based on image dimensions
+  - image_url: Optimized image URL with width/height constraints
+  - alt: Accessibility alt text from image metadata
+  - rimage__image: Base image styling class
+{% endcomment %}
               <noscript>
                 <div class="rimage-wrapper" style="padding-top:{{ 1 | divided_by: block.settings.image.aspect_ratio | times: 100 }}%">
-                  <img src="{{ block.settings.image | img_url: '1024x1024' }}" alt="{{ block.settings.image.alt | escape }}" class="rimage__image"/>
+                  <img src="{{ block.settings.image | image_url: width: 1024, height: 1024 }}" alt="{{ block.settings.image.alt | escape }}" class="rimage__image"/>
                 </div>
               </noscript>
           </div>
+
+{% comment %}
+  =============================================================================
+  MOBILE IMAGE DISPLAY
+  =============================================================================
+  Mobile-specific image container with responsive handling
+  - mobile-only: Hidden on desktop devices
+  - Same responsive image setup as desktop version
+  - Uses block.settings.mobile_image for mobile-specific content
+  - Maintains aspect ratio and responsive sizing
+{% endcomment %}
           {% if block.settings.mobile_image != blank %}
             <div class="rimage-outer-wrapper lazyload--manual mobile-only fade-in {% if section.settings.height == 'full' %}fill-viewport{% endif %}"
                 data-bgset="{% render 'bgset', image: block.settings.mobile_image %}"
@@ -97,12 +272,25 @@
               {%- endif -%}
                 <noscript>
                   <div class="rimage-wrapper" style="padding-top:{{ 1 | divided_by: block.settings.mobile_image.aspect_ratio | times: 100 }}%">
-                    <img src="{{ block.settings.mobile_image | img_url: '1024x1024' }}" alt="{{ block.settings.mobile_image.alt | escape }}" class="rimage__image"/>
+                    <img src="{{ block.settings.mobile_image | image_url: width: 1024, height: 1024 }}" alt="{{ block.settings.mobile_image.alt | escape }}" class="rimage__image"/>
                   </div>
                 </noscript>
             </div>
           {% endif %}
         {% else %}
+
+{% comment %}
+  =============================================================================
+  PLACEHOLDER IMAGE FALLBACK
+  =============================================================================
+  Fallback placeholder when no image is provided
+  - placeholder-image: Base placeholder styling
+  - placeholder--banner: Banner-specific placeholder styling
+  - dark: Dark overlay when text content is present
+  - padding-top: 50% for responsive height when adapt mode is enabled
+  - cycle: Alternates between two placeholder images
+  - placeholder_svg_tag: Generates SVG placeholder with proper classes
+{% endcomment %}
           <div class="placeholder-image placeholder--banner
             {% if block.settings.title != blank or block.settings.subheading != blank %}dark{% endif %}"
             {% if section.settings.height == 'adapt' %}style="padding-top: 50%"{% endif %}
@@ -112,29 +300,84 @@
           </div>
         {% endif %}
 
+{% comment %}
+  =============================================================================
+  OVERLAY CONTENT DISPLAY
+  =============================================================================
+  Conditional overlay content when text elements are present
+  - show_overlay_text: Boolean flag for overlay visibility
+  - overlay-type overlay: Base overlay styling classes
+  - {{ block.settings.overlay_position }}: Dynamic positioning from theme editor
+  - inner: Overlay content wrapper for proper positioning
+  - overlay__content: Content container with proper spacing
+{% endcomment %}
         {%- if show_overlay_text -%}
           <div class="overlay-type overlay {{ block.settings.overlay_position }}">
             <div class="inner">
               <div>
                 <div class="overlay__content">
+
+{% comment %}
+  =============================================================================
+  SUBHEADING TEXT
+  =============================================================================
+  Displays subheading text above main title
+  - feature-subheader: Subheading styling class
+  - block.settings.subheading: Subheading text from theme editor
+  - escape filter: Prevents XSS in text content
+  - Only renders when subheading is not blank
+{% endcomment %}
                   {%- if block.settings.subheading != blank -%}
                     <div class="feature-subheader">
                       {{ block.settings.subheading | escape }}
                     </div>
                   {% endif %}
 
+{% comment %}
+  =============================================================================
+  MAIN HEADING TITLE
+  =============================================================================
+  Displays main slide title with dynamic heading tag
+  - {{ heading_tag }}: Dynamic heading level (h1 or h2)
+  - line-1: Base title styling class
+  - line-1--large: Large title class for titles 86px+
+  - block.settings.title: Title text from theme editor
+  - newline_to_br: Converts newlines to line breaks for formatting
+{% endcomment %}
                   {%- if block.settings.title != blank -%}
                     <{{ heading_tag }} class="line-1 {% if section.settings.title_size >= 86 %}line-1--large{% endif %}">
                       {{ block.settings.title | newline_to_br }}
                     </{{ heading_tag }}>
                   {%- endif -%}
 
+{% comment %}
+  =============================================================================
+  BODY TEXT CONTENT
+  =============================================================================
+  Displays main text content below title
+  - rte: Rich text editor styling for formatted content
+  - line-2: Text content styling class
+  - large-text: Optional enlarged text class
+  - block.settings.text: Text content from theme editor
+  - block.settings.enlarge_text: Boolean for text size control
+{% endcomment %}
                   {%- if block.settings.text != blank -%}
                     <div class="rte line-2 {% if block.settings.enlarge_text %}large-text{% endif %}">
                       {{ block.settings.text }}
                     </div>
                   {%- endif -%}
 
+{% comment %}
+  =============================================================================
+  CALL-TO-ACTION BUTTON
+  =============================================================================
+  Displays call-to-action button when label is provided
+  - line-3: Button container with proper spacing
+  - button: Base button styling class
+  - hover-grow: Hover animation effect
+  - block.settings.button_label: Button text from theme editor
+  - escape filter: Prevents XSS in button text
+{% endcomment %}
                   {%- if block.settings.button_label != blank -%}
                     <div class="line-3">
                       <span class="button hover-grow">{{ block.settings.button_label | escape }}</span>
@@ -156,353 +399,365 @@
 </div>
 
 
+{% comment %}
+  =============================================================================
+  SCHEMA CONFIGURATION
+  =============================================================================
+  Theme editor configuration for slideshow section
+  - name: Section name displayed in theme editor
+  - class: CSS class for section-specific styling
+  - max_blocks: Maximum number of slides allowed (8)
+  - settings: Global section settings for appearance and behavior
+  - blocks: Block types that can be added to this section
+  - presets: Default section configuration for easy addition
+{% endcomment %}
 {% schema %}
-  {
-    "name": "Slideshow",
-    "class": "section-slideshow header-overlap-section",
-    "max_blocks": 8,
-    "settings": [
-      {
-        "type": "radio",
-        "id": "height",
-        "label": "Slide height",
-        "options": [
-          {
-            "value": "adapt",
-            "label": "Adapt to first image"
-          },
-          {
-            "value": "full",
-            "label": "Full screen"
-          },
-          {
-            "value": "fixed",
-            "label": "Fixed height"
-          }
-        ],
-        "default": "fixed"
-      },
-      {
-        "type": "range",
-        "id": "height_desktop",
-        "min": 200,
-        "max": 1000,
-        "step": 20,
-        "unit": "px",
-        "label": "Desktop fixed height",
-        "default": 600
-      },
-      {
-        "type": "range",
-        "id": "height_mobile",
-        "min": 100,
-        "max": 1000,
-        "step": 20,
-        "unit": "px",
-        "label": "Mobile fixed height",
-        "default": 500
-      },
-      {
-        "id": "full_width",
-        "type": "checkbox",
-        "label": "Full page width",
-        "default": true
-      },
-      {
-        "id": "mobile_overlay_under",
-        "type": "checkbox",
-        "label": "Show text below image on mobile",
-        "default": false
-      },
-      {
-        "id": "overlay_style_tint",
-        "type": "checkbox",
-        "label": "Show overlay tint",
-        "default": true
-      },
-      {
-        "type": "header",
-        "content": "Slideshow navigation"
-      },
-      {
-        "type": "select",
-        "id": "slide_transition",
-        "label": "Transition",
-        "options": [
-          {
-            "value": "zoom",
-            "label": "Zoom"
-          },
-          {
-            "value": "slide",
-            "label": "Slide"
-          },
-          {
-            "value": "fade",
-            "label": "Fade"
-          },
-          {
-            "value": "instant",
-            "label": "Instant"
-          }
-        ],
-        "default": "slide"
-      },
-      {
-        "id": "slide_navigation",
-        "type": "select",
-        "label": "Slide navigation style",
-        "default": "arrows",
-        "options": [
-          {
-            "value": "arrows",
-            "label": "Arrows"
-          },
-          {
-            "value": "dots",
-            "label": "Dots"
-          },
-          {
-            "value": "none",
-            "label": "None"
-          }
-        ]
-      },
-      {
-        "id": "autoplay",
-        "type": "checkbox",
-        "label": "Auto-rotate slides",
-        "default": true
-      },
-      {
-        "type": "range",
-        "id": "autoplay_speed",
-        "min": 1,
-        "max": 20,
-        "step": 1,
-        "unit": "s",
-        "label": "Change slides every",
-        "default": 7
-      }
-    ],
-    "blocks": [
-      {
-        "type": "image",
-        "name": "Slide",
-        "settings": [
-          {
-            "type": "image_picker",
-            "id": "image",
-            "label": "Image",
-            "info": "2048 x 1024px recommended"
-          },
-          {
-            "type": "image_picker",
-            "id": "mobile_image",
-            "label": "Mobile image",
-            "info": "1024px x 1024px recommended"
-          },
-          {
-            "type": "select",
-            "id": "desktop_image_position",
-            "label": "Desktop image alignment",
-            "info": "Used to keep the subject of your image in view",
-            "options": [
-              {
-                "value": "left top",
-                "label": "Top left"
-              },
-              {
-                "value": "center top",
-                "label": "Top center"
-              },
-              {
-                "value": "right top",
-                "label": "Top right"
-              },
-              {
-                "value": "left center",
-                "label": "Middle left"
-              },
-              {
-                "value": "center center",
-                "label": "Middle center"
-              },
-              {
-                "value": "right center",
-                "label": "Middle right"
-              },
-              {
-                "value": "left bottom",
-                "label": "Bottom left"
-              },
-              {
-                "value": "center bottom",
-                "label": "Bottom center"
-              },
-              {
-                "value": "right bottom",
-                "label": "Bottom right"
-              }
-            ],
-            "default": "center center"
-          },
-          {
-            "type": "select",
-            "id": "mobile_image_position",
-            "label": "Mobile image alignment",
-            "options": [
-              {
-                "value": "left top",
-                "label": "Top left"
-              },
-              {
-                "value": "center top",
-                "label": "Top center"
-              },
-              {
-                "value": "right top",
-                "label": "Top right"
-              },
-              {
-                "value": "left center",
-                "label": "Middle left"
-              },
-              {
-                "value": "center center",
-                "label": "Middle center"
-              },
-              {
-                "value": "right center",
-                "label": "Middle right"
-              },
-              {
-                "value": "left bottom",
-                "label": "Bottom left"
-              },
-              {
-                "value": "center bottom",
-                "label": "Bottom center"
-              },
-              {
-                "value": "right bottom",
-                "label": "Bottom right"
-              }
-            ],
-            "default": "center center"
-          },
-          {
-            "type": "url",
-            "id": "slide_link",
-            "label": "Slide link"
-          },
-          {
-            "type": "text",
-            "id": "subheading",
-            "label": "Subheading",
-            "default": "Subheading"
-          },
-          {
-            "type": "textarea",
-            "id": "title",
-            "label": "Heading",
-            "default": "Tell your story"
-          },
-          {
-            "type": "range",
-            "id": "title_size",
-            "min": 20,
-            "max": 150,
-            "step": 2,
-            "unit": "px",
-            "label": "Heading text size",
-            "default": 60
-          },
-          {
-            "type": "checkbox",
-            "id": "heading_h1",
-            "label": "Set as primary page heading",
-            "info": "Uses <h1> tag. One per page recommended. [Learn more](https://cleancanvas.co.uk/support/showcase/seo#inner-anchor-0)",
-            "default": false
-          },
-          {
-            "type": "richtext",
-            "id": "text",
-            "label": "Text",
-            "default": "<p>Pair text with an image to tell a story</p>"
-          },
-          {
-            "type": "checkbox",
-            "id": "enlarge_text",
-            "label": "Enlarge text",
-            "default": true
-          },
-          {
-            "type": "text",
-            "id": "button_label",
-            "label": "Button"
-          },
-          {
-            "type": "select",
-            "id": "overlay_position",
-            "label": "Text alignment",
-            "options": [
-              {
-                "value": "position--left position--top",
-                "label": "Top left"
-              },
-              {
-                "value": "position--hcenter position--top",
-                "label": "Top center"
-              },
-              {
-                "value": "position--right position--top",
-                "label": "Top right"
-              },
-              {
-                "value": "position--left position--vcenter",
-                "label": "Middle left"
-              },
-              {
-                "value": "position--hcenter position--vcenter",
-                "label": "Middle center"
-              },
-              {
-                "value": "position--right position--vcenter",
-                "label": "Middle right"
-              },
-              {
-                "value": "position--left position--bottom",
-                "label": "Bottom left"
-              },
-              {
-                "value": "position--hcenter position--bottom",
-                "label": "Bottom center"
-              },
-              {
-                "value": "position--right position--bottom",
-                "label": "Bottom right"
-              }
-            ],
-            "default": "position--hcenter position--vcenter"
-          }
-        ]
-      }
-    ],
-    "presets": [
-      {
-        "name": "Slideshow",
-        "settings": {
+{
+  "name": "Slideshow",
+  "class": "section-slideshow header-overlap-section",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "radio",
+      "id": "height",
+      "label": "Slide height",
+      "options": [
+        {
+          "value": "adapt",
+          "label": "Adapt to first image"
         },
-        "blocks": [
-          {
-            "type": "image"
-          },
-           {
-            "type": "image"
-          }
-        ]
-      }
-    ]
-  }
+        {
+          "value": "full",
+          "label": "Full screen"
+        },
+        {
+          "value": "fixed",
+          "label": "Fixed height"
+        }
+      ],
+      "default": "fixed"
+    },
+    {
+      "type": "range",
+      "id": "height_desktop",
+      "min": 200,
+      "max": 1000,
+      "step": 20,
+      "unit": "px",
+      "label": "Desktop fixed height",
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "height_mobile",
+      "min": 100,
+      "max": 1000,
+      "step": 20,
+      "unit": "px",
+      "label": "Mobile fixed height",
+      "default": 500
+    },
+    {
+      "id": "full_width",
+      "type": "checkbox",
+      "label": "Full page width",
+      "default": true
+    },
+    {
+      "id": "mobile_overlay_under",
+      "type": "checkbox",
+      "label": "Show text below image on mobile",
+      "default": false
+    },
+    {
+      "id": "overlay_style_tint",
+      "type": "checkbox",
+      "label": "Show overlay tint",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Slideshow navigation"
+    },
+    {
+      "type": "select",
+      "id": "slide_transition",
+      "label": "Transition",
+      "options": [
+        {
+          "value": "zoom",
+          "label": "Zoom"
+        },
+        {
+          "value": "slide",
+          "label": "Slide"
+        },
+        {
+          "value": "fade",
+          "label": "Fade"
+        },
+        {
+          "value": "instant",
+          "label": "Instant"
+        }
+      ],
+      "default": "slide"
+    },
+    {
+      "id": "slide_navigation",
+      "type": "select",
+      "label": "Slide navigation style",
+      "default": "arrows",
+      "options": [
+        {
+          "value": "arrows",
+          "label": "Arrows"
+        },
+        {
+          "value": "dots",
+          "label": "Dots"
+        },
+        {
+          "value": "none",
+          "label": "None"
+        }
+      ]
+    },
+    {
+      "id": "autoplay",
+      "type": "checkbox",
+      "label": "Auto-rotate slides",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "unit": "s",
+      "label": "Change slides every",
+      "default": 7
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "2048 x 1024px recommended"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Mobile image",
+          "info": "1024px x 1024px recommended"
+        },
+        {
+          "type": "select",
+          "id": "desktop_image_position",
+          "label": "Desktop image alignment",
+          "info": "Used to keep the subject of your image in view",
+          "options": [
+            {
+              "value": "left top",
+              "label": "Top left"
+            },
+            {
+              "value": "center top",
+              "label": "Top center"
+            },
+            {
+              "value": "right top",
+              "label": "Top right"
+            },
+            {
+              "value": "left center",
+              "label": "Middle left"
+            },
+            {
+              "value": "center center",
+              "label": "Middle center"
+            },
+            {
+              "value": "right center",
+              "label": "Middle right"
+            },
+            {
+              "value": "left bottom",
+              "label": "Bottom left"
+            },
+            {
+              "value": "center bottom",
+              "label": "Bottom center"
+            },
+            {
+              "value": "right bottom",
+              "label": "Bottom right"
+            }
+          ],
+          "default": "center center"
+        },
+        {
+          "type": "select",
+          "id": "mobile_image_position",
+          "label": "Mobile image alignment",
+          "options": [
+            {
+              "value": "left top",
+              "label": "Top left"
+            },
+            {
+              "value": "center top",
+              "label": "Top center"
+            },
+            {
+              "value": "right top",
+              "label": "Top right"
+            },
+            {
+              "value": "left center",
+              "label": "Middle left"
+            },
+            {
+              "value": "center center",
+              "label": "Middle center"
+            },
+            {
+              "value": "right center",
+              "label": "Middle right"
+            },
+            {
+              "value": "left bottom",
+              "label": "Bottom left"
+            },
+            {
+              "value": "center bottom",
+              "label": "Bottom center"
+            },
+            {
+              "value": "right bottom",
+              "label": "Bottom right"
+            }
+          ],
+          "default": "center center"
+        },
+        {
+          "type": "url",
+          "id": "slide_link",
+          "label": "Slide link"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Subheading",
+          "default": "Subheading"
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Heading",
+          "default": "Tell your story"
+        },
+        {
+          "type": "range",
+          "id": "title_size",
+          "min": 20,
+          "max": 150,
+          "step": 2,
+          "unit": "px",
+          "label": "Heading text size",
+          "default": 60
+        },
+        {
+          "type": "checkbox",
+          "id": "heading_h1",
+          "label": "Set as primary page heading",
+          "info": "Uses <h1> tag. One per page recommended. [Learn more](https://cleancanvas.co.uk/support/showcase/seo#inner-anchor-0)",
+          "default": false
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Pair text with an image to tell a story</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "enlarge_text",
+          "label": "Enlarge text",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button"
+        },
+        {
+          "type": "select",
+          "id": "overlay_position",
+          "label": "Text alignment",
+          "options": [
+            {
+              "value": "position--left position--top",
+              "label": "Top left"
+            },
+            {
+              "value": "position--hcenter position--top",
+              "label": "Top center"
+            },
+            {
+              "value": "position--right position--top",
+              "label": "Top right"
+            },
+            {
+              "value": "position--left position--vcenter",
+              "label": "Middle left"
+            },
+            {
+              "value": "position--hcenter position--vcenter",
+              "label": "Middle center"
+            },
+            {
+              "value": "position--right position--vcenter",
+              "label": "Middle right"
+            },
+            {
+              "value": "position--left position--bottom",
+              "label": "Bottom left"
+            },
+            {
+              "value": "position--hcenter position--bottom",
+              "label": "Bottom center"
+            },
+            {
+              "value": "position--right position--bottom",
+              "label": "Bottom right"
+            }
+          ],
+          "default": "position--hcenter position--vcenter"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Slideshow",
+      "settings": {
+      },
+      "blocks": [
+        {
+          "type": "image"
+        },
+        {
+          "type": "image"
+        }
+      ]
+    }
+  ]
+}
 {% endschema %}

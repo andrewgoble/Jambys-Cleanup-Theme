@@ -1,3 +1,27 @@
+{% comment %}
+  =============================================================================
+  ACCORDIONS SECTION
+  =============================================================================
+  Collapsible content section with expandable/collapsible items
+  - Supports both FAQ-style content and product-specific accordions
+  - Dynamic styling with customizable background colors and wave effects
+  - Responsive layout with reading-width container for optimal readability
+  - JavaScript-powered accordion functionality with smooth animations
+  - Integrates with product pages for product-specific FAQ content
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  TITLE ALIGNMENT STYLING
+  =============================================================================
+  Dynamic CSS for section title alignment
+  - title_alignment: Controls heading text alignment (left/center/right)
+  - section-heading: Container for title and view all link
+  - flex-wrap: wrap for responsive text wrapping
+  - align-items: center for vertical centering
+  - justify-content: center for horizontal centering
+  - flex-direction: column for stacked layout
+{% endcomment %}
 {% style %}
   {% if section.settings.title_alignment == 'center' %}
   .section-id-{{ section.id }} h2 {
@@ -14,6 +38,16 @@
   {% endif %}
 {% endstyle %}
 
+{% comment %}
+  =============================================================================
+  BACKGROUND COLOR STYLING
+  =============================================================================
+  Dynamic background color from section settings
+  - color_bg: Custom background color from theme editor
+  - section-id-{{ section.id }}: Unique identifier for section-specific styling
+  - Only applies background color if setting is not blank
+  - Allows merchants to customize section appearance
+{% endcomment %}
 {% style %}
   {% unless section.settings.color_bg == blank %}
      .section-id-{{ section.id }} {
@@ -22,6 +56,18 @@
   {% endunless %}
 {% endstyle %}
 
+{% comment %}
+  =============================================================================
+  WAVE STYLING INTEGRATION
+  =============================================================================
+  Optional decorative wave borders for visual interest
+  - wave: Wave position setting (none/top/bottom/both)
+  - wave-styles: Snippet for rendering wave SVG elements
+  - wave_position: Passes wave position to wave-styles snippet
+  - section_id: Unique section identifier for styling
+  - fill_color: Wave color matches section background color
+  - Creates seamless integration between waves and background
+{% endcomment %}
 {%- if section.settings.wave != "none" -%}
   {%- render 'wave-styles', 
     wave_position: section.settings.wave, 
@@ -29,8 +75,46 @@
     fill_color: section.settings.color_bg -%}
 {%- endif -%}
 
+{% comment %}
+  =============================================================================
+  MAIN ACCORDION CONTAINER
+  =============================================================================
+  Primary container with section identification and component setup
+  - id="section-id-{{ section.id }}": Unique section identifier
+  - data-section-type="accordion": Identifies section type for JavaScript
+  - half-gutter: Reduced spacing for tighter layout
+  - section-spacing: Consistent vertical spacing between sections
+  - section-id-{{ section.id }}: CSS class for section-specific styling
+  - use-alt-bg: Optional alternate background color class
+  - data-components="accordion": Required JavaScript component
+{% endcomment %}
 <div id="section-id-{{ section.id }}" data-section-type="accordion" class="half-gutter section-spacing section-id-{{ section.id }} {% if section.settings.alternate_bg_color %}use-alt-bg{% endif %}" data-components="accordion">
-  <div class="accordion-container reading-width {% if section.settings.title == blank %}no-title{% endif %}" >
+
+  {% comment %}
+    =============================================================================
+    ACCORDION CONTENT CONTAINER
+    =============================================================================
+    Content wrapper with responsive width and title handling
+    - accordion-container: Main content wrapper
+    - reading-width: Optimal width for readable content
+    - no-title: CSS class when no title is provided
+    - section.settings.title: Section title from theme editor
+  {% endcomment %}
+  <div class="accordion-container reading-width {% if section.settings.title == blank %}no-title{% endif %}">
+
+    {% comment %}
+      =============================================================================
+      SECTION HEADING & TITLE
+      =============================================================================
+      Section title with optional view all link
+      - section-heading: Container for title and navigation
+      - section-heading--with-spacing: Additional spacing for title
+      - container container--large: Responsive container sizing
+      - data-cc-animate: JavaScript animation trigger
+      - h2: Semantic heading level for section structure
+      - view_all_page: Optional link to full FAQ page
+      - faq.view_all: Localized text for view all link
+    {% endcomment %}
     {% if section.settings.title != blank %}
       <div class="section-heading section-heading--with-spacing container container--large"
            data-cc-animate>
@@ -44,6 +128,16 @@
       </div>
     {% endif %}
 
+    {% comment %}
+      =============================================================================
+      ACCORDION CONTENT AREA
+      =============================================================================
+      Main accordion content container with product integration
+      - container container--large: Responsive container for accordion items
+      - data-cc-animate: JavaScript animation trigger for content
+      - id="faqs-product": Unique identifier for product-specific FAQs
+      - product: Current product object for product-specific content
+    {% endcomment %}
     <div class="container container--large" data-cc-animate id="faqs-product">
       
 
@@ -91,7 +185,7 @@
           {% for question in product_type_collection.metafields.custom.faqs_questions.value %}
             {% assign isCustom = true %}
             {% assign text = question.answers | metafield_tag %}
-            {%- render "accordion", first_item_open: false, item1_title: question.question, item1_content: text, id_accordion: "general"-%}
+            {%- render "accordion", first_item_open: false, item1_title: question.question, item1_content: text, id_accordion: "general" -%}
           {% endfor %}
 
           {% unless isCustom %}
@@ -238,143 +332,143 @@
           "label": "Icon",
           "default": "none",
           "options": [
-  {
-    "value": "none",
-    "label": "None"
-  },
-  {
-    "value": "award",
-    "label": "Award"
-  },
-  {
-    "value": "box",
-    "label": "Box"
-  },
-  {
-    "value": "briefcase",
-    "label": "Briefcase"
-  },
-  {
-    "value": "calendar",
-    "label": "Calendar"
-  },
-  {
-    "value": "chat_bubble",
-    "label": "Chat bubble"
-  },
-  {
-    "value": "check_mark",
-    "label": "Check mark"
-  },
-  {
-    "value": "clock",
-    "label": "Clock"
-  },
-  {
-    "value": "credit_card",
-    "label": "Credit card"
-  },
-  {
-    "value": "dollar_sign",
-    "label": "Dollar sign"
-  },
-  {
-    "value": "dryer",
-    "label": "Dryer"
-  },
-  {
-    "value": "eye",
-    "label": "Eye"
-  },
-  {
-    "value": "feather",
-    "label": "Feather"
-  },
-  {
-    "value": "gift",
-    "label": "Gift"
-  },
-  {
-    "value": "heart",
-    "label": "Heart"
-  },
-  {
-    "value": "iron",
-    "label": "Iron"
-  },
-  {
-    "value": "leaf",
-    "label": "Leaf"
-  },
-  {
-    "value": "leather",
-    "label": "Leather"
-  },
-  {
-    "value": "lock",
-    "label": "Lock"
-  },
-  {
-    "value": "map_pin",
-    "label": "Map pin"
-  },
-  {
-    "value": "pants",
-    "label": "Pants"
-  },
-  {
-    "value": "percent",
-    "label": "Percent"
-  },
-  {
-    "value": "plane",
-    "label": "Plane"
-  },
-  {
-    "value": "price_tag",
-    "label": "Price tag"
-  },
-  {
-    "value": "question_mark",
-    "label": "Question mark"
-  },
-  {
-    "value": "return",
-    "label": "Return"
-  },
-  {
-    "value": "ruler",
-    "label": "Ruler"
-  },
-  {
-    "value": "scissors",
-    "label": "Scissors"
-  },
-  {
-    "value": "shirt",
-    "label": "Shirt"
-  },
-  {
-    "value": "shoe",
-    "label": "Shoe"
-  },
-  {
-    "value": "silhouette",
-    "label": "Silhouette"
-  },
-  {
-    "value": "star",
-    "label": "Star"
-  },
-  {
-    "value": "truck",
-    "label": "Truck"
-  },
-  {
-    "value": "washing",
-    "label": "Washing"
-  }
-]
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "award",
+              "label": "Award"
+            },
+            {
+              "value": "box",
+              "label": "Box"
+            },
+            {
+              "value": "briefcase",
+              "label": "Briefcase"
+            },
+            {
+              "value": "calendar",
+              "label": "Calendar"
+            },
+            {
+              "value": "chat_bubble",
+              "label": "Chat bubble"
+            },
+            {
+              "value": "check_mark",
+              "label": "Check mark"
+            },
+            {
+              "value": "clock",
+              "label": "Clock"
+            },
+            {
+              "value": "credit_card",
+              "label": "Credit card"
+            },
+            {
+              "value": "dollar_sign",
+              "label": "Dollar sign"
+            },
+            {
+              "value": "dryer",
+              "label": "Dryer"
+            },
+            {
+              "value": "eye",
+              "label": "Eye"
+            },
+            {
+              "value": "feather",
+              "label": "Feather"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            },
+            {
+              "value": "heart",
+              "label": "Heart"
+            },
+            {
+              "value": "iron",
+              "label": "Iron"
+            },
+            {
+              "value": "leaf",
+              "label": "Leaf"
+            },
+            {
+              "value": "leather",
+              "label": "Leather"
+            },
+            {
+              "value": "lock",
+              "label": "Lock"
+            },
+            {
+              "value": "map_pin",
+              "label": "Map pin"
+            },
+            {
+              "value": "pants",
+              "label": "Pants"
+            },
+            {
+              "value": "percent",
+              "label": "Percent"
+            },
+            {
+              "value": "plane",
+              "label": "Plane"
+            },
+            {
+              "value": "price_tag",
+              "label": "Price tag"
+            },
+            {
+              "value": "question_mark",
+              "label": "Question mark"
+            },
+            {
+              "value": "return",
+              "label": "Return"
+            },
+            {
+              "value": "ruler",
+              "label": "Ruler"
+            },
+            {
+              "value": "scissors",
+              "label": "Scissors"
+            },
+            {
+              "value": "shirt",
+              "label": "Shirt"
+            },
+            {
+              "value": "shoe",
+              "label": "Shoe"
+            },
+            {
+              "value": "silhouette",
+              "label": "Silhouette"
+            },
+            {
+              "value": "star",
+              "label": "Star"
+            },
+            {
+              "value": "truck",
+              "label": "Truck"
+            },
+            {
+              "value": "washing",
+              "label": "Washing"
+            }
+          ]
         },
         {
           "id": "title",

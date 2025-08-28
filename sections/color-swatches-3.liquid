@@ -57,7 +57,7 @@
 
         {% if block.settings.primary_image != blank %}
 
-          <img class="color-swatch-img" src="{{ block.settings.primary_image | img_url }}">
+          <img class="color-swatch-img" src="{{ block.settings.primary_image | image_url: width: 100, height: 100 }}">
 
         {% else %}
 

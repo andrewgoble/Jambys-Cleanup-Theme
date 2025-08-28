@@ -1470,3 +1470,17 @@ button[data-gender-category].gender-active span{
     background-color: rgb(255, 0, 0);
   }
 }
+
+/* =============================================================================
+   HIDE OKENDO REVIEWS TAB
+   =============================================================================
+   Hide the Okendo floating reviews tab since it's not used */
+.oke-reviewsTab,
+.oke-reviewsTab--small-top-left,
+.oke-reviewsTab--large-top-left,
+[data-oke-container] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}

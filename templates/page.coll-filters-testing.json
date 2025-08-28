@@ -1,18 +1,10 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "main": {
       "type": "main-page",
       "disabled": true,
-      "settings": {}
+      "settings": {
+      }
     },
     "replo_coll_filters_hPqrP3": {
       "type": "replo-coll-filters",
@@ -20,21 +12,21 @@
         "filter_icon_D8xJ6R": {
           "type": "filter_icon",
           "settings": {
-            "filter_icon_img": "shopify:\/\/shop_images\/Illustration_Long_Jambys_WB.png",
+            "filter_icon_img": "shopify://shop_images/Illustration_Long_Jambys_WB.png",
             "product_type": "Long Jambys"
           }
         },
         "filter_icon_EdNRNa": {
           "type": "filter_icon",
           "settings": {
-            "filter_icon_img": "shopify:\/\/shop_images\/Illustration_Jambys_WB.png",
+            "filter_icon_img": "shopify://shop_images/Illustration_Jambys_WB.png",
             "product_type": "Jambys"
           }
         },
         "filter_icon_GUqcPc": {
           "type": "filter_icon",
           "settings": {
-            "filter_icon_img": "shopify:\/\/shop_images\/Illustration_Air_JamTee_WB.png",
+            "filter_icon_img": "shopify://shop_images/Illustration_Air_JamTee_WB.png",
             "product_type": "JamTee"
           }
         }

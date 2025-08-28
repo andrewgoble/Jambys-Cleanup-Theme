@@ -1,3 +1,27 @@
+{% comment %}
+  =============================================================================
+  RICH TEXT SECTION
+  =============================================================================
+  Flexible content section for displaying formatted text and images
+  - Supports customizable headings, subheadings, and body text
+  - Configurable color schemes with custom color options
+  - Responsive typography with mobile/desktop size adjustments
+  - Optional image display with configurable width
+  - Dynamic button styling with auto color scheme detection
+  - Reading width option for optimal text readability
+  - Staggered animations for content entrance effects
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  HEADING TAG DETERMINATION
+  =============================================================================
+  Sets appropriate heading tag based on section settings
+  - heading_tag: Default heading level (h2)
+  - section.settings.heading_h1: Boolean to promote heading to h1
+  - Used for SEO and document structure hierarchy
+  - H1 should only be used once per page for main page heading
+{% endcomment %}
 {%- liquid
   assign heading_tag = "h2"
   if section.settings.heading_h1
@@ -5,7 +29,31 @@
   endif
 -%}
 
+{% comment %}
+  =============================================================================
+  MAIN SECTION CONTAINER
+  =============================================================================
+  Primary container with section identification and styling
+  - id="section-id-{{ section.id }}": Unique section identifier
+  - section-id-{{ section.id }}: CSS class for section-specific styling
+  - cf: Clearfix utility class for layout
+  - use-{{ section.settings.color_scheme }}-bg: Dynamic color scheme class
+  - data-cc-animate: JavaScript animation trigger for entrance effects
+{% endcomment %}
 <div id="section-id-{{ section.id }}" class="section-id-{{ section.id }} cf use-{{ section.settings.color_scheme }}-bg" data-cc-animate>
+
+{% comment %}
+  =============================================================================
+  DYNAMIC COLOR SCHEME STYLING
+  =============================================================================
+  CSS styles for custom color schemes and button interactions
+  - color_scheme == "custom": Custom color scheme option
+  - color_bg: Custom background color from theme editor
+  - --cust-text-color: CSS custom property for text color
+  - button_style == 'auto': Automatic button color scheme
+  - Hover effects: Button colors invert on hover for custom schemes
+  - Ensures proper contrast and visual hierarchy
+{% endcomment %}
   {% style %}
     {% if section.settings.color_scheme == "custom" %}
       .section-id-{{ section.id }} {
@@ -22,10 +70,31 @@
       {% endif %}
     {% endif %}
 
+{% comment %}
+  =============================================================================
+  IMAGE WIDTH STYLING
+  =============================================================================
+  Sets custom width for section image when provided
+  - section.settings.image_width: Width setting from theme editor
+  - .section-rich-text__image: Image container class
+  - .rimage-outer-wrapper: Responsive image wrapper
+  - width: Constrains image to specified pixel width
+{% endcomment %}
     #section-id-{{ section.id }} .section-rich-text__image .rimage-outer-wrapper {
       width: {{ section.settings.image_width }}px;
     }
 
+{% comment %}
+  =============================================================================
+  RESPONSIVE TYPOGRAPHY STYLES
+  =============================================================================
+  Dynamic typography sizing for different screen sizes
+  - Medium screens (768px+): 70% of desktop title size
+  - Large screens (992px+): Full desktop title size
+  - title_size: Base title size from section settings
+  - feature-header: Title styling class
+  - Ensures readability across all device sizes
+{% endcomment %}
     @media (min-width: 768px) {
       #section-id-{{ section.id }} .feature-header {
         {%- assign title_size_medium = section.settings.title_size | times: 0.7 -%}
@@ -40,19 +109,78 @@
     }
   {% endstyle %}
 
+{% comment %}
+  =============================================================================
+  CONTENT CONTAINER WRAPPER
+  =============================================================================
+  Main content container with spacing and width options
+  - section-spacing: Consistent vertical spacing between sections
+  - wide-container: Contained width layout option
+  - section-spacing--sm-b: Reduced bottom spacing option
+  - no_padding_bottom: Boolean setting to remove bottom padding
+{% endcomment %}
   <div class="section-spacing wide-container {% if section.settings.no_padding_bottom %}section-spacing--sm-b{% endif %}">
+
+{% comment %}
+  =============================================================================
+  CONTENT LAYOUT & ALIGNMENT
+  =============================================================================
+  Content wrapper with alignment and width controls
+  - content transparent: Base content styling with transparency
+  - align-{{ section.settings.text_alignment }}: Dynamic text alignment
+  - reading-width: Optimal width for readable text content
+  - full_width: Boolean setting to control content width
+{% endcomment %}
     <div class="content transparent align-{{ section.settings.text_alignment }} {% if section.settings.full_width == false %}reading-width{% endif %}">
 
+{% comment %}
+  =============================================================================
+  OPTIONAL IMAGE DISPLAY
+  =============================================================================
+  Displays section image when provided in theme editor
+  - section.settings.image: Image picker from theme editor
+  - section-rich-text__image: Image container class
+  - data-cc-animate="cc-fade-in-up": Animation trigger for image entrance
+  - responsive-image: Snippet for optimized image rendering
+  - Only renders when image is not blank
+{% endcomment %}
       {% if section.settings.image != blank %}
         <div class="section-rich-text__image" data-cc-animate="cc-fade-in-up">
           {%- render 'responsive-image', image: section.settings.image -%}
         </div>
       {% endif %}
 
+{% comment %}
+  =============================================================================
+  SUBHEADING TEXT
+  =============================================================================
+  Displays subheading text above main title
+  - feature-subheader: Subheading styling class
+  - section.settings.subheading: Subheading text from theme editor
+  - escape filter: Prevents XSS in text content
+  - data-cc-animate="cc-fade-in-up": Animation trigger for entrance
+  - data-cc-animate-delay="0.1s": Staggered animation delay
+  - Only renders when subheading is not blank
+{% endcomment %}
       {% if section.settings.subheading != blank %}
         <div class="feature-subheader" data-cc-animate="cc-fade-in-up" data-cc-animate-delay="0.1s">{{ section.settings.subheading | escape }}</div>
       {% endif %}
 
+{% comment %}
+  =============================================================================
+  MAIN HEADING TITLE
+  =============================================================================
+  Displays main section title with dynamic heading tag
+  - {{ heading_tag }}: Dynamic heading level (h1 or h2)
+  - feature-header: Base title styling class
+  - align-{{ section.settings.text_alignment }}: Dynamic text alignment
+  - feature-header--large: Large title class for titles 86px+
+  - feature-header__no-line: Removes underline when no content below
+  - feature-header__no-gap: Removes spacing when no content below
+  - data-cc-animate="cc-fade-in-up": Animation trigger for entrance
+  - data-cc-animate-delay="0.2s": Staggered animation delay
+  - newline_to_br: Converts newlines to line breaks for formatting
+{% endcomment %}
       {% if section.settings.title != blank %}
         <{{ heading_tag }} class="feature-header align-{{ section.settings.text_alignment }}
           {% if section.settings.title_size >= 86 %}feature-header--large{% endif %}
@@ -61,12 +189,44 @@
         </{{ heading_tag }}>
       {% endif %}
 
+{% comment %}
+  =============================================================================
+  BODY TEXT CONTENT
+  =============================================================================
+  Displays main text content below title
+  - rte: Rich text editor styling for formatted content
+  - inherit-colors: Inherits color scheme from section
+  - large-text: Optional enlarged text class
+  - align-{{ section.settings.text_alignment }}: Dynamic text alignment
+  - data-cc-animate="cc-fade-in-up": Animation trigger for entrance
+  - data-cc-animate-delay="0.3s": Staggered animation delay
+  - section.settings.text: Text content from theme editor
+  - section.settings.enlarge_text: Boolean for text size control
+{% endcomment %}
       {% if section.settings.text != blank %}
         <div class="rte inherit-colors {% if section.settings.enlarge_text %}large-text{% endif %} align-{{ section.settings.text_alignment }}" data-cc-animate="cc-fade-in-up" data-cc-animate-delay="0.3s">
           {{ section.settings.text }}
         </div>
       {% endif %}
 
+{% comment %}
+  =============================================================================
+  CALL-TO-ACTION BUTTON
+  =============================================================================
+  Displays call-to-action button when label is provided
+  - button-row: Button container with proper spacing
+  - inherit-colors: Inherits color scheme from section
+  - data-cc-animate="cc-fade-in-up": Animation trigger for entrance
+  - data-cc-animate-delay="0.3s": Staggered animation delay
+  - Dynamic button styling based on section settings:
+    - button-custom: Custom styling when not auto
+    - link-display: Link-style button option
+    - button: Standard button styling
+    - alt: Secondary button variant
+    - type-2: Enlarged link styling
+  - data-cc-animate-click: Animation trigger for click effects
+  - href: Links to section.settings.button_link URL
+{% endcomment %}
       {% if section.settings.button_label != blank %}
         <div class="button-row inherit-colors" data-cc-animate="cc-fade-in-up" data-cc-animate-delay="0.3s">
           <a data-cc-animate-click class="
@@ -81,168 +241,180 @@
 </div>
 
 
+{% comment %}
+  =============================================================================
+  SCHEMA CONFIGURATION
+  =============================================================================
+  Theme editor configuration for rich text section
+  - name: Section name displayed in theme editor
+  - class: CSS class for section-specific styling
+  - settings: Global section settings for appearance and behavior
+  - Includes text content, styling, colors, and layout options
+  - Provides comprehensive customization for text-based content
+{% endcomment %}
 {% schema %}
-  {
-    "name": "Rich text",
-    "class": "section-rich-text",
-    "settings": [
-      {
-        "type": "text",
-        "id": "subheading",
-        "label": "Subheading"
-      },
-      {
-        "type": "textarea",
-        "id": "title",
-        "label": "Heading",
-        "default": "Rich text"
-      },
-      {
-        "type": "range",
-        "id": "title_size",
-        "min": 20,
-        "max": 150,
-        "step": 2,
-        "unit": "px",
-        "label": "Heading text size",
-        "default": 60
-      },
-      {
-        "type": "checkbox",
-        "id": "heading_h1",
-        "label": "Set as primary page heading",
-        "info": "Uses <h1> tag. One per page recommended. [Learn more](https://cleancanvas.co.uk/support/showcase/seo#inner-anchor-0)",
-        "default": false
-      },
-      {
-        "type": "richtext",
-        "id": "text",
-        "label": "Text",
-        "default": "<p>Use this text to share information about your store with your customers.</p><p>Describe product, share announcements, or welcome customers to your store.</p>"
-      },
-      {
-        "type": "image_picker",
-        "id": "image",
-        "label": "Image"
-      },
-      {
-        "type": "range",
-        "id": "image_width",
-        "min": 60,
-        "max": 700,
-        "step": 10,
-        "label": "Image width",
-        "unit": "px",
-        "default": 120
-      },
-      {
-        "type": "text",
-        "id": "button_label",
-        "label": "Button"
-      },
-      {
-        "type": "url",
-        "id": "button_link",
-        "label": "Button link"
-      },
-      {
-        "type": "select",
-        "id": "button_style",
-        "label": "Button style",
-        "options": [
-          {
-            "label": "Button - primary",
-            "value": "primary"
-          },
-          {
-            "label": "Button - secondary",
-            "value": "secondary"
-          },
-          {
-            "label": "Button - auto",
-            "value": "auto"
-          },
-          {
-            "label": "Link",
-            "value": "link"
-          }
-        ],
-        "default": "auto"
-      },
-      {
-        "type": "select",
-        "id": "text_alignment",
-        "label": "Text alignment",
-        "default": "center",
-        "options": [
-          {
-            "label": "Left",
-            "value": "left"
-          },
-          {
-            "label": "Center",
-            "value": "center"
-          },
-          {
-            "label": "Right",
-            "value": "right"
-          }
-        ]
-      },
-      {
-        "type": "checkbox",
-        "id": "enlarge_text",
-        "label": "Enlarge text",
-        "default": false
-      },
-      {
-        "type": "checkbox",
-        "id": "full_width",
-        "label": "Wide display",
-        "default": false
-      },
-      {
-        "type": "checkbox",
-        "id": "no_padding_bottom",
-        "label": "Remove bottom spacing",
-        "default": false
-      },
-      {
-        "type": "radio",
-        "id": "color_scheme",
-        "label": "Color scheme",
-        "default": "standard",
-        "options": [
-          {
-            "value": "standard",
-            "label": "Standard"
-          },
-          {
-            "value": "alt",
-            "label": "Alternate colors"
-          },
-          {
-            "value": "custom",
-            "label": "Custom colors"
-          }
-        ]
-      },
-      {
-        "type": "color",
-        "id": "color_bg",
-        "label": "Custom background color"
-      },
-      {
-        "type": "color",
-        "id": "color_text",
-        "label": "Custom text color"
+{
+  "name": "Rich text",
+  "class": "section-rich-text",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Heading",
+      "default": "Rich text"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 20,
+      "max": 150,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading text size",
+      "default": 60
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_h1",
+      "label": "Set as primary page heading",
+      "info": "Uses <h1> tag. One per page recommended. [Learn more](https://cleancanvas.co.uk/support/showcase/seo#inner-anchor-0)",
+      "default": false
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Use this text to share information about your store with your customers.</p><p>Describe product, share announcements, or welcome customers to your store.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "image_width",
+      "min": 60,
+      "max": 700,
+      "step": 10,
+      "label": "Image width",
+      "unit": "px",
+      "default": 120
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "options": [
+        {
+          "label": "Button - primary",
+          "value": "primary"
+        },
+        {
+          "label": "Button - secondary",
+          "value": "secondary"
+        },
+        {
+          "label": "Button - auto",
+          "value": "auto"
+        },
+        {
+          "label": "Link",
+          "value": "link"
+        }
+      ],
+      "default": "auto"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "default": "center",
+      "options": [
+        {
+          "label": "Left",
+          "value": "left"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "right"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "enlarge_text",
+      "label": "Enlarge text",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Wide display",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "no_padding_bottom",
+      "label": "Remove bottom spacing",
+      "default": false
+    },
+    {
+      "type": "radio",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "standard",
+      "options": [
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "alt",
+          "label": "Alternate colors"
+        },
+        {
+          "value": "custom",
+          "label": "Custom colors"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "color_bg",
+      "label": "Custom background color"
+    },
+    {
+      "type": "color",
+      "id": "color_text",
+      "label": "Custom text color"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rich text",
+      "settings": {
       }
-    ],
-    "presets": [
-      {
-        "name": "Rich text",
-        "settings": {}
-      }
-    ]
-  }
+    }
+  ]
+}
 {% endschema %}

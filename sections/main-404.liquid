@@ -1,4 +1,36 @@
+{% comment %}
+  =============================================================================
+  MAIN 404 ERROR PAGE SECTION
+  =============================================================================
+  Custom 404 error page for when users navigate to non-existent URLs
+  - Centralized content layout with proper spacing
+  - Localized error messages from theme locales
+  - Animated content with JavaScript hooks
+  - Homepage link for user navigation recovery
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  404 PAGE CONTAINER & CONTENT STRUCTURE
+  =============================================================================
+  Main error page container with responsive layout and animations
+  - central: Centers content within page width constraints
+  - content: Applies consistent content styling
+  - rte: Rich text editor styling for consistent typography
+  - py-medium: Vertical padding for proper spacing
+  - data-cc-animate: JavaScript animation hook for page entrance
+{% endcomment %}
 <div class="central content rte py-medium" data-cc-animate>
+  {% comment %}
+    =============================================================================
+    ERROR TITLE & MESSAGE
+    =============================================================================
+    Primary error message with localized text
+    - feature-header: Consistent heading styling across theme
+    - general.404.title: Localized "Page not found" message
+    - general.404.subtext: Localized explanation text
+    - align-center: Centers the error message for better UX
+  {% endcomment %}
   <h1 class="feature-header">{{ 'general.404.title' | t }}</h1>
   <p class="align-center">{{ 'general.404.subtext' | t }} <a data-cc-animate-click href="{{ routes.root_url }}">{{ 'general.404.link' | t }}</a></p>
 </div>

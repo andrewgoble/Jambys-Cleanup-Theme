@@ -178,7 +178,7 @@ results.filters : {{ results.filters | json }}
               {%- endcapture -%}
               {{ filter_content }}
 
-              {{current_sort_by }}
+              {{ current_sort_by }}
 
             {{ form_hidden_fields }}
 
@@ -265,7 +265,7 @@ results.filters : {{ results.filters | json }}
         
         <form id="FacetsForm">
           {%- for filter in results.filters -%}
-            {%- if filter.label == "Color" or filter.label == "Product type"-%}
+            {%- if filter.label == "Color" or filter.label == "Product type" -%}
               {%- continue -%}
             {%- endif -%}
 
@@ -343,7 +343,7 @@ results.filters : {{ results.filters | json }}
 
                       {%- if value.count > 0 or section.settings.show_filter_deadends %}
                         {%- assign num_available_options = num_available_options | plus: 1 -%}
-                        <label class="cc-checkbox{% if product_type_icon != '' %} has-icon{% endif %}{% if is_color %} is-color{% endif %} {{ value.label | downcase | escape | replace: " ", "-"}}">
+                        <label class="cc-checkbox{% if product_type_icon != '' %} has-icon{% endif %}{% if is_color %} is-color{% endif %} {{ value.label | downcase | escape | replace: " ", "-" }}">
 
                           {% if is_color %}
                           {% comment %}
@@ -360,7 +360,7 @@ results.filters : {{ results.filters | json }}
 
                           <span class="cc-checkbox__label">
                             {% if product_type_icon != '' %}
-                              <img class="product-type-filter-icon" src="{{ product_type_icon | img_url }}" loading="lazy">
+                              <img class="product-type-filter-icon" src="{{ product_type_icon | image_url: width: 100, height: 100 }}" loading="lazy">
                             {% endif %}
                             {{ value.label | escape }} 
                           </span>
@@ -469,7 +469,7 @@ results.filters : {{ results.filters | json }}
         
         {%- capture filter_content2 -%}
         {%- for option in results.sort_options -%}
-          {%- if option.value == "title-ascending" or  option.value == "title-descending" or option.value == "created-ascending" or option.value == "best-selling"-%}
+          {%- if option.value == "title-ascending" or  option.value == "title-descending" or option.value == "created-ascending" or option.value == "best-selling" -%}
             {% continue %}
           {%- elsif option.value == "manual" -%}
             <div class="item-radio-sorting">
@@ -512,7 +512,7 @@ results.filters : {{ results.filters | json }}
           {%- endif -%}
         {%- endfor -%}
       {%- endcapture -%}
-        {{filter_content2 }}
+        {{ filter_content2 }}
       </div>
 
     {% endif %}
@@ -521,7 +521,7 @@ results.filters : {{ results.filters | json }}
       <div class="dtc-collection-results">
         {%- capture filter_content2 -%} 
           {%- for option in results.sort_options -%}
-            {%- if option.value == "title-ascending" or  option.value == "title-descending" or option.value == "created-ascending" or option.value == "best-selling"-%}
+            {%- if option.value == "title-ascending" or  option.value == "title-descending" or option.value == "created-ascending" or option.value == "best-selling" -%}
               {% continue %}
             {%- elsif option.value == "manual" -%}
               <div class="item-radio-sorting">
@@ -574,7 +574,7 @@ results.filters : {{ results.filters | json }}
           </div>
         </div>
         
-        <div class="sort-item-child" id="sort-item-child">{{filter_content2 }}</div>
+        <div class="sort-item-child" id="sort-item-child">{{ filter_content2 }}</div>
       </div>
       
       {% capture active_filters_html %}
@@ -599,7 +599,7 @@ results.filters : {{ results.filters | json }}
                 {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
                   <li>
                     <a href="{{ filter.url_to_remove }}" class="active-filter-controls__tag" data-active-tag="{{ filter | escape }}">
-                      {%-if filter.min_value.value %}{%- render "price", price: filter.min_value.value -%}{%- else -%}{%- render "price", price: 0 -%}{%- endif -%}&nbsp;-&nbsp;{%- if filter.max_value.value -%}{%- render "price", price: filter.max_value.value -%}{%- else -%}{%- render "price", price: filter.range_max -%}{% endif %}
+                      {%- if filter.min_value.value %}{%- render "price", price: filter.min_value.value -%}{%- else -%}{%- render "price", price: 0 -%}{%- endif -%}&nbsp;-&nbsp;{%- if filter.max_value.value -%}{%- render "price", price: filter.max_value.value -%}{%- else -%}{%- render "price", price: filter.range_max -%}{% endif %}
                     </a>
                   </li>
                 {%- endif -%}
@@ -614,7 +614,7 @@ results.filters : {{ results.filters | json }}
           </ul>
         </div>
       {% endcapture %}
-      {%- if active_filters_html contains 'active-filter-controls__tag'-%}
+      {%- if active_filters_html contains 'active-filter-controls__tag' -%}
         {{ active_filters_html }}
       {%- endif -%}
 

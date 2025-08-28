@@ -1,6 +1,43 @@
+{% comment %}
+  =============================================================================
+  TESTIMONIALS SECTION
+  =============================================================================
+  Customer testimonial display section with flexible image layouts
+  - Supports single or dual image testimonials with captions
+  - Configurable star ratings and content layout
+  - Responsive design with scroll animations
+  - Conditional rendering based on image availability
+  - Customizable button styles and link options
+  - Uses Shopify blocks for flexible content management
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  MAIN TESTIMONIALS CONTAINER
+  =============================================================================
+  Primary container with dynamic styling and responsive behavior
+  - section-id-{{ section.id }}: Unique section identifier
+  - data-section-type="testimonials": JavaScript identifier for functionality
+  - half-gutter: Reduced spacing between elements
+  - section-spacing: Standard vertical spacing between sections
+  - section-spacing--top-only: Top-only spacing variant
+  - use-alt-bg: Alternate background color option
+  - data-cc-animate: JavaScript animation trigger for entrance effects
+{% endcomment %}
 <div id="section-id-{{ section.id }}"
      data-section-type="testimonials"
      class="half-gutter section-spacing section-spacing--top-only {% if section.settings.alternate_bg_color %}use-alt-bg{% endif %}" data-cc-animate>
+  
+  {% comment %}
+    =============================================================================
+    IMAGE AVAILABILITY DETECTION
+    =============================================================================
+    Determines if any testimonial blocks contain images
+    - no_images: Boolean flag for image presence
+    - Iterates through section blocks to check for images
+    - image1 and image2: Individual image fields from block settings
+    - Used to adjust layout and styling when no images are present
+  {% endcomment %}
   {% assign no_images = true %}
   {%- for block in section.blocks -%}
     {% if block.settings.image1 != blank or block.settings.image2 != blank %}
@@ -8,6 +45,18 @@
     {% endif %}
   {%- endfor -%}
 
+  {% comment %}
+    =============================================================================
+    SECTION TITLE DISPLAY
+    =============================================================================
+    Optional section title with conditional styling
+    - section.settings.title: Custom title from theme settings
+    - container container--large: Large container for title positioning
+    - section-heading: Consistent heading styling
+    - section-heading--with-spacing: Spacing variant for title
+    - centered: Centers title when no images are present
+    - data-cc-animate: JavaScript animation trigger
+  {% endcomment %}
   {% if section.settings.title != blank %}
     <div class="container container--large">
       <div class="section-heading section-heading--with-spacing {% if no_images %}centered{% endif %}" data-cc-animate>
@@ -16,14 +65,53 @@
     </div>
   {% endif %}
 
+  {% comment %}
+    =============================================================================
+    TESTIMONIALS CONTENT CONTAINER
+    =============================================================================
+    Main content area with conditional styling
+    - container container--large: Large container for content layout
+    - section-testimonials--no-images: Special styling when no images present
+    - no_images: Boolean flag from image availability detection
+  {% endcomment %}
   <div class="container container--large {% if no_images %}section-testimonials--no-images{% endif %}">
 
+    {% comment %}
+      =============================================================================
+      TESTIMONIAL BLOCKS ITERATION
+      =============================================================================
+      Loops through individual testimonial blocks
+      - section.blocks: Array of testimonial content blocks
+      - Each block represents a single customer testimonial
+      - Supports flexible image and content configurations
+    {% endcomment %}
     {%- for block in section.blocks -%}
+      {% comment %}
+        =============================================================================
+        IMAGE ASSIGNMENT & VALIDATION
+        =============================================================================
+        Assigns and validates image content for each testimonial
+        - image1: Primary image for testimonial display
+        - image1_caption: Caption text for primary image
+        - image2: Secondary image for dual-image layouts
+        - image2_caption: Caption text for secondary image
+        - Fallback logic: Uses image2 as image1 if image1 is missing
+      {% endcomment %}
       {% assign image1 = block.settings.image1 %}
       {% assign image1_caption = block.settings.image1_caption %}
       {% assign image2 = block.settings.image2 %}
       {% assign image2_caption = block.settings.image2_caption %}
 
+      {% comment %}
+        =============================================================================
+        IMAGE FALLBACK LOGIC
+        =============================================================================
+        Handles cases where only secondary image is available
+        - image1 == blank and image2 != blank: Only secondary image present
+        - Moves image2 to image1 position for consistent layout
+        - Clears image2 variables to prevent duplication
+        - Ensures proper image positioning in testimonial layout
+      {% endcomment %}
       {% if image1 == blank and image2 != blank %}
         {% assign image1 = image2 %}
         {% assign image1_caption = image2_caption %}
@@ -31,6 +119,19 @@
         {% assign image2_caption = "" %}
       {% endif %}
 
+      {% comment %}
+        =============================================================================
+        TESTIMONIAL BLOCK CONTAINER
+        =============================================================================
+        Individual testimonial block with dynamic styling
+        - cc-testimonial: Base testimonial styling class
+        - cc-testimonial--align-{{ block.settings.layout }}: Layout alignment class
+        - cc-testimonial--no-images: Styling for text-only testimonials
+        - cc-testimonial--one-image: Styling for single-image testimonials
+        - cc-testimonial--two-images: Styling for dual-image testimonials
+        - block.shopify_attributes: Shopify block identification attributes
+        - data-scrollax-parent: Scroll animation parent container
+      {% endcomment %}
       <div class="cc-testimonial
         cc-testimonial--align-{{ block.settings.layout }}
         {% if image1 == blank and image2 == blank %}cc-testimonial--no-images{% endif %}
@@ -40,6 +141,19 @@
         {{ block.shopify_attributes }}
            data-scrollax-parent="true">
 
+        {% comment %}
+          =============================================================================
+          PRIMARY IMAGE DISPLAY
+          =============================================================================
+          Main image with caption and responsive handling
+          - image1: Primary testimonial image
+          - cc-testimonial__column: Image column layout class
+          - cc-testimonial__image-with-caption: Image and caption container
+          - data-cc-animate: JavaScript animation trigger
+          - cc-testimonial__image-wrapper: Image wrapper for styling
+          - data-scrollax: Scroll animation properties for parallax effect
+          - responsive-image: Responsive image rendering snippet
+        {% endcomment %}
         {% if image1 != blank %}
           <div class="cc-testimonial__column">
             <figure class="cc-testimonial__image-with-caption" data-cc-animate>
@@ -49,6 +163,16 @@
                 </div>
               </div>
 
+              {% comment %}
+                =============================================================================
+                PRIMARY IMAGE CAPTION
+                =============================================================================
+                Optional caption text for primary image
+                - image1_caption: Caption text from block settings
+                - figcaption: Semantic HTML for image captions
+                - cc-testimonial__image-with-caption__caption: Caption styling class
+                - Only displays when caption text is provided
+              {% endcomment %}
               {% if image1_caption != blank %}
                 <figcaption class="cc-testimonial__image-with-caption__caption">
                   {{ image1_caption }}
@@ -58,8 +182,30 @@
           </div>
         {% endif %}
 
+        {% comment %}
+          =============================================================================
+          TESTIMONIAL CONTENT COLUMN
+          =============================================================================
+          Main content area with text, rating, and button
+          - cc-testimonial__column: Content column layout class
+          - cc-testimonial__content: Content container styling
+          - overlay-type: Overlay styling for content positioning
+          - Contains star rating, title, text, and call-to-action button
+        {% endcomment %}
         <div class="cc-testimonial__column">
           <div class="cc-testimonial__content overlay-type">
+            {% comment %}
+              =============================================================================
+              STAR RATING DISPLAY
+              =============================================================================
+              Dynamic star rating based on block settings
+              - block.settings.star_rating: Rating value from 1-5
+              - cc-testimonial__star-rating: Rating container styling
+              - data-cc-animate: JavaScript animation trigger
+              - cc-fade-in-up: Fade-in upward animation effect
+              - Loops through rating value to display individual stars
+              - svg-star: Star icon rendering snippet
+            {% endcomment %}
             {%- if block.settings.star_rating > 0 -%}
               <div class="cc-testimonial__star-rating" data-cc-animate="cc-fade-in-up">
                 {%- for i in (1..block.settings.star_rating) -%}
@@ -68,18 +214,53 @@
               </div>
             {%- endif -%}
 
+            {% comment %}
+              =============================================================================
+              TESTIMONIAL TITLE
+              =============================================================================
+              Customer testimonial title or name
+              - block.settings.title: Title text from block settings
+              - line-1: Primary text styling class
+              - data-cc-animate: JavaScript animation trigger
+              - cc-fade-in-up: Fade-in upward animation effect
+              - newline_to_br: Converts line breaks to HTML br tags
+            {% endcomment %}
             {%- if block.settings.title != blank -%}
               <h3 class="line-1" data-cc-animate="cc-fade-in-up">
                 {{ block.settings.title | newline_to_br }}
               </h3>
             {%- endif -%}
 
+            {% comment %}
+              =============================================================================
+              TESTIMONIAL TEXT CONTENT
+              =============================================================================
+              Main testimonial content or quote
+              - block.settings.text: Rich text content from block settings
+              - rte: Rich text editor styling for consistent typography
+              - line-2: Secondary text styling class
+              - data-cc-animate: JavaScript animation trigger
+              - cc-fade-in-up: Fade-in upward animation effect
+            {% endcomment %}
             {%- if block.settings.text != blank -%}
               <div class="rte line-2" data-cc-animate="cc-fade-in-up">
                 {{ block.settings.text }}
               </div>
             {%- endif -%}
 
+            {% comment %}
+              =============================================================================
+              CALL-TO-ACTION BUTTON
+              =============================================================================
+              Optional button with customizable styling
+              - block.settings.button_label: Button text from block settings
+              - button-row: Button container styling
+              - data-cc-animate: JavaScript animation trigger
+              - cc-fade-in-up: Fade-in upward animation effect
+              - data-cc-animate-click: Click animation trigger
+              - overlay-type-ignore: Ignores overlay positioning
+              - Conditional button styling based on section settings
+            {% endcomment %}
             {% if block.settings.button_label != blank %}
               <div class="button-row" data-cc-animate="cc-fade-in-up">
                 <a data-cc-animate-click
@@ -91,6 +272,19 @@
             {% endif %}
           </div>
 
+          {% comment %}
+            =============================================================================
+            SECONDARY IMAGE DISPLAY
+            =============================================================================
+            Secondary image with caption for dual-image layouts
+            - image2: Secondary testimonial image
+            - cc-testimonial__image-wrapper: Image wrapper for styling
+            - cc-testimonial__image-with-caption: Image and caption container
+            - cc-testimonial__image-with-caption--small: Small image variant styling
+            - data-cc-animate: JavaScript animation trigger
+            - data-scrollax: Scroll animation properties for parallax effect
+            - responsive-image: Responsive image rendering snippet
+          {% endcomment %}
           {% if image2 != blank %}
             <div class="cc-testimonial__image-wrapper">
               <figure class="cc-testimonial__image-with-caption cc-testimonial__image-with-caption--small" data-cc-animate>
@@ -100,6 +294,16 @@
                   </div>
                 </div>
 
+                {% comment %}
+                  =============================================================================
+                  SECONDARY IMAGE CAPTION
+                  =============================================================================
+                  Optional caption text for secondary image
+                  - image2_caption: Caption text from block settings
+                  - figcaption: Semantic HTML for image captions
+                  - cc-testimonial__image-with-caption__caption: Caption styling class
+                  - Only displays when caption text is provided
+                {% endcomment %}
                 {% if image2_caption != blank %}
                   <figcaption class="cc-testimonial__image-with-caption__caption">
                     {{ image2_caption }}
@@ -114,145 +318,200 @@
   </div>
 </div>
 
+{% comment %}
+  =============================================================================
+  SCHEMA CONFIGURATION SUMMARY
+  =============================================================================
+  Theme editor configuration for the testimonials section
+  
+  **SECTION OVERVIEW:**
+  Customer testimonial display section with flexible image layouts and content management.
+  Supports single or dual image testimonials with captions, star ratings, and customizable content.
+  
+  **KEY FEATURES:**
+  - Flexible image layouts (no images, single image, dual images)
+  - Configurable star ratings (0-5 stars)
+  - Customizable content positioning (left/right layout)
+  - Image captions for better context
+  - Call-to-action buttons with link options
+  - Responsive design with scroll animations
+  - Conditional rendering based on content availability
+  
+  **SECTION SETTINGS:**
+  - title: Optional section title
+  - alternate_bg_color: Toggle for alternate background color
+  - button_style: Button styling options (primary, secondary, link)
+  
+  **BLOCK SETTINGS (per testimonial):**
+  - star_rating: Customer rating from 0-5 stars
+  - title: Testimonial heading or customer name
+  - text: Main testimonial content (rich text)
+  - button_label: Optional call-to-action button text
+  - link: Button destination URL
+  - image1: Primary testimonial image (750x1000px recommended)
+  - image1_caption: Caption for primary image
+  - image2: Secondary testimonial image (750x1000px recommended)
+  - image2_caption: Caption for secondary image
+  - layout: Content positioning (left or right)
+  
+  **LAYOUT VARIATIONS:**
+  - cc-testimonial--no-images: Text-only testimonials
+  - cc-testimonial--one-image: Single image testimonials
+  - cc-testimonial--two-images: Dual image testimonials
+  - cc-testimonial--align-left/right: Content positioning
+  
+  **ANIMATION FEATURES:**
+  - Scroll animations with parallax effects
+  - Fade-in animations for content elements
+  - Click animations for interactive elements
+  - Responsive animation triggers
+  
+  **RESPONSIVE BEHAVIOR:**
+  - Mobile-optimized layouts
+  - Conditional styling based on image presence
+  - Responsive image handling
+  - Touch-friendly interactions
+{% endcomment %}
 {% schema %}
-  {
-    "name": "Testimonials",
-    "class": "section-testimonials",
-    "settings": [
-      {
-        "type": "text",
-        "id": "title",
-        "label": "Heading"
+{
+  "name": "Testimonials",
+  "class": "section-testimonials",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "default": "primary",
+      "options": [
+        {
+          "label": "Button - primary",
+          "value": "primary"
+        },
+        {
+          "label": "Button - secondary",
+          "value": "secondary"
+        },
+        {
+          "label": "Link",
+          "value": "link"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "alternate_bg_color",
+      "label": "Use alternate section color",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "range",
+          "id": "star_rating",
+          "min": 0,
+          "max": 5,
+          "step": 1,
+          "label": "Star rating",
+          "default": 5
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Heading",
+          "default": "Testimonial header"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Use to this text to elaborate on the main heading</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "image_picker",
+          "id": "image1",
+          "label": "Image",
+          "info": "750 x 1000px recommended"
+        },
+        {
+          "type": "text",
+          "id": "image1_caption",
+          "label": "Image caption"
+        },
+        {
+          "type": "image_picker",
+          "id": "image2",
+          "label": "Image",
+          "info": "750 x 1000px recommended"
+        },
+        {
+          "type": "text",
+          "id": "image2_caption",
+          "label": "Image caption"
+        },
+        {
+          "type": "select",
+          "id": "layout",
+          "label": "Layout",
+          "options": [
+            {
+              "value": "left",
+              "label": "Testimonial on left"
+            },
+            {
+              "value": "right",
+              "label": "Testimonial on right"
+            }
+          ],
+          "default": "left"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "settings": {
       },
-      {
-        "type": "select",
-        "id": "button_style",
-        "label": "Button style",
-        "default": "primary",
-        "options": [
-          {
-            "label": "Button - primary",
-            "value": "primary"
-          },
-          {
-            "label": "Button - secondary",
-            "value": "secondary"
-          },
-          {
-            "label": "Link",
-            "value": "link"
+      "blocks": [
+        {
+          "type": "testimonial",
+          "settings": {
+            "layout": "right"
           }
-        ]
-      },
-      {
-        "type": "checkbox",
-        "id": "alternate_bg_color",
-        "label": "Use alternate section color",
-        "default": false
-      }
-    ],
-    "blocks": [
-      {
-        "type": "testimonial",
-        "name": "Testimonial",
-        "settings": [
-          {
-            "type": "range",
-            "id": "star_rating",
-            "min": 0,
-            "max": 5,
-            "step": 1,
-            "label": "Star rating",
-            "default": 5
-          },
-          {
-            "type": "textarea",
-            "id": "title",
-            "label": "Heading",
-            "default": "Testimonial header"
-          },
-          {
-            "type": "richtext",
-            "id": "text",
-            "label": "Text",
-            "default": "<p>Use to this text to elaborate on the main heading</p>"
-          },
-          {
-            "type": "text",
-            "id": "button_label",
-            "label": "Button"
-          },
-          {
-            "type": "url",
-            "id": "link",
-            "label": "Link"
-          },
-          {
-            "type": "image_picker",
-            "id": "image1",
-            "label": "Image",
-            "info": "750 x 1000px recommended"
-          },
-          {
-            "type": "text",
-            "id": "image1_caption",
-            "label": "Image caption"
-          },
-          {
-            "type": "image_picker",
-            "id": "image2",
-            "label": "Image",
-            "info": "750 x 1000px recommended"
-          },
-          {
-            "type": "text",
-            "id": "image2_caption",
-            "label": "Image caption"
-          },
-          {
-            "type": "select",
-            "id": "layout",
-            "label": "Layout",
-            "options": [
-              {
-                "value": "left",
-                "label": "Testimonial on left"
-              },
-              {
-                "value": "right",
-                "label": "Testimonial on right"
-              }
-            ],
-            "default": "left"
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "layout": "left"
           }
-        ]
-      }
-    ],
-    "presets": [
-      {
-        "name": "Testimonials",
-        "settings": {},
-        "blocks": [
-          {
-            "type": "testimonial",
-            "settings": {
-              "layout": "right"
-            }
-          },
-          {
-            "type": "testimonial",
-            "settings": {
-              "layout": "left"
-            }
-          },
-          {
-            "type": "testimonial",
-            "settings": {
-              "layout": "left"
-            }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "layout": "left"
           }
-        ]
-      }
-    ]
-  }
+        }
+      ]
+    }
+  ]
+}
 {% endschema %}

@@ -76,7 +76,7 @@
             </div>
 
             {%- assign closest_location_country_code = pick_up_availabilities.first.location.address.country_code -%}
-            {%- assign imperialSystemCountries = 'US,MM,LR'  | split: ',' -%}
+            {%- assign imperialSystemCountries = 'US,MM,LR' | split: ',' -%}
             {%- if imperialSystemCountries contains closest_location_country_code -%}
               {%- assign unit_system = 'imperial' -%}
             {%- else -%}
@@ -89,7 +89,7 @@
                   <div class="store-availability-list__location">
                     <div class="store-availability-list__location__text">
                       <strong>
-                        {{availability.location.name}}
+                        {{ availability.location.name }}
                       </strong>
                     </div>
 
@@ -177,7 +177,10 @@
 
 {% schema %}
 {
-  "name": {},
-  "settings": []
+  "name": {
+  },
+  "settings": [
+
+  ]
 }
 {% endschema %}

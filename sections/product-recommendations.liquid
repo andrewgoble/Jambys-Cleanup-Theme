@@ -1,25 +1,150 @@
+{% comment %}
+  =============================================================================
+  PRODUCT RECOMMENDATIONS SECTION
+  =============================================================================
+  Dynamic product recommendation display using Shopify's recommendation engine
+  - Integrates with Shopify's AI-powered product recommendation system
+  - Swiper.js-powered carousel for smooth product browsing
+  - Responsive grid layout with customizable products per row
+  - Conditional rendering based on recommendation availability
+  - Uses product-block snippet for consistent product display
+  - Supports vendor display and color swatch hiding options
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  CONDITIONAL SECTION RENDERING
+  =============================================================================
+  Only displays section when recommendations are enabled
+  - section.settings.show_product_recommendations: Toggle from theme editor
+  - Prevents unnecessary rendering when recommendations are disabled
+  - Allows merchants to control section visibility
+{% endcomment %}
 {% if section.settings.show_product_recommendations %}
+  {% comment %}
+    =============================================================================
+    MAIN RECOMMENDATIONS CONTAINER
+    =============================================================================
+    Primary container with data attributes for functionality
+    - product-recommendations: Base styling class for section
+    - data-section-type: Identifies section type for JavaScript
+    - data-components: Required JavaScript component initialization
+    - data-url: Shopify recommendations API endpoint with parameters
+    - section_id: Current section identifier for API requests
+    - product_id: Current product ID for personalized recommendations
+    - limit: Maximum number of recommended products (12)
+  {% endcomment %}
   <div class="product-recommendations"
        data-section-type="product-recommendations"
        data-components="product-block"
        data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit=12">
 
+    {% comment %}
+      =============================================================================
+      RECOMMENDATIONS VALIDATION & DISPLAY
+      =============================================================================
+      Checks if recommendations are available and have products
+      - recommendations.performed: Boolean indicating API call completion
+      - recommendations.products_count: Number of available recommendations
+      - Only displays content when recommendations are successfully loaded
+      - Prevents empty section display when no recommendations exist
+    {% endcomment %}
     {% if recommendations.performed and recommendations.products_count > 0 %}
+      {% comment %}
+        =============================================================================
+        RECOMMENDATIONS CONTENT WRAPPER
+        =============================================================================
+        Content container with responsive layout and spacing
+        - product-recommendations-container: Main content wrapper
+        - product-slider: Slider-specific styling class
+        - wide-container: Responsive width container
+        - section-spacing: Consistent vertical spacing between sections
+      {% endcomment %}
       <div class="product-recommendations-container product-slider">
         <div class="wide-container section-spacing">
+          {% comment %}
+            =============================================================================
+            PRODUCT LIST WITH SWIPER INTEGRATION
+            =============================================================================
+            Swiper.js container for carousel functionality
+            - product-list: Base styling class for product grid
+            - swiper-container: Required class for Swiper.js initialization
+            - data-products-in-view: Custom attribute for grid configuration
+            - section.settings.grid: Products per row setting (2-4)
+            - Enables responsive carousel behavior
+          {% endcomment %}
           <div class="product-list swiper-container" data-products-in-view="{{ section.settings.grid }}">
+            {% comment %}
+              =============================================================================
+              SECTION HEADING
+              =============================================================================
+              Configurable section title with animation
+              - h2: Semantic heading level for accessibility
+              - section-heading: Consistent heading styling
+              - section.settings.title: Custom title from theme editor
+              - data-cc-animate: JavaScript animation trigger
+              - Default text: "You may also like"
+            {% endcomment %}
             <h2 class="h2 section-heading" data-cc-animate>
               {{ section.settings.title }}
             </h2>
 
+            {% comment %}
+              =============================================================================
+              SWIPER WRAPPER FOR PRODUCT SLIDES
+              =============================================================================
+              Swiper.js wrapper for individual product slides
+              - swiper-wrapper: Required class for Swiper.js functionality
+              - data-normheights: Normalizes heights for consistent layout
+              - data-normheights-inner: Inner element for height normalization
+              - .image: CSS selector for image container height normalization
+              - img: CSS selector for image height normalization
+              - Ensures uniform slide heights for better visual consistency
+            {% endcomment %}
             <div class="swiper-wrapper" data-normheights=".image" data-normheights-inner="img">
-               {%- for product in recommendations.products -%}
-              
+              {% comment %}
+                =============================================================================
+                PRODUCT RECOMMENDATIONS LOOP
+                =============================================================================
+                Iterates through Shopify's recommended products
+                - recommendations.products: Array of recommended product objects
+                - forloop.index: Current iteration index for animation
+                - Creates individual product slides for each recommendation
+                - Integrates with product-block snippet for consistent display
+              {% endcomment %}
+              {%- for product in recommendations.products -%}
+                {% comment %}
+                  =============================================================================
+                  INDIVIDUAL PRODUCT SLIDE
+                  =============================================================================
+                  Single product slide with Swiper.js integration
+                  - swiper-slide: Required class for Swiper.js slide functionality
+                  - product-block: Renders individual product using snippet
+                  - product: Current product object from recommendations
+                  - product_class: CSS class for product styling
+                  - i: forloop.index for unique product identification
+                  - animate: Animation trigger based on loop index
+                  - show_vendor: Toggle for vendor display
+                  - hide_swatches: Toggle for color swatch visibility
+                {% endcomment %}
                 <div class="swiper-slide">
                   {% render 'product-block', product: product, product_class: product_class, i: forloop.index, animate: forloop.index, show_vendor: section.settings.show_vendor, hide_swatches: section.settings.hide_swatches %}
                 </div>
               {%- endfor -%}
             </div>
+            
+            {% comment %}
+              =============================================================================
+              SWIPER NAVIGATION CONTROLS
+              =============================================================================
+              Carousel navigation elements for user interaction
+              - swiper-scrollbar: Progress bar showing current position
+              - swiper-button-prev: Previous button with accessibility label
+              - swiper-button-next: Next button with accessibility label
+              - aria-label: Screen reader accessible navigation labels
+              - general.accessibility_labels.previous/next: Localized labels
+              - svg-chevron-left/right: Directional arrow icons
+            {% endcomment %}
             <div class="swiper-scrollbar"></div>
             <a href="#" class="swiper-button-prev" aria-label="{{ 'general.accessibility_labels.previous' | t | escape }}">{% render 'svg-chevron-left' %}</a>
             <a href="#" class="swiper-button-next" aria-label="{{ 'general.accessibility_labels.next' | t | escape }}">{% render 'svg-chevron-right' %}</a>
@@ -30,45 +155,95 @@
   </div>
 {% endif %}
 
+{% comment %}
+  =============================================================================
+  SCHEMA CONFIGURATION SUMMARY
+  =============================================================================
+  Theme editor configuration for the product recommendations section
+  
+  **SECTION OVERVIEW:**
+  Dynamic product recommendation display using Shopify's AI-powered recommendation engine.
+  Integrates with Swiper.js for smooth carousel functionality and responsive design.
+  
+  **KEY FEATURES:**
+  - Shopify's AI-powered product recommendations
+  - Swiper.js carousel with navigation controls
+  - Responsive grid layout (2-4 products per row)
+  - Conditional rendering based on recommendation availability
+  - Consistent product display using product-block snippet
+  
+  **SECTION SETTINGS:**
+  - show_product_recommendations: Toggle section visibility (default: true)
+  - title: Custom section heading (default: "You may also like")
+  - hide_swatches: Toggle color swatch visibility (default: false)
+  - show_vendor: Toggle vendor display (default: false)
+  - grid: Products per row (2-4, default: 3)
+  
+  **RECOMMENDATION SYSTEM:**
+  - Uses Shopify's recommendation API endpoint
+  - Personalized based on current product
+  - Maximum 12 recommended products
+  - Dynamic content that improves over time
+  - Automatic fallback when no recommendations available
+  
+  **CAROUSEL FUNCTIONALITY:**
+  - Swiper.js integration for smooth scrolling
+  - Previous/next navigation buttons
+  - Progress scrollbar for position indication
+  - Height normalization for consistent layout
+  - Touch-friendly mobile interactions
+  
+  **ACCESSIBILITY FEATURES:**
+  - Semantic HTML structure with proper headings
+  - ARIA labels for navigation controls
+  - Screen reader friendly content structure
+  - Keyboard accessible carousel controls
+  
+  **PERFORMANCE CONSIDERATIONS:**
+  - Conditional rendering prevents unnecessary DOM
+  - Lazy loading through Swiper.js
+  - Efficient product-block snippet rendering
+  - Optimized image handling through product-block
+{% endcomment %}
 {% schema %}
-  {
-    "name": "Product recommendations",
-    "class": "section-product-recommendations",
-    "settings": [
-      {
-        "type": "checkbox",
-        "id": "show_product_recommendations",
-        "label": "Show recommendations",
-        "info": "Dynamic recommendations change and improve with time. [Learn more](https://help.shopify.com/en/themes/development/recommended-products)",
-        "default": true
-      },
-      {
-        "type": "text",
-        "id": "title",
-        "label": "Heading",
-        "default": "You may also like"
-      },
-      {
-        "type": "checkbox",
-        "id": "hide_swatches",
-        "label": "Hide color swatches",
-        "default": false
-      },
-      {
-        "type": "checkbox",
-        "id": "show_vendor",
-        "label": "Show product vendor",
-        "default": false
-      },
-      {
-        "type": "range",
-        "id": "grid",
-        "label": "Products per row",
-        "min": 2,
-        "max": 4,
-        "step": 1,
-        "default": 3
-      }
-    ]
-  }
+{
+  "name": "Product recommendations",
+  "class": "section-product-recommendations",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_product_recommendations",
+      "label": "Show recommendations",
+      "info": "Dynamic recommendations change and improve with time. [Learn more](https://help.shopify.com/en/themes/development/recommended-products)",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "You may also like"
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_swatches",
+      "label": "Hide color swatches",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show product vendor",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "grid",
+      "label": "Products per row",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    }
+  ]
+}
 {% endschema %}

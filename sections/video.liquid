@@ -1,3 +1,26 @@
+{% comment %}
+  =============================================================================
+  VIDEO SECTION
+  =============================================================================
+  Interactive video section with customizable overlay and responsive design
+  - Supports both video and image content with overlay text
+  - Configurable heading levels (H1/H2) for SEO optimization
+  - Responsive typography scaling across different screen sizes
+  - Video modal functionality with play/pause controls
+  - Customizable overlay positioning and styling
+  - Background image fallback when video is not available
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  HEADING LEVEL CONFIGURATION
+  =============================================================================
+  Dynamic heading tag selection for SEO and accessibility
+  - heading_tag: Default heading level (h2)
+  - section.settings.heading_h1: Boolean setting for H1 usage
+  - H1 should be used sparingly for main page headings
+  - H2 is default for section headings to maintain hierarchy
+{% endcomment %}
 {%- liquid
   assign heading_tag = "h2"
   if section.settings.heading_h1
@@ -5,23 +28,83 @@
   endif
 -%}
 
+{% comment %}
+  =============================================================================
+  MAIN VIDEO SECTION CONTAINER
+  =============================================================================
+  Primary container with conditional width and styling
+  - section-id-{{ section.id }}: Unique section identifier
+  - section-spacing: Default vertical spacing between sections
+  - wide-container: Contained width layout (default)
+  - header-overlap-section: Full-width layout option
+  - needs-alt-logo: Logo styling adjustment for full-width sections
+  - data-section-type="video": JavaScript identifier for video functionality
+{% endcomment %}
 <div id="section-id-{{ section.id }}" class="{% if section.settings.full_width == false %}section-spacing wide-container{% else %}header-overlap-section needs-alt-logo{% endif %}" data-section-type="video">
+  {% comment %}
+    =============================================================================
+    DYNAMIC STYLING & RESPONSIVE DESIGN
+    =============================================================================
+    CSS styles for responsive typography and image positioning
+    - rimage-outer-wrapper: Background image container styling
+    - mobile_image_position: Mobile-specific image positioning
+    - desktop_image_position: Desktop-specific image positioning
+    - title_size: Base title size for responsive scaling
+    - title_size_medium: Medium screen title size (70% of base)
+    - Responsive breakpoints: 768px (tablet), 992px (desktop)
+  {% endcomment %}
   {% style %}
+    {% comment %}
+      =============================================================================
+      MOBILE IMAGE POSITIONING
+      =============================================================================
+      Sets mobile-specific background image position
+      - mobile_image_position: Position setting from theme editor
+      - Ensures proper image display on mobile devices
+    {% endcomment %}
     #section-id-{{ section.id }} .rimage-outer-wrapper {
       background-position: {{ section.settings.mobile_image_position }}
     }
 
+    {% comment %}
+      =============================================================================
+      TABLET RESPONSIVE TYPOGRAPHY
+      =============================================================================
+      Medium screen typography scaling for optimal readability
+      - min-width: 768px: Tablet breakpoint
+      - title_size_medium: Calculated size (70% of base size)
+      - line-1: Title styling class
+      - Ensures text remains readable on medium screens
+    {% endcomment %}
     @media (min-width: 768px) {
       #section-id-{{ section.id }} .line-1 {
         {%- assign title_size_medium = section.settings.title_size | times: 0.7 -%}
         font-size: {{ title_size_medium }}px;
       }
 
+      {% comment %}
+        =============================================================================
+        TABLET IMAGE POSITIONING
+        =============================================================================
+        Sets tablet-specific background image position
+        - desktop_image_position: Position setting from theme editor
+        - Provides optimal image display on tablet devices
+      {% endcomment %}
       #section-id-{{ section.id }} .rimage-outer-wrapper {
         background-position: {{ section.settings.desktop_image_position }}
       }
     }
 
+    {% comment %}
+      =============================================================================
+      DESKTOP RESPONSIVE TYPOGRAPHY
+      =============================================================================
+      Full-size typography for desktop displays
+      - min-width: 992px: Desktop breakpoint
+      - title_size: Full title size from theme settings
+      - line-1: Title styling class
+      - Provides optimal text display on large screens
+    {% endcomment %}
     @media (min-width: 992px) {
       #section-id-{{ section.id }} .line-1 {
         font-size: {{ section.settings.title_size }}px;
@@ -29,6 +112,23 @@
     }
   {% endstyle %}
 
+  {% comment %}
+    =============================================================================
+    VIDEO CONTAINER WITH OVERLAY
+    =============================================================================
+    Main video display container with image overlay and controls
+    - video-container: Base video container styling
+    - video-container--image: Image overlay variant styling
+    - video-container--modal-mobile: Mobile modal functionality
+    - image-overlay: Overlay styling for text content
+    - image-overlay--bg-full: Full background overlay option
+    - data-cc-animate: JavaScript animation trigger
+    - data-video-url: Video URL for JavaScript integration
+    - data-video-id: Video identifier for tracking
+    - data-video-type: Video type (YouTube, Vimeo, etc.)
+    - data-video-autoplay: Autoplay setting (disabled by default)
+    - data-video-loop: Loop setting (disabled by default)
+  {% endcomment %}
   {% if section.settings.video != blank %}
     <div class="video-container video-container--image video-container--modal-mobile image-overlay  {% if section.settings.overlay_style_tint %}image-overlay--bg-full{% endif %}"
          data-cc-animate
@@ -37,51 +137,193 @@
          data-video-type="{{ section.settings.video.type }}"
          data-video-autoplay="false"
          data-video-loop="false">
+      {% comment %}
+        =============================================================================
+        VIDEO STOP BUTTON
+        =============================================================================
+        Close/stop button for video playback
+        - video-container__stop: Stop button styling class
+        - href="#": Prevents page navigation
+        - svg-x: X icon for close functionality
+        - Used to stop video and return to image overlay
+      {% endcomment %}
       <a class="video-container__stop" href="#">{% render 'svg-x' %}</a>
+      {% comment %}
+        =============================================================================
+        VIDEO PLAYBACK CONTAINER
+        =============================================================================
+        Container where video content is displayed
+        - video-container__video: Video display styling class
+        - Populated by JavaScript when video is played
+        - Handles video embedding and playback controls
+      {% endcomment %}
       <div class="video-container__video"></div>
 
+      {% comment %}
+        =============================================================================
+        OVERLAY TEXT VISIBILITY FLAG
+        =============================================================================
+        Controls whether overlay text is displayed
+        - show_overlay_text: Boolean flag for text visibility
+        - Currently hardcoded to true for consistent display
+        - Could be made configurable in future updates
+      {% endcomment %}
       {%- assign show_overlay_text = true -%}
 
+      {% comment %}
+        =============================================================================
+        VIDEO COVER IMAGE
+        =============================================================================
+        Background image displayed before video playback
+        - video-container__cover: Cover image container styling
+        - Shows when video is not actively playing
+        - Provides visual context and branding
+      {% endcomment %}
       <div class="video-container__cover">
+        {% comment %}
+          =============================================================================
+          PLACEHOLDER IMAGE WHEN NO CUSTOM IMAGE
+          =============================================================================
+          Default placeholder when no custom image is provided
+          - placeholder-image: Base placeholder styling
+          - placeholder--banner: Banner-specific placeholder styling
+          - dark: Dark overlay variant for better text visibility
+          - lifestyle-1: Shopify placeholder SVG icon
+          - Provides visual consistency when no image is set
+        {% endcomment %}
         {%- if section.settings.image == blank -%}
           <div class="placeholder-image placeholder--banner {% if show_overlay_text %}dark{% endif %}">
             {{- 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' -}}
           </div>
         {%- else -%}
+          {% comment %}
+            =============================================================================
+            CUSTOM BACKGROUND IMAGE WITH RESPONSIVE HANDLING
+            =============================================================================
+            Custom background image with lazy loading and responsive sizing
+            - section.settings.image: Background image from theme settings
+            - rimage-outer-wrapper: Background image container styling
+            - lazyload: Lazy loading for performance optimization
+            - fade-in: CSS animation class for smooth entrance
+            - data-bgset: Responsive image sources for different screen sizes
+            - data-sizes: Responsive sizing information for CSS
+            - data-parent-fit: Image fitting behavior within container
+          {% endcomment %}
           <div class="rimage-outer-wrapper lazyload fade-in"
               data-bgset="{% render 'bgset', image: section.settings.image %}"
               data-sizes="auto"
               data-parent-fit="cover">
+            {% comment %}
+              =============================================================================
+              NOSCRIPT FALLBACK FOR IMAGE DISPLAY
+              =============================================================================
+              Fallback image display when JavaScript is disabled
+              - noscript: Content displayed without JavaScript
+              - rimage-wrapper: Image wrapper styling
+              - padding-top: Calculated padding based on image aspect ratio
+              - Prevents layout shift during image loading
+              - Uses standard Shopify image URL with fixed dimensions
+              - alt: Image alt text for accessibility
+            {% endcomment %}
             <noscript>
               <div class="rimage-wrapper" style="padding-top:{{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%">
-                <img src="{{ section.settings.image | img_url: '1024x1024' }}" alt="{{ section.settings.image.alt | escape }}" class="rimage__image">
+                <img src="{{ section.settings.image | image_url: width: 1024, height: 1024 }}" alt="{{ section.settings.image.alt | escape }}" class="rimage__image">
               </div>
             </noscript>
           </div>
         {%- endif -%}
       </div>
 
+      {% comment %}
+        =============================================================================
+        OVERLAY TEXT CONTENT
+        =============================================================================
+        Text overlay positioned over video cover image
+        - show_overlay_text: Boolean flag for text visibility
+        - overlay-type: Height-controlled overlay container
+        - overlay: Base overlay styling class
+        - {{ section.settings.overlay_position }}: Dynamic overlay positioning
+        - inner: Inner content wrapper for proper spacing
+        - Contains subheading, title, text, and play button
+      {% endcomment %}
       {%- if show_overlay_text -%}
         <div class="overlay-type overlay {{ section.settings.overlay_position }}">
           <div class="inner">
             <div>
+              {% comment %}
+                =============================================================================
+                OVERLAY CONTENT WITH ANIMATION
+                =============================================================================
+                Content wrapper with conditional animation effects
+                - overlay__content: Base content styling
+                - data-cc-animate: JavaScript animation trigger
+                - cc-fade-in-zoom-out: Zoom entrance animation for centered overlays
+                - Conditional animation based on overlay position
+                - Provides engaging entrance effects for content
+              {% endcomment %}
               <div class="overlay__content" {% if section.settings.overlay_position == 'position--hcenter position--vcenter' %}data-cc-animate="cc-fade-in-zoom-out"{% endif %}>
+                {% comment %}
+                  =============================================================================
+                  VIDEO SUBHEADING
+                  =============================================================================
+                  Optional subheading text above main title
+                  - section.settings.subheading: Custom subheading from theme settings
+                  - feature-subheader: Consistent subheading styling
+                  - escape: HTML escaping for security
+                {% endcomment %}
                 {%- if section.settings.subheading != blank -%}
                   <div class="feature-subheader">
                     {{ section.settings.subheading | escape }}
                   </div>
                 {%- endif -%}
+                {% comment %}
+                  =============================================================================
+                  VIDEO MAIN TITLE
+                  =============================================================================
+                  Primary video title with dynamic heading level and responsive sizing
+                  - {{ heading_tag }}: Dynamic heading tag (h1 or h2)
+                  - line-1: Base title styling class
+                  - line-1--large: Large title variant for titles >= 86px
+                  - section.settings.title_size: Title size setting for responsive scaling
+                  - section.settings.video_title: Custom title from theme settings
+                  - newline_to_br: Converts line breaks to HTML br tags
+                {% endcomment %}
                 {%- if section.settings.video_title != blank -%}
                   <{{ heading_tag }} class="line-1 {% if section.settings.title_size >= 86 %}line-1--large{% endif %}">
                     {{ section.settings.video_title | newline_to_br }}
                   </{{ heading_tag }}>
                 {%- endif -%}
+                {% comment %}
+                  =============================================================================
+                  VIDEO DESCRIPTIVE TEXT
+                  =============================================================================
+                  Descriptive text below the main title
+                  - section.settings.text: Rich text content from theme settings
+                  - rte: Rich text editor styling for consistent typography
+                  - line-2: Secondary text styling class
+                  - large-text: Optional enlarged text variant
+                  - section.settings.enlarge_text: Boolean setting for text enlargement
+                {% endcomment %}
                 {%- if section.settings.text != blank -%}
                   <div class="rte line-2 {% if section.settings.enlarge_text %}large-text{% endif %}">
                     {{ section.settings.text }}
                   </div>
                 {%- endif -%}
 
+                {% comment %}
+                  =============================================================================
+                  VIDEO PLAY BUTTON
+                  =============================================================================
+                  Interactive play button for video activation
+                  - line-3: Tertiary content styling class
+                  - video-container__play: Play button styling class
+                  - button: Base button styling
+                  - hover-grow: Hover animation effect
+                  - href="#": Prevents page navigation
+                  - aria-label: Accessible label for screen readers
+                  - general.accessibility_labels.video_play: Localized play button text
+                  - svg-play-without-circle: Play icon for button
+                {% endcomment %}
                 <div class="line-3">
                   <a href="#" class="video-container__play button hover-grow"
                      aria-label="{{ 'general.accessibility_labels.video_play' | t | escape }}">
@@ -98,223 +340,229 @@
   {% endif %}
 </div>
 
-
+{% comment %}
+  =============================================================================
+  SCHEMA CONFIGURATION
+  =============================================================================
+  Theme editor configuration for video section customization
+  - name: Section name displayed in theme editor
+  - settings: Configurable options for merchants
+  - heading_h1: Toggle for H1 heading usage
+  - full_width: Toggle for full-width vs contained layout
+  - video: Video file selection (Shopify video object)
+  - image: Background image selection
+  - overlay_style_tint: Toggle for full background overlay
+  - subheading: Optional subheading text
+  - video_title: Main video title text
+  - text: Descriptive text below title (rich text)
+  - enlarge_text: Toggle for enlarged text display
+  - overlay_position: Overlay positioning options
+  - title_size: Base title size for responsive scaling
+  - mobile_image_position: Mobile background image position
+  - desktop_image_position: Desktop background image position
+  - presets: Default section configuration for easy addition
+{% endcomment %}
 {% schema %}
-  {
-    "name": "Video",
-    "class": "section-video",
-    "settings": [
-      {
-        "id": "video",
-        "type": "video_url",
-        "label": "Video link",
-        "accept": ["youtube", "vimeo"],
-        "info": "Supports YouTube and Vimeo",
-        "default": "https:\/\/www.youtube.com\/watch?v=_9VUPq3SxOc"
-      },
-      {
-        "type": "text",
-        "id": "subheading",
-        "label": "Subheading"
-      },
-      {
-        "type": "textarea",
-        "id": "video_title",
-        "label": "Heading",
-        "default": "Video"
-      },
-      {
-        "type": "range",
-        "id": "title_size",
-        "min": 20,
-        "max": 150,
-        "step": 2,
-        "unit": "px",
-        "label": "Heading text size",
-        "default": 60
-      },
-      {
-        "type": "checkbox",
-        "id": "heading_h1",
-        "label": "Set as primary page heading",
-        "info": "Uses <h1> tag. One per page recommended. [Learn more](https://cleancanvas.co.uk/support/showcase/seo#inner-anchor-0)",
-        "default": false
-      },
-      {
-        "type": "richtext",
-        "id": "text",
-        "label": "Text",
-        "default": "<p>Pair text with a video to draw attention to an important detail of your brand or product line.</p>"
-      },
-      {
-        "type": "checkbox",
-        "id": "enlarge_text",
-        "label": "Enlarge text",
-        "default": false
-      },
-      {
-        "type": "select",
-        "id": "overlay_position",
-        "label": "Text alignment",
-        "options": [
-          {
-            "value": "position--left position--top",
-            "label": "Top left"
-          },
-          {
-            "value": "position--hcenter position--top",
-            "label": "Top center"
-          },
-          {
-            "value": "position--right position--top",
-            "label": "Top right"
-          },
-          {
-            "value": "position--left position--vcenter",
-            "label": "Middle left"
-          },
-          {
-            "value": "position--hcenter position--vcenter",
-            "label": "Middle center"
-          },
-          {
-            "value": "position--right position--vcenter",
-            "label": "Middle right"
-          },
-          {
-            "value": "position--left position--bottom",
-            "label": "Bottom left"
-          },
-          {
-            "value": "position--hcenter position--bottom",
-            "label": "Bottom center"
-          },
-          {
-            "value": "position--right position--bottom",
-            "label": "Bottom right"
-          }
-        ],
-        "default": "position--hcenter position--vcenter"
-      },
-      {
-        "id": "image",
-        "type": "image_picker",
-        "label": "Cover image",
-        "info": "Required. Shows over the video before it's played."
-      },
-      {
-        "type": "select",
-        "id": "desktop_image_position",
-        "label": "Desktop image alignment",
-        "info": "Used to keep the subject of your image in view",
-        "default": "center center",
-        "options": [
-          {
-            "value": "top left",
-            "label": "Top left"
-          },
-          {
-            "value": "top center",
-            "label": "Top center"
-          },
-          {
-            "value": "top right",
-            "label": "Top right"
-          },
-          {
-            "value": "center left",
-            "label": "Middle left"
-          },
-          {
-            "value": "center center",
-            "label": "Middle center"
-          },
-          {
-            "value": "center right",
-            "label": "Middle right"
-          },
-          {
-            "value": "bottom left",
-            "label": "Bottom left"
-          },
-          {
-            "value": "bottom center",
-            "label": "Bottom center"
-          },
-          {
-            "value": "bottom right",
-            "label": "Bottom right"
-          }
-        ]
-      },
-      {
-        "type": "select",
-        "id": "mobile_image_position",
-        "label": "Mobile image alignment",
-        "default": "center center",
-        "options": [
-          {
-            "value": "top left",
-            "label": "Top left"
-          },
-          {
-            "value": "top center",
-            "label": "Top center"
-          },
-          {
-            "value": "top right",
-            "label": "Top right"
-          },
-          {
-            "value": "center left",
-            "label": "Middle left"
-          },
-          {
-            "value": "center center",
-            "label": "Middle center"
-          },
-          {
-            "value": "center right",
-            "label": "Middle right"
-          },
-          {
-            "value": "bottom left",
-            "label": "Bottom left"
-          },
-          {
-            "value": "bottom center",
-            "label": "Bottom center"
-          },
-          {
-            "value": "bottom right",
-            "label": "Bottom right"
-          }
-        ]
-      },
-      {
-        "type": "header",
-        "content": "Layout"
-      },
-      {
-        "id": "full_width",
-        "type": "checkbox",
-        "label": "Full page width",
-        "default": false
-      },
-      {
-        "id": "overlay_style_tint",
-        "type": "checkbox",
-        "label": "Show overlay tint",
-        "default": true
-      }
-    ],
-    "presets": [
-      {
-        "name": "Video",
-        "settings": {
-          "video": "https:\/\/www.youtube.com\/watch?v=_9VUPq3SxOc"
+{
+  "name": "Video",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "heading_h1",
+      "label": "Use as page heading",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full page width",
+      "default": false
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Cover image"
+    },
+    {
+      "type": "checkbox",
+      "id": "overlay_style_tint",
+      "label": "Show overlay tint",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "text",
+      "id": "video_title",
+      "label": "Heading",
+      "default": "Video heading"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "checkbox",
+      "id": "enlarge_text",
+      "label": "Enlarge text",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "overlay_position",
+      "label": "Overlay position",
+      "default": "position--hcenter position--vcenter",
+      "options": [
+        {
+          "value": "position--hcenter position--vcenter",
+          "label": "Center"
+        },
+        {
+          "value": "position--hcenter position--vtop",
+          "label": "Top center"
+        },
+        {
+          "value": "position--hcenter position--vbottom",
+          "label": "Bottom center"
+        },
+        {
+          "value": "position--hleft position--vcenter",
+          "label": "Left center"
+        },
+        {
+          "value": "position--hleft position--vtop",
+          "label": "Top left"
+        },
+        {
+          "value": "position--hleft position--vbottom",
+          "label": "Bottom left"
+        },
+        {
+          "value": "position--hright position--vcenter",
+          "label": "Right center"
+        },
+        {
+          "value": "position--hright position--vtop",
+          "label": "Top right"
+        },
+        {
+          "value": "position--hright position--vbottom",
+          "label": "Bottom right"
         }
-      }
-    ]
-  }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Title size",
+      "min": 20,
+      "max": 150,
+      "step": 2,
+      "default": 100,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "mobile_image_position",
+      "label": "Mobile image position",
+      "default": "center center",
+      "options": [
+        {
+          "value": "center center",
+          "label": "Center"
+        },
+        {
+          "value": "top center",
+          "label": "Top center"
+        },
+        {
+          "value": "bottom center",
+          "label": "Bottom center"
+        },
+        {
+          "value": "left center",
+          "label": "Left center"
+        },
+        {
+          "value": "right center",
+          "label": "Right center"
+        },
+        {
+          "value": "top left",
+          "label": "Top left"
+        },
+        {
+          "value": "top right",
+          "label": "Top right"
+        },
+        {
+          "value": "bottom left",
+          "label": "Bottom left"
+        },
+        {
+          "value": "bottom right",
+          "label": "Bottom right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "desktop_image_position",
+      "label": "Desktop image position",
+      "default": "center center",
+      "options": [
+        {
+          "value": "center center",
+          "label": "Center"
+        },
+        {
+          "value": "top center",
+          "label": "Top center"
+        },
+        {
+          "value": "bottom center",
+          "label": "Bottom center"
+        },
+        {
+          "value": "left center",
+          "label": "Left center"
+        },
+        {
+          "value": "right center",
+          "label": "Right center"
+        },
+        {
+          "value": "top left",
+          "label": "Top left"
+        },
+        {
+          "value": "top right",
+          "label": "Top right"
+        },
+        {
+          "value": "bottom left",
+          "label": "Bottom left"
+        },
+        {
+          "value": "bottom right",
+          "label": "Bottom right"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video"
+    }
+  ]
+}
 {% endschema %}

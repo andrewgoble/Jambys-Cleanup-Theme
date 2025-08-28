@@ -1,3 +1,26 @@
+{% comment %}
+  =============================================================================
+  DOWNTIME PREVIEW SECTION
+  =============================================================================
+  Preview section for Downtime Magazine content and articles
+  - Displays Downtime Magazine logo and tagline
+  - Article carousel using Embla Carousel library
+  - Links to external Downtime Magazine website
+  - Customizable background color from theme settings
+  - Responsive design with mobile optimization
+  - Integrates Jambys brand with editorial content
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  DYNAMIC BACKGROUND COLOR STYLING
+  =============================================================================
+  CSS styles for customizable section background
+  - color_bg: Custom background color from section settings
+  - articles-section--og-rip: Section-specific styling class
+  - Only applies background color if setting is not blank
+  - Allows merchants to customize section appearance
+{% endcomment %}
 <style>
 {% unless section.settings.color_bg == blank %}
    .articles-section--og-rip {
@@ -6,30 +29,155 @@
 {% endunless %}
 </style>
 
+{% comment %}
+  =============================================================================
+  MAIN DOWNTIME SECTION CONTAINER
+  =============================================================================
+  Primary container for Downtime Magazine content
+  - articles-section--og-rip: Main section styling class
+  - Contains logo, tagline, and article carousel
+  - Full-width layout for maximum content visibility
+{% endcomment %}
 <div class="articles-section--og-rip">
 
+{% comment %}
+  =============================================================================
+  FULL-WIDTH CONTENT WRAPPER
+  =============================================================================
+  Full-width container for section content
+  - w-full: Full-width layout class
+  - ecl="true": Ecommerce-specific attribute for tracking
+  - Ensures content spans entire section width
+{% endcomment %}
 <div class="w-full" ecl="true">
 
+  {% comment %}
+    =============================================================================
+    DOWNTIME MAGAZINE HEADER
+    =============================================================================
+    Header section with logo and tagline
+    - px-9: Horizontal padding for content spacing
+    - max-w-sm: Maximum width constraint for readability
+    - mx-auto: Center alignment
+    - text-center: Center text alignment
+    - mb-12: Bottom margin for spacing
+    - Links to external Downtime Magazine website
+  {% endcomment %}
   <div class="px-9 max-w-sm mx-auto text-center mb-12" ecl="true">
+    {% comment %}
+      =============================================================================
+      DOWNTIME MAGAZINE LOGO LINK
+      =============================================================================
+      Clickable logo linking to Downtime Magazine
+      - href: External link to downtime.jambys.com
+      - target="_blank": Opens in new tab
+      - aria-label: Accessibility label for screen readers
+      - rel="noopener": Security attribute for external links
+    {% endcomment %}
     <a href="https://downtime.jambys.com/" target="_blank" aria-label="Downtime Mag" rel="noopener" ecl="true">
+
+      {% comment %}
+        =============================================================================
+        LOGO IMAGE STYLING
+        =============================================================================
+        CSS styles for Downtime Magazine logo
+        - max-width: 250px for logo size constraint
+        - ::before pseudo-element for aspect ratio maintenance
+        - padding-top: 19.18% for responsive image sizing
+        - Ensures logo maintains proportions across screen sizes
+      {% endcomment %}
       <style ecl="true">
   #ImageWrapper-497359683669-downtime-logo {
     max-width: 250px;
   }
   #ImageWrapper-497359683669-downtime-logo::before {padding-top:19.183673469387756%;
   }
-</style><div id="ImageWrapper-497359683669-downtime-logo" style="text-align:center; margin:auto;" data-image-id="497359683669" class="responsive-image__wrapper " ecl="true">
-  <img id="Image-497359683669-downtime-logo" class="responsive-image__image object-cover lazyload fade-in" tabindex="-1" alt="" data-widths="[100,180,360,490]" data-aspectratio="5.212765957446808" data-sizes="auto" data-src="//cdn.shopify.com/s/files/1/0090/4128/1109/files/Frame.png?v=1614883885" ecl="true">
-</div>
+</style>
 
-<noscript ecl="true">
-  <img class="lazyload fade-in object-cover" src="//cdn.shopify.com/s/files/1/0090/4128/1109/files/Frame_2048x2048.png?v=1614883885" alt="">
-</noscript>
+      {% comment %}
+        =============================================================================
+        RESPONSIVE LOGO IMAGE CONTAINER
+        =============================================================================
+        Container for responsive logo image
+        - id: Unique identifier for logo wrapper
+        - text-align: center for logo centering
+        - margin: auto for horizontal centering
+        - responsive-image__wrapper: Responsive image styling class
+        - data-image-id: Image identifier for tracking
+      {% endcomment %}
+      <div id="ImageWrapper-497359683669-downtime-logo" style="text-align:center; margin:auto;" data-image-id="497359683669" class="responsive-image__wrapper " ecl="true">
+
+        {% comment %}
+          =============================================================================
+          LAZY-LOADED LOGO IMAGE
+          =============================================================================
+          Main logo image with lazy loading
+          - responsive-image__image: Responsive image styling
+          - object-cover: Image scaling behavior
+          - lazyload: Lazy loading for performance
+          - fade-in: Fade-in animation
+          - tabindex="-1": Removes from tab order
+          - data-widths: Responsive image widths
+          - data-aspectratio: Image aspect ratio for sizing
+          - data-sizes: Responsive image sizing
+          - data-src: Lazy-loaded image source
+        {% endcomment %}
+        <img id="Image-497359683669-downtime-logo" class="responsive-image__image object-cover lazyload fade-in" tabindex="-1" alt="" data-widths="[100,180,360,490]" data-aspectratio="5.212765957446808" data-sizes="auto" data-src="//cdn.shopify.com/s/files/1/0090/4128/1109/files/Frame.png?v=1614883885" ecl="true">
+
+      </div>
+
+      {% comment %}
+        =============================================================================
+        NOSCRIPT IMAGE FALLBACK
+        =============================================================================
+        Fallback image for users with JavaScript disabled
+        - noscript: Content for non-JavaScript environments
+        - lazyload: Fallback lazy loading class
+        - fade-in: Fallback animation class
+        - object-cover: Image scaling behavior
+        - Direct image source for immediate display
+      {% endcomment %}
+      <noscript ecl="true">
+        <img class="lazyload fade-in object-cover" src="//cdn.shopify.com/s/files/1/0090/4128/1109/files/Frame_2048x2048.png?v=1614883885" alt="">
+      </noscript>
 
     </a>
+    
+    {% comment %}
+      =============================================================================
+      DOWNTIME MAGAZINE TAGLINE
+      =============================================================================
+      Descriptive text and call-to-action link
+      - mt-4: Top margin for spacing from logo
+      - text-blue: Brand color styling
+      - text-xl: Large text size
+      - opacity-75: Slight transparency for visual hierarchy
+      - max-width: 300px for text width constraint
+      - margin: auto for center alignment
+    {% endcomment %}
     <div class="mt-4 text-blue text-xl opacity-75" style="max-width:300px; margin:auto;" ecl="true">
+      {% comment %}
+        =============================================================================
+        MAGAZINE DESCRIPTION
+        =============================================================================
+        Tagline describing Downtime Magazine
+        - Hard-hitting journalism from a company that makes shorts
+        - Establishes brand voice and content focus
+        - Connects Jambys product with editorial mission
+      {% endcomment %}
       <p ecl="true">Hard-hitting journalism from a company that makes shorts</p>
 
+        {% comment %}
+          =============================================================================
+          SEE ALL ARTICLES LINK
+          =============================================================================
+          Call-to-action link to full magazine
+          - mt-1: Top margin for spacing
+          - link: Link styling class
+          - href: External link to Downtime Magazine
+          - target="_blank": Opens in new tab
+          - rel="noopener": Security attribute
+        {% endcomment %}
         <a class="mt-1 link" href="https://downtime.jambys.com/" target="_blank" rel="noopener" ecl="true">
           See all articles
         </a>
@@ -37,10 +185,43 @@
     </div>
   </div>
 
+  {% comment %}
+    =============================================================================
+    EMBLA CAROUSEL CONTAINER
+    =============================================================================
+    Article carousel using Embla Carousel library
+    - embla: Main carousel container class
+    - data-js-main-carousel: JavaScript carousel identifier
+    - data-js-carousel-align: start for left alignment
+    - data-js-carousel-loop: false disables infinite loop
+    - Responsive carousel for article previews
+  {% endcomment %}
   <div class="embla" data-js-main-carousel="" data-js-carousel-align="start" data-js-carousel-loop="false" ecl="true">
+
+    {% comment %}
+      =============================================================================
+      CAROUSEL VIEWPORT & CONTAINER
+      =============================================================================
+      Carousel viewport and slide container
+      - embla__viewport: Visible carousel area
+      - px-6: Horizontal padding for content spacing
+      - overflow-x: scroll for horizontal scrolling
+      - embla__container: Container for all slides
+      - -ml-3: Negative left margin for slide spacing
+    {% endcomment %}
     <div class="embla__viewport px-6" style="overflow-x: scroll;" ecl="true">
       <div class="embla__container -ml-3" ecl="true">
 
+          {% comment %}
+            =============================================================================
+            INDIVIDUAL ARTICLE SLIDE
+            =============================================================================
+            Single article preview slide
+            - embla__slide: Individual slide class
+            - pl-3: Left padding for slide spacing
+            - Links to specific article on Downtime Magazine
+            - Card-based layout with article information
+          {% endcomment %}
           <div class="embla__slide pl-3" ecl="true">
             <div class="embla__slide__inner" ecl="true">
               <a href="https://downtime.jambys.com/posts/best-movies-amazon-prime" target="_blank" rel="noopener" ecl="true">
@@ -142,7 +323,7 @@
 {% schema %}
 {
   "name": {
-      "en": "Downtime Stories Preview"
+    "en": "Downtime Stories Preview"
   },
   "settings": [
     {

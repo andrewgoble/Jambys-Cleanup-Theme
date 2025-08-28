@@ -10,7 +10,7 @@
   document.addEventListener('wonderment:shipments_loaded', function(event) {
   
     document.addEventListener('rebuy.ready', function(event){
-      if(event.detail.widget.id == "{{section.settings.rebuy-widget-id}}") {
+      if(event.detail.widget.id == "{{ section.settings.rebuy-widget-id }}") {
         const widget = event.detail.widget;
         const orderId = window.wonderment.shipments[0].order.id;
         if (orderId) {
@@ -21,7 +21,7 @@
     });
     
     let rebuyContainer = document.createElement('div');
-    rebuyContainer.dataset.rebuyId = "{{section.settings.rebuy-widget-id}}";
+    rebuyContainer.dataset.rebuyId = "{{ section.settings.rebuy-widget-id }}";
     rebuyContainer.dataset.rebuyShopifyOrderIds = event.shipments[0].order.id;
   document.getElementById('wonderment-rebuy').appendChild(rebuyContainer);
         
@@ -33,10 +33,10 @@
 
 
 {% schema %}
-  {
-    "name": "📦 Rebuy",
-	"tag": "section",
-    "settings": [
+{
+  "name": "📦 Rebuy",
+  "tag": "section",
+  "settings": [
     {
       "type": "header",
       "content": "Rebuy | v1.02"
@@ -62,15 +62,14 @@
       "id": "rebuy-widget-id",
       "label": "Rebuy Widget ID",
       "info": "Add your widget ID from your Wonderment widget, found in your [Rebuy account](https://rebuyengine.com/onlinestore/third_party)."
-	}
+    }
   ],
-    
-	"presets": [
+  "presets": [
     {
       "name": "📦 Rebuy"
     }
   ]
-  }
+}
 {% endschema %}
 
 

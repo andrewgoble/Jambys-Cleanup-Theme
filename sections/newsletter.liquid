@@ -1,3 +1,29 @@
+{% comment %}
+  =============================================================================
+  NEWSLETTER SIGNUP SECTION
+  =============================================================================
+  Customer newsletter subscription section with customizable styling
+  - Email signup form with Shopify customer integration
+  - Configurable background images and color schemes
+  - Responsive design with mobile/desktop height controls
+  - Form validation and error handling
+  - Customer tagging for marketing segmentation
+  - Overlay positioning and animation effects
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  DYNAMIC STYLING & COLOR CUSTOMIZATION
+  =============================================================================
+  CSS styles for custom color schemes and responsive height controls
+  - color_scheme: Theme color scheme selection (custom vs predefined)
+  - color_bg: Custom background color when using custom scheme
+  - color_text: Custom text color when using custom scheme
+  - height_mobile: Mobile-specific height setting in pixels
+  - height_desktop: Desktop-specific height setting in pixels
+  - section-id-{{ section.id }}: Unique identifier for section-specific styling
+  - Responsive breakpoint at 768px for mobile/desktop height switching
+{% endcomment %}
 {% style %}
   {% if section.settings.color_scheme == "custom" %}
     .section-id-{{ section.id }} {
@@ -6,10 +32,29 @@
     }
   {% endif %}
 
+  {% comment %}
+    =============================================================================
+    MOBILE HEIGHT CONTROL
+    =============================================================================
+    Sets mobile-specific height for overlay content
+    - height_mobile: Height setting from theme editor
+    - overlay-type: Container class for height control
+    - Ensures proper mobile layout and content visibility
+  {% endcomment %}
   #section-id-{{ section.id }} .overlay-type {
     height: {{ section.settings.height_mobile }}px;
   }
 
+  {% comment %}
+    =============================================================================
+    DESKTOP HEIGHT CONTROL
+    =============================================================================
+    Sets desktop-specific height for overlay content
+    - height_desktop: Height setting from theme editor
+    - min-width: 768px: Desktop breakpoint for responsive design
+    - overlay-type: Container class for height control
+    - Provides optimal desktop viewing experience
+  {% endcomment %}
   @media (min-width: 768px) {
     #section-id-{{ section.id }} .overlay-type {
       height: {{ section.settings.height_desktop }}px;
@@ -17,48 +62,223 @@
   }
 {% endstyle %}
 
+{% comment %}
+  =============================================================================
+  MAIN NEWSLETTER SECTION CONTAINER
+  =============================================================================
+  Primary container with dynamic classes and responsive layout
+  - section-id-{{ section.id }}: Unique section identifier
+  - wide-container: Full-width layout class
+  - align-center: Center-aligned content positioning
+  - use-{{ section.settings.color_scheme }}-bg: Dynamic color scheme class
+  - image-overlay: Background image overlay styling
+  - image-overlay--bg-full: Full background image coverage
+  - data-cc-animate: JavaScript animation trigger for entrance effects
+{% endcomment %}
 <div id="section-id-{{ section.id }}"
      class="section-id-{{ section.id }}
   wide-container align-center use-{{ section.settings.color_scheme }}-bg
   {% if section.settings.image and section.settings.color_scheme == "standard" %} image-overlay image-overlay--bg-full{% endif %}
 " data-cc-animate>
 
+  {% comment %}
+    =============================================================================
+    BACKGROUND IMAGE WITH RESPONSIVE HANDLING
+    =============================================================================
+    Optional background image with lazy loading and responsive sizing
+    - section.settings.image: Background image from theme settings
+    - section.settings.color_scheme == "standard": Only shows with standard color scheme
+    - rimage-outer-wrapper: Background image container styling
+    - rimage-background: Background image specific styling
+    - lazyload: Lazy loading for performance optimization
+    - fade-in: CSS animation class for smooth entrance
+    - data-cc-animate: JavaScript animation trigger
+    - cc-zoom-out: Zoom-out entrance animation effect
+    - data-bgset: Responsive image sources for different screen sizes
+    - data-sizes: Responsive sizing information for CSS
+    - data-parent-fit: Image fitting behavior within container
+  {% endcomment %}
   {% if section.settings.image and section.settings.color_scheme == "standard" %}
     <div class="rimage-outer-wrapper rimage-background lazyload fade-in"
       data-cc-animate="cc-zoom-out"
       data-bgset="{% render 'bgset', image: section.settings.image %}"
       data-sizes="auto"
       data-parent-fit="cover">
+      {% comment %}
+        =============================================================================
+        NOSCRIPT FALLBACK FOR IMAGE DISPLAY
+        =============================================================================
+        Fallback image display when JavaScript is disabled
+        - noscript: Content displayed without JavaScript
+        - rimage-wrapper: Image wrapper styling
+        - padding-top: Calculated padding based on image aspect ratio
+        - Prevents layout shift during image loading
+        - Uses standard Shopify image URL with fixed dimensions
+        - alt: Image alt text for accessibility
+      {% endcomment %}
       <noscript>
         <div class="rimage-wrapper" style="padding-top:{{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%">
-          <img src="{{ section.settings.image | img_url: '1024x1024' }}" alt="{{ section.settings.image.alt | escape }}" class="rimage__image">
+          <img src="{{ section.settings.image | image_url: width: 1024, height: 1024 }}" alt="{{ section.settings.image.alt | escape }}" class="rimage__image">
         </div>
       </noscript>
     </div>
   {% endif %}
 
+  {% comment %}
+    =============================================================================
+    OVERLAY CONTENT CONTAINER
+    =============================================================================
+    Content overlay positioned over background image
+    - overlay-type: Height-controlled overlay container
+    - overlay: Base overlay styling class
+    - {{ section.settings.overlay_position }}: Dynamic overlay positioning
+    - inner: Inner content wrapper for proper spacing
+    - Contains newsletter form and content elements
+  {% endcomment %}
   <div class="overlay-type overlay {{ section.settings.overlay_position }}">
     <div class="inner">
       <div>
+        {% comment %}
+          =============================================================================
+          OVERLAY CONTENT WRAPPER
+          =============================================================================
+          Content wrapper for newsletter form and text
+          - overlay__content: Base content styling
+          - Contains subheading, title, form, and descriptive text
+          - Provides consistent spacing and layout structure
+        {% endcomment %}
         <div class="overlay__content">
+          {% comment %}
+            =============================================================================
+            NEWSLETTER FORM ID GENERATION
+            =============================================================================
+            Generates unique form ID for multiple newsletter sections
+            - section.id: Unique section identifier
+            - prepend: "newsletter-signup-": Prefix for form identification
+            - form_id: Unique identifier for form element
+            - Prevents conflicts when multiple newsletter sections exist
+          {% endcomment %}
           {% assign form_id = section.id | prepend: "newsletter-signup-" %}
+          {% comment %}
+            =============================================================================
+            SHOPIFY CUSTOMER FORM INTEGRATION
+            =============================================================================
+            Shopify customer form for newsletter subscription
+            - form 'customer': Shopify customer form helper
+            - id: form_id: Unique form identifier
+            - Integrates with Shopify customer management system
+            - Handles form submission and customer creation
+          {% endcomment %}
           {% form 'customer', id: form_id %}
+            {% comment %}
+              =============================================================================
+              NEWSLETTER SUBHEADING
+              =============================================================================
+              Optional subheading text above main title
+              - section.settings.subheading: Custom subheading from theme settings
+              - feature-subheader: Consistent subheading styling
+              - data-cc-animate: JavaScript animation trigger
+              - escape: HTML escaping for security
+            {% endcomment %}
             {% if section.settings.subheading != blank %}
               <div class="feature-subheader" data-cc-animate>{{ section.settings.subheading | escape }}</div>
             {% endif %}
 
+            {% comment %}
+              =============================================================================
+              NEWSLETTER MAIN TITLE
+              =============================================================================
+              Primary newsletter title with consistent styling
+              - section.settings.title: Custom title from theme settings
+              - h2: Semantic heading level for accessibility
+              - line-1: Title styling class
+              - data-cc-animate: JavaScript animation trigger
+              - escape: HTML escaping for security
+            {% endcomment %}
             <h4 class="h2 line-1" data-cc-animate>{{ section.settings.title | escape }}</h4>
 
+            {% comment %}
+              =============================================================================
+              NEWSLETTER SIGNUP FORM CONTAINER
+              =============================================================================
+              Main form container with success/error handling
+              - signup-form: Base form styling class
+              - Handles form submission states and responses
+              - Contains email input, submit button, and feedback messages
+            {% endcomment %}
             <div class="signup-form">
+              {% comment %}
+                =============================================================================
+                SUCCESS MESSAGE DISPLAY
+                =============================================================================
+                Success message when newsletter signup is successful
+                - form.posted_successfully?: Shopify form success flag
+                - signup-form__response: Success message styling
+                - general.newsletter.success: Localized success message
+                - Only displays after successful form submission
+              {% endcomment %}
               {% if form.posted_successfully? %}
                 <div class="signup-form__response">
                   <p>{{ 'general.newsletter.success' | t }}</p>
                 </div>
               {% else %}
+                {% comment %}
+                  =============================================================================
+                  NEWSLETTER FORM FIELDS
+                  =============================================================================
+                  Newsletter form input fields and submission
+                  - input type="hidden" name="newsletter" value="true": Newsletter flag
+                  - contact[tags]: Customer tagging for marketing segmentation
+                  - prospect,newsletter: Default tags for new subscribers
+                  - inline-mini-form: Compact form layout styling
+                  - inline-mini-form--arrow: Arrow button styling variant
+                {% endcomment %}
                 <input type="hidden" name="newsletter" value="true"/>
+                {% comment %}
+                  =============================================================================
+                  NEWSLETTER DESCRIPTIVE TEXT
+                  =============================================================================
+                  Descriptive text below the main title
+                  - section.settings.text: Rich text content from theme settings
+                  - rte: Rich text editor styling for consistent typography
+                  - align-center: Center-aligned text positioning
+                  - data-cc-animate: JavaScript animation trigger
+                  - data-cc-animate-delay: Animation timing delay for staggered effects
+                {% endcomment %}
                 <div class="rte align-center" data-cc-animate data-cc-animate-delay="0.2s">{{ section.settings.text }}</div>
 
+                {% comment %}
+                  =============================================================================
+                  CUSTOMER TAGGING SYSTEM
+                  =============================================================================
+                  Hidden field for customer tag assignment
+                  - contact_tags{{ section.id }}: Unique tag field identifier
+                  - name="contact[tags]": Shopify customer tag field
+                  - value="prospect,newsletter": Default tag values
+                  - prospect: Identifies customer as potential buyer
+                  - newsletter: Identifies customer as newsletter subscriber
+                {% endcomment %}
                 <input type="hidden" id="contact_tags{{ section.id }}" name="contact[tags]" value="prospect,newsletter"/>
+                {% comment %}
+                  =============================================================================
+                  EMAIL INPUT AND SUBMIT BUTTON
+                  =============================================================================
+                  Email input field with arrow submit button
+                  - inline-mini-form: Compact form layout styling
+                  - inline-mini-form--arrow: Arrow button styling variant
+                  - data-cc-animate: JavaScript animation trigger
+                  - data-cc-animate-delay: Animation timing delay for staggered effects
+                  - input type="email": Email input field with validation
+                  - aria-label: Accessible label for screen readers
+                  - placeholder: Input placeholder text
+                  - required: Form validation requirement
+                  - mailinglist_email{{ section.id }}: Unique email field identifier
+                  - name="contact[email]": Shopify customer email field
+                  - button type="submit": Form submission button
+                  - compact no-hover: Button styling classes
+                  - aria-label: Accessible button label
+                  - svg-rarrow-long: Arrow icon for submit button
+                {% endcomment %}
                 <div class="inline-mini-form inline-mini-form--arrow" data-cc-animate data-cc-animate-delay="0.4s">
                   <input type="email" aria-label="{{ 'general.signup.email_label' | t | escape }}"
                          placeholder="{{ 'general.signup.email_label' | t | escape }}" class="required" value="" id="mailinglist_email{{ section.id }}" name="contact[email]" />
@@ -67,6 +287,18 @@
                   </button>
                 </div>
 
+                {% comment %}
+                  =============================================================================
+                  FORM ERROR HANDLING
+                  =============================================================================
+                  Error message display for form validation failures
+                  - form.errors: Shopify form error object
+                  - signup-form__response: Error message styling
+                  - field: Individual form field with error
+                  - form.errors.messages[field]: Error message for specific field
+                  - capitalize: Capitalizes field name for display
+                  - error: Error message styling class
+                {% endcomment %}
                 {% if form.errors %}
                   <div class="signup-form__response">
                     {% for field in form.errors %}
@@ -85,98 +317,124 @@
 
 </div>
 
+{% comment %}
+  =============================================================================
+  SCHEMA CONFIGURATION
+  =============================================================================
+  Theme editor configuration for newsletter section customization
+  - name: Section name displayed in theme editor
+  - class: CSS class for section-specific styling
+  - settings: Configurable options for merchants
+  - subheading: Optional subheading text above main title
+  - title: Main newsletter title text
+  - text: Descriptive text below title (rich text)
+  - image: Background image selection
+  - color_scheme: Color scheme selection (standard, custom)
+  - color_bg: Custom background color when using custom scheme
+  - color_text: Custom text color when using custom scheme
+  - overlay_position: Overlay positioning options
+  - height_mobile: Mobile-specific height in pixels
+  - height_desktop: Desktop-specific height in pixels
+  - presets: Default section configuration for easy addition
+{% endcomment %}
 {% schema %}
-  {
-    "name": "Newsletter",
-    "class": "section-newsletter",
-    "settings": [
-      {
-        "type": "text",
-        "id": "subheading",
-        "label": "Subheading"
-      },
-      {
-        "type": "text",
-        "id": "title",
-        "label": "Heading",
-        "default": "Subscribe to our newsletter"
-      },
-	    {
-        "type": "richtext",
-        "id": "text",
-        "label": "Text",
-        "default": "<p>Sign up to our newsletter and we’ll keep you up to date with the latest arrivals<\/p>"
-      },
-      {
-        "type": "range",
-        "id": "height_desktop",
-        "min": 300,
-        "max": 1000,
-        "step": 50,
-        "unit": "px",
-        "label": "Desktop fixed height",
-        "default": 500
-      },
-      {
-        "type": "range",
-        "id": "height_mobile",
-        "min": 300,
-        "max": 700,
-        "step": 50,
-        "unit": "px",
-        "label": "Mobile fixed height",
-        "default": 400
-      },
-      {
-        "type": "paragraph",
-        "content": "Customers who subscribe will have their email address added to the 'accepts marketing' [customer list](/admin/customers?query=&accepts_marketing=1)"
-      },
-      {
-        "type": "header",
-        "content": "Background"
-      },
-      {
-        "type": "image_picker",
-        "id": "image",
-        "label": "Image",
-        "info": "2048 x 1024px recommended"
-      },
-      {
-        "type": "radio",
-        "id": "color_scheme",
-        "label": "Color scheme",
-        "default": "standard",
-        "options": [
-          {
-            "value": "standard",
-            "label": "Standard"
-          },
-          {
-            "value": "alt",
-            "label": "Alternate colors"
-          },
-          {
-            "value": "custom",
-            "label": "Custom colors"
-          }
-        ]
-      },
-      {
-        "type": "color",
-        "id": "color_bg",
-        "label": "Custom background color"
-      },
-      {
-        "type": "color",
-        "id": "color_text",
-        "label": "Custom text color"
-      }
-	  ],
-	  "presets": [
-      {
-        "name": "Newsletter",
-        "settings": {}
-      }
-	  ]
-  }
+{
+  "name": "Newsletter",
+  "class": "section-newsletter",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Subscribe to our newsletter"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Subscribe to get special offers, free giveaways, and once-in-a-lifetime deals.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "standard",
+      "options": [
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "custom",
+          "label": "Custom"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "color_bg",
+      "label": "Custom background color"
+    },
+    {
+      "type": "color",
+      "id": "color_text",
+      "label": "Custom text color"
+    },
+    {
+      "type": "select",
+      "id": "overlay_position",
+      "label": "Overlay position",
+      "default": "center",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "height_mobile",
+      "label": "Mobile height",
+      "min": 200,
+      "max": 600,
+      "step": 20,
+      "default": 400,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "height_desktop",
+      "label": "Desktop height",
+      "min": 200,
+      "max": 800,
+      "step": 20,
+      "default": 500,
+      "unit": "px"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter"
+    }
+  ]
+}
 {% endschema %}

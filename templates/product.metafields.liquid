@@ -7,7 +7,7 @@ https://www.shopify.com/partners/blog/shopify-alternate-templates
 {
   "metafields": {
   {% for metafield in product.metafields.related_products %}
-   "{{ metafield | first  }}" :  "{{ metafield | last }}"{% unless forloop.last %},{% endunless %}
+   "{{ metafield | first }}" :  "{{ metafield | last }}"{% unless forloop.last %},{% endunless %}
   {% endfor %}
   },
   "global_metafields": {
@@ -15,15 +15,15 @@ https://www.shopify.com/partners/blog/shopify-alternate-templates
      {% assign metafield_name = metafield | first %}
      {% assign metafield_value = metafield | last %}
      {% if metafield_name == 'size_chart' %}
-      "{{ metafield | first  }}" :  {{ pages[metafield_value].content | json }}{% unless forloop.last %},{% endunless %}
+      "{{ metafield | first }}" :  {{ pages[metafield_value].content | json }}{% unless forloop.last %},{% endunless %}
      {% else %}
-      "{{ metafield | first  }}" :  "{{ metafield | last }}"{% unless forloop.last %},{% endunless %}
+      "{{ metafield | first }}" :  "{{ metafield | last }}"{% unless forloop.last %},{% endunless %}
      {% endif %}
      {% endfor %}
   },
   "badge_metafields": {
      {% for metafield in product.metafields.badge %}
-      "{{ metafield | first  }}" :  "{{ metafield | last }}"{% unless forloop.last %},{% endunless %}
+      "{{ metafield | first }}" :  "{{ metafield | last }}"{% unless forloop.last %},{% endunless %}
      {% endfor %}
   },
   "backorder_metafields": {

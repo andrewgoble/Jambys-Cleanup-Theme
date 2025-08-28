@@ -1,3 +1,28 @@
+{% comment %}
+  =============================================================================
+  FEATURED BLOG SECTION - BLOG CONTENT DISPLAY & SLIDESHOW
+  =============================================================================
+  Dynamic blog content section with multiple layout options and slideshow functionality
+  - Supports both grid and slideshow layout modes
+  - Configurable background colors and wave effects
+  - Responsive height controls for mobile and desktop
+  - Blog selection and post limit configuration
+  - Optional title image and body text display
+  - View all link to blog page
+  - Slideshow mode with header overlap and alt logo support
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  DYNAMIC STYLING & COLOR CUSTOMIZATION
+  =============================================================================
+  CSS styles for background colors, title alignment, and layout positioning
+  - color_bg: Custom background color from section settings
+  - title_alignment: Controls heading text alignment (left/center/right)
+  - shopify-section: Ensures proper section positioning and overflow
+  - blog-image-title: Constrains title image width for consistent display
+  - Responsive layout adjustments for different alignment options
+{% endcomment %}
 {% style %}
   {% unless section.settings.color_bg == blank %}
      .section-id-{{ section.id }} {
@@ -39,6 +64,18 @@
 
 {% endstyle %}
 
+{% comment %}
+  =============================================================================
+  WAVE STYLING INTEGRATION
+  =============================================================================
+  Optional decorative wave borders for visual interest
+  - wave: Wave position setting (none/top/bottom/both)
+  - wave-styles: Snippet for rendering wave SVG elements
+  - wave_position: Passes wave position to wave-styles snippet
+  - section_id: Unique section identifier for styling
+  - fill_color: Wave color matches section background color
+  - Creates seamless integration between waves and background
+{% endcomment %}
 {%- if section.settings.wave != "none" -%}
   {%- render 'wave-styles', 
     wave_position: section.settings.wave, 
@@ -46,18 +83,70 @@
     fill_color: section.settings.color_bg -%}
 {%- endif -%}
 
-
+{% comment %}
+  =============================================================================
+  MAIN FEATURED BLOG CONTAINER
+  =============================================================================
+  Primary container with dynamic classes and layout options
+  - id="section-id-{{ section.id }}": Unique section identifier
+  - blog-section: Base section styling class
+  - section-id-{{ section.id }}: CSS class for section-specific styling
+  - header-overlap-section: Full-width layout for slideshow mode
+  - needs-alt-logo: Triggers alternate logo display for dark overlays
+  - data-section-type="featured-blog": Identifies section type for JavaScript
+  - data-cc-animate: JavaScript animation trigger for entrance effects
+{% endcomment %}
 <div id="section-id-{{ section.id }}" class="blog-section section-id-{{ section.id }} {% if section.settings.layout == 'slideshow' %}header-overlap-section needs-alt-logo{% endif %}" data-section-type="featured-blog" data-cc-animate>
+  {% comment %}
+    =============================================================================
+    BLOG ASSIGNMENT
+    =============================================================================
+    Retrieves the selected blog from section settings
+    - section.settings.blog: Blog handle from theme editor
+    - blogs[section.settings.blog]: Blog object lookup
+    - Used for blog URL generation and post access
+  {% endcomment %}
   {% assign blog = blogs[section.settings.blog] %}
 
+  {% comment %}
+    =============================================================================
+    SLIDESHOW LAYOUT MODE
+    =============================================================================
+    Slideshow-specific functionality and styling
+    - layout == 'slideshow': Slideshow layout mode setting
+    - post_limit: Maximum number of posts to display
+    - limit > 7: Constrains slideshow to maximum 7 posts for performance
+    - height controls: Fixed height settings for mobile and desktop
+    - wide-container: Full-width container for slideshow content
+  {% endcomment %}
   {% if section.settings.layout == 'slideshow' %}
+    {% comment %}
+      =============================================================================
+      POST LIMIT VALIDATION
+      =============================================================================
+      Ensures slideshow doesn't exceed performance limits
+      - section.settings.post_limit: Post limit from theme editor
+      - limit > 7: Maximum of 7 posts for slideshow performance
+      - Prevents excessive DOM elements and improves user experience
+    {% endcomment %}
     {% assign limit = section.settings.post_limit %}
 
     {% if limit > 7 %}
       {% assign limit = 7 %}
     {% endif %}
 
-
+    {% comment %}
+      =============================================================================
+      RESPONSIVE HEIGHT STYLES
+      =============================================================================
+      Dynamic CSS for slideshow height on different screen sizes
+      - height == 'fixed': Fixed height mode setting
+      - height_mobile: Fixed height for mobile devices (under 768px)
+      - height_desktop: Fixed height for desktop devices (768px+)
+      - rimage-outer-wrapper: Responsive image container
+      - placeholder-image: Fallback image styling
+      - Responsive breakpoints: 768px (tablet/desktop)
+    {% endcomment %}
     {% style %}
       {%- if section.settings.height == 'fixed' -%}
         #section-id-{{ section.id }} .rimage-outer-wrapper,
@@ -76,23 +165,88 @@
       }
     {% endstyle %}
 
+    {% comment %}
+      =============================================================================
+      SLIDESHOW CONTAINER WRAPPER
+      =============================================================================
+      Conditional container for slideshow content
+      - full_width: Boolean setting for full-width vs contained layout
+      - wide-container: Contained width layout option
+      - half-gutter: Reduced spacing for tighter layout
+      - section-spacing: Consistent vertical spacing between sections
+      - Only renders when full-width is disabled
+    {% endcomment %}
     {%- unless section.settings.full_width -%}<div class="wide-container half-gutter section-spacing">{%- endunless -%}
 
+    {% comment %}
+      =============================================================================
+      SLIDESHOW BLOG CONTAINER
+      =============================================================================
+      Main slideshow container with blog content
+      - slideshow-blog: Slideshow-specific styling class
+      - Contains title, body text, view all link, and blog posts
+      - Responsive design with mobile and desktop optimization
+    {% endcomment %}
     <div class="slideshow-blog">
+      {% comment %}
+        =============================================================================
+        TITLE IMAGE DISPLAY
+        =============================================================================
+        Optional title image above slideshow content
+        - title_image: Image picker from theme editor
+        - blog-image-title: Constrained width styling for title image
+        - image_url: width: 500: Optimized image with 500px width
+        - Falls back to text title if no image is provided
+      {% endcomment %}
       {% if section.settings.title_image != blank %}
         <h2>
-          <img class="blog-image-title" src="{{ section.settings.title_image | img_url: '500x' }}">
+          <img class="blog-image-title" src="{{ section.settings.title_image | image_url: width: 500 }}">
         </h2>
       {% elsif section.settings.title != blank %}
+        {% comment %}
+          =============================================================================
+          TEXT TITLE DISPLAY
+          =============================================================================
+          Text-based title when no title image is provided
+          - slideshow-blog__title: Title styling class
+          - feature-subheader: Consistent heading styling
+          - overlay-type: Overlay styling for better visibility
+          - data-cc-animate: Animation hook for title appearance
+          - data-cc-animate-delay="0.2s": Staggered animation timing
+        {% endcomment %}
         <h2 class="slideshow-blog__title feature-subheader overlay-type" data-cc-animate data-cc-animate-delay="0.2s">
           {{ section.settings.title | escape }}
         </h2>
       {% endif %}
 
+      {% comment %}
+        =============================================================================
+        BODY TEXT DISPLAY
+        =============================================================================
+        Optional descriptive text below title
+        - body_text: Text input from theme editor
+        - Provides additional context for the featured blog section
+        - Can include HTML formatting and links
+      {% endcomment %}
       {% if section.settings.body_text != blank %}
         <p>{{ section.settings.body_text }}</p>
       {% endif %}
 
+      {% comment %}
+        =============================================================================
+        VIEW ALL LINK
+        =============================================================================
+        Optional link to the full blog page
+        - show_view_all: Boolean setting for link visibility
+        - slideshow-blog__view-all: Link styling class
+        - feature-subheader: Consistent text styling
+        - overlay-type: Overlay styling for better visibility
+        - data-cc-animate-click: Animation hook for link interaction
+        - data-cc-animate: Animation hook for link appearance
+        - data-cc-animate-delay="0.3s": Staggered animation timing
+        - blog.url: Link to the selected blog page
+        - blogs.general.view_all: Localized "View All" text
+      {% endcomment %}
       {% if section.settings.show_view_all != blank %}
         <a data-cc-animate-click class="slideshow-blog__view-all feature-subheader overlay-type"
            href="{{ blog.url }}" data-cc-animate data-cc-animate-delay="0.3s">
@@ -100,6 +254,22 @@
         </a>
       {% endif %}
 
+      {% comment %}
+        =============================================================================
+        SLIDESHOW CONTAINER WITH NAVIGATION & TRANSITIONS
+        =============================================================================
+        Main slideshow container with Slick.js integration
+        - slideshow: Base slideshow styling class
+        - slideshow--navigation-{{ slide_navigation }}: Dynamic navigation styling
+        - slick-slider-overlay-dots-desktop: Desktop dot navigation
+        - slick-slider-overlay-dots: Mobile dot navigation
+        - data-transition: Slide transition effect (zoom/slide/fade)
+        - data-cc-animate: Animation hook for slideshow appearance
+        - data-autoplay: Boolean for automatic slide rotation
+        - data-autoplay-speed: Time between slide changes in seconds
+        - data-navigation: Navigation type (dots)
+        - data-title-navigation: Enables title-based navigation
+      {% endcomment %}
       <div class="slideshow
             slideshow--navigation-{{ section.settings.slide_navigation }}
             slick-slider-overlay-dots-desktop
@@ -112,28 +282,100 @@
            data-title-navigation="true"
       >
 
+        {% comment %}
+          =============================================================================
+          BLOG ARTICLES VALIDATION
+          =============================================================================
+          Checks if blog is selected before rendering slides
+          - section.settings.blog: Blog selection from theme editor
+          - Prevents rendering empty slideshow when no blog is selected
+          - Ensures proper functionality and user experience
+        {% endcomment %}
         {% unless section.settings.blog == blank %}
 
+          {% comment %}
+            =============================================================================
+            BLOG ARTICLES SLIDES LOOP
+            =============================================================================
+            Iterates through blog articles to create individual slides
+            - blog.articles: Array of all articles in selected blog
+            - limit: Maximum number of articles to display
+            - slide: Individual slide container for each article
+            - slide-{{ forloop.index }}: Unique slide identifier
+            - height--{{ height }}: Dynamic height class based on settings
+            - image-overlay: Overlay styling for content visibility
+            - overlay_style_tint: Optional background tint for better text readability
+            - block.shopify_attributes: Shopify block attributes for theme editor
+          {% endcomment %}
           {% for article in blog.articles limit: limit %}
             <div class="slide slide-{{ forloop.index }} height--{{ section.settings.height }} image-overlay {% if section.settings.overlay_style_tint %}image-overlay--bg-full{% endif %}" {{ block.shopify_attributes }}>
+              {% comment %}
+                =============================================================================
+                ARTICLE FEATURED IMAGE DISPLAY
+                =============================================================================
+                Featured image for each article slide
+                - article.image: Article's featured image from Shopify
+                - rimage-outer-wrapper: Responsive image container
+                - lazyload--manual: Manual lazy loading for performance
+                - fade-in: CSS animation for image appearance
+                - fill-viewport: Full viewport height for full-height slides
+                - data-bgset: Responsive image source set for different screen sizes
+                - data-sizes: Responsive image sizing information
+                - data-parent-fit: Image fitting behavior (cover for full container)
+              {% endcomment %}
               {% if article.image != blank %}
                 <div class="rimage-outer-wrapper lazyload--manual fade-in {% if section.settings.height == 'full' %}fill-viewport{% endif %}"
                     data-bgset="{% render 'bgset', image: article.image %}"
                     data-sizes="auto"
                     data-parent-fit="cover">
 
+                  {% comment %}
+                    =============================================================================
+                    ADAPTIVE HEIGHT CALCULATION
+                    =============================================================================
+                    Calculates aspect ratio for adaptive height slides
+                    - height == 'adapt': Adaptive height mode setting
+                    - aspect_ratio: Uses first article's image aspect ratio or defaults to 2.0
+                    - padding-top: Calculates percentage for responsive image sizing
+                    - Ensures consistent image proportions across all slides
+                  {% endcomment %}
                   {%- if section.settings.height == 'adapt' -%}
                     {%- assign aspect_ratio = blog.articles.first.image.aspect_ratio | default: 2.0 -%}
                     <div class="rimage-wrapper" style="padding-top:{{ 1 | divided_by: aspect_ratio | times: 100 }}%"></div>
                   {%- endif -%}
 
+                  {% comment %}
+                    =============================================================================
+                    NOSCRIPT IMAGE FALLBACK
+                    =============================================================================
+                    Fallback image for users with JavaScript disabled
+                    - rimage-wrapper: Image container with aspect ratio
+                    - padding-top: Calculated aspect ratio for proper sizing
+                    - image_url: Direct image URL with dimensions (1024x1024)
+                    - alt: Image alt text for accessibility
+                    - rimage__image: Image styling class
+                  {% endcomment %}
                   <noscript>
                     <div class="rimage-wrapper" style="padding-top:{{ 1 | divided_by: article.image.aspect_ratio | times: 100 }}%">
-                      <img src="{{ article.image | img_url: '1024x1024' }}" alt="{{ article.image.alt | escape }}" class="rimage__image"/>
+                      <img src="{{ article.image | image_url: width: 1024, height: 1024 }}" alt="{{ article.image.alt | escape }}" class="rimage__image"/>
                     </div>
                   </noscript>
                 </div>
               {% else %}
+                {% comment %}
+                  =============================================================================
+                  PLACEHOLDER IMAGE FOR ARTICLES WITHOUT IMAGES
+                  =============================================================================
+                  Fallback placeholder when article has no featured image
+                  - placeholder-image: Placeholder styling class
+                  - placeholder--banner: Banner-style placeholder
+                  - dark: Dark placeholder variant for better text visibility
+                  - height == 'adapt': Adaptive height styling
+                  - padding-top: 50% for square aspect ratio
+                  - cycle: Alternates between placeholder images (1, 2)
+                  - lifestyle-{{ current }}: Placeholder image naming convention
+                  - placeholder_svg_tag: Generates SVG placeholder element
+                {% endcomment %}
                 <div class="placeholder-image placeholder--banner
                   {% if block.settings.title != blank or block.settings.subheading != blank %}dark{% endif %}"
                   {% if section.settings.height == 'adapt' %}style="padding-top: 50%"{% endif %}
@@ -143,16 +385,52 @@
                 </div>
               {% endif %}
 
+              {% comment %}
+                =============================================================================
+                SLIDE CONTENT OVERLAY
+                =============================================================================
+                Content overlay positioned over slide background
+                - overlay-type overlay: Overlay styling and positioning
+                - position--left position--bottom: Bottom-left positioning
+                - inner: Inner content wrapper for proper spacing
+                - overlay__content: Main content container
+                - Contains article title, metadata, and read more button
+              {% endcomment %}
               <div class="overlay-type overlay position--left position--bottom">
                 <div class="inner">
                   <div>
                     <div class="overlay__content">
+                      {% comment %}
+                        =============================================================================
+                        ARTICLE TITLE DISPLAY
+                        =============================================================================
+                        Article title as clickable link
+                        - line-1: Title styling class
+                        - article.title: Article title from Shopify
+                        - data-cc-animate-click: Animation hook for link interaction
+                        - article.url: Link to full article page
+                      {% endcomment %}
                       {%- if article.title != blank -%}
                         <h3 class="line-1">
                           <a data-cc-animate-click href="{{ article.url }}">{{ article.title }}</a>
                         </h3>
                       {%- endif -%}
 
+                      {% comment %}
+                        =============================================================================
+                        ARTICLE METADATA DISPLAY
+                        =============================================================================
+                        Optional article publication date and author
+                        - blog_show_date: Boolean setting for date display
+                        - blog_show_author: Boolean setting for author display
+                        - feature-subheader: Consistent metadata styling
+                        - data-cc-animate: Animation hook for metadata appearance
+                        - data-cc-animate-delay="0.2s": Staggered animation timing
+                        - published_at: Article publication date
+                        - format: 'month_date_year': Date formatting
+                        - author: Article author name
+                        - Conditional comma separator between date and author
+                      {% endcomment %}
                       {% if section.settings.blog_show_date or section.settings.blog_show_author %}
                         <div class="feature-subheader" data-cc-animate data-cc-animate-delay="0.2s">
                           {%- if section.settings.blog_show_date -%}
@@ -166,6 +444,17 @@
                         </div>
                       {% endif %}
 
+                      {% comment %}
+                        =============================================================================
+                        READ MORE BUTTON
+                        =============================================================================
+                        Call-to-action button linking to full article
+                        - line-3: Button container styling class
+                        - button alt hover-grow: Button styling with hover effects
+                        - data-cc-animate-click: Animation hook for button interaction
+                        - article.url: Link to full article page
+                        - blogs.article.read_more: Localized "Read More" text
+                      {% endcomment %}
                       <div class="line-3">
                         <a data-cc-animate-click class="button alt hover-grow" href="{{ article.url }}">
                           {{ 'blogs.article.read_more' | t }}
@@ -179,6 +468,17 @@
 
           {% else %}
 
+            {% comment %}
+              =============================================================================
+              EMPTY BLOG STATE MESSAGE
+              =============================================================================
+              Message displayed when blog has no articles
+              - wide-container: Contained width layout
+              - half-gutter: Reduced spacing for tighter layout
+              - section-spacing: Consistent vertical spacing
+              - align-center: Centers the message for better UX
+              - onboarding.blog.empty: Localized "no articles" message
+            {% endcomment %}
             <div class="wide-container half-gutter section-spacing">
               <p class="align-center">{{ 'onboarding.blog.empty' | t }}</p>
             </div>
@@ -187,6 +487,21 @@
 
         {% else %}
 
+          {% comment %}
+            =============================================================================
+            ONBOARDING PLACEHOLDER SLIDES
+            =============================================================================
+            Default slides when no blog is selected (theme editor preview)
+            - Creates 5 placeholder slides for demonstration
+            - slide-{{ forloop.index }}: Unique slide identifier
+            - height--{{ height }}: Dynamic height class
+            - image-overlay: Overlay styling for content visibility
+            - overlay_style_tint: Optional background tint
+            - placeholder-image: Placeholder styling with dark variant
+            - height == 'adapt': Adaptive height styling (50% padding)
+            - cycle: Alternates between placeholder images (1, 2)
+            - lifestyle-{{ current }}: Placeholder image naming
+          {% endcomment %}
           {% for i in (1..5) %}
             <div class="slide slide-{{ forloop.index }} height--{{ section.settings.height }} image-overlay {% if section.settings.overlay_style_tint %}image-overlay--bg-full{% endif %}">
 
@@ -197,14 +512,44 @@
                 {{ 'lifestyle-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
               </div>
 
+              {% comment %}
+                =============================================================================
+                ONBOARDING OVERLAY CONTENT
+                =============================================================================
+                Placeholder content for onboarding slides
+                - overlay-type overlay: Overlay styling and positioning
+                - position--left position--bottom: Bottom-left positioning
+                - inner: Inner content wrapper for proper spacing
+                - overlay__content: Main content container
+                - Contains placeholder title, metadata, and button
+              {% endcomment %}
               <div class="overlay-type overlay position--left position--bottom">
                 <div class="inner">
                   <div>
                     <div class="overlay__content">
+                      {% comment %}
+                        =============================================================================
+                        ONBOARDING TITLE
+                        =============================================================================
+                        Placeholder title for onboarding slides
+                        - line-1: Title styling class
+                        - onboarding.article.title: Localized placeholder title
+                        - span instead of link for placeholder functionality
+                      {% endcomment %}
                       <h3 class="line-1">
                         <span href="{{ article.url }}">{{ 'onboarding.article.title' | t }}</span>
                       </h3>
 
+                      {% comment %}
+                        =============================================================================
+                        ONBOARDING METADATA
+                        =============================================================================
+                        Placeholder metadata for onboarding slides
+                        - Same structure as real article metadata
+                        - Uses current date for date display
+                        - onboarding.article.author: Localized placeholder author
+                        - Conditional comma separator between date and author
+                      {% endcomment %}
                       {% if section.settings.blog_show_date or section.settings.blog_show_author %}
                         <div class="feature-subheader" data-cc-animate data-cc-animate-delay="0.2s">
                           {%- if section.settings.blog_show_date -%}
@@ -220,6 +565,16 @@
                         </div>
                       {% endif %}
 
+                      {% comment %}
+                        =============================================================================
+                        ONBOARDING READ MORE BUTTON
+                        =============================================================================
+                        Placeholder button for onboarding slides
+                        - line-3: Button container styling class
+                        - button alt hover-grow: Button styling with hover effects
+                        - span instead of link for placeholder functionality
+                        - blogs.article.read_more: Localized "Read More" text
+                      {% endcomment %}
                       <div class="line-3">
                         <span class="button alt hover-grow">
                           {{ 'blogs.article.read_more' | t }}
@@ -233,6 +588,14 @@
 
           {% else %}
 
+            {% comment %}
+              =============================================================================
+              ONBOARDING EMPTY STATE MESSAGE
+              =============================================================================
+              Message displayed when no blog is selected
+              - Same structure as empty blog state
+              - onboarding.blog.empty: Localized "no articles" message
+            {% endcomment %}
             <div class="wide-container half-gutter section-spacing">
               <p class="align-center">{{ 'onboarding.blog.empty' | t }}</p>
             </div>
@@ -242,8 +605,33 @@
         {% endunless %}
       </div>
 
+      {% comment %}
+        =============================================================================
+        SLIDESHOW TITLE NAVIGATION
+        =============================================================================
+        Optional title-based navigation for slideshow
+        - limit > 1: Only shows when multiple slides exist
+        - overlay-type: Overlay styling for better visibility
+        - slideshow-blog__titles: Title navigation container
+        - data-cc-animate: Animation hook for navigation appearance
+        - cc-fade-in-up: Specific animation effect
+        - data-cc-animate-delay="0.3s": Staggered animation timing
+      {% endcomment %}
       {% if limit > 1 %}
         <ol class="overlay-type slideshow-blog__titles" data-cc-animate="cc-fade-in-up" data-cc-animate-delay="0.3s">
+          {% comment %}
+            =============================================================================
+            TITLE NAVIGATION FOR REAL BLOG ARTICLES
+            =============================================================================
+            Navigation list with real article titles
+            - section.settings.blog: Blog selection validation
+            - blog.articles: Array of all articles in selected blog
+            - limit: Maximum number of articles to display
+            - slideshow-blog__titles__progress: Progress indicator styling
+            - transition-duration: Matches autoplay speed for sync
+            - data-go-to-slide: JavaScript hook for slide navigation
+            - forloop.index | minus: 1: Zero-based slide index
+          {% endcomment %}
           {% unless section.settings.blog == blank %}
             {% for article in blog.articles limit: limit %}
               <li>
@@ -254,6 +642,16 @@
               </li>
             {% endfor %}
           {% else %}
+            {% comment %}
+              =============================================================================
+              TITLE NAVIGATION FOR ONBOARDING SLIDES
+              =============================================================================
+              Navigation list with placeholder titles
+              - Creates 5 placeholder navigation items
+              - Same structure as real article navigation
+              - onboarding.article.title: Localized placeholder title
+              - forloop.index | minus: 1: Zero-based slide index
+            {% endcomment %}
             {% for i in (1..5) %}
               <li>
                 <span class="slideshow-blog__titles__progress" style="transition-duration: {{ section.settings.autoplay_speed }}s"></span>
@@ -267,26 +665,87 @@
       {% endif %}
     </div>
 
+    {% comment %}
+      =============================================================================
+      SLIDESHOW CONTAINER CLOSING
+      =============================================================================
+      Closes the conditional container wrapper
+      - full_width: Boolean setting for full-width vs contained layout
+      - Only closes when full-width is disabled
+      - Maintains proper HTML structure
+    {% endcomment %}
     {%- unless section.settings.full_width -%}</div>{%- endunless -%}
 
+  {% comment %}
+    =============================================================================
+    CAROUSEL LAYOUT MODE
+    =============================================================================
+    Alternative layout mode using Swiper.js carousel
+    - layout == 'carousel': Carousel layout mode setting
+    - carousel-blog: Carousel-specific styling class
+    - product-slider: Swiper.js integration class
+    - Wide container with section spacing for contained layout
+    - Section heading with title, body text, and view all link
+    - Swiper container with navigation and pagination
+  {% endcomment %}
   {% elsif section.settings.layout == 'carousel' %}
 
     <div class="carousel-blog product-slider">
       <div class="wide-container half-gutter section-spacing">
+        {% comment %}
+          =============================================================================
+          CAROUSEL SECTION HEADING
+          =============================================================================
+          Header section for carousel layout
+          - section-heading: Header container styling
+          - data-cc-animate: Animation hook for header appearance
+          - Conditional display based on title or view all link
+          - Title image, text title, or empty div
+          - Body text and view all link when enabled
+        {% endcomment %}
         {% if section.settings.title != blank or section.settings.show_view_all %}
           <div class="section-heading" data-cc-animate>
+            {% comment %}
+              =============================================================================
+              CAROUSEL TITLE IMAGE
+              =============================================================================
+              Optional title image for carousel layout
+              - title_image: Image picker from theme editor
+              - blog-image-title: Constrained width styling
+              - image_url: width: 500: Optimized image with 500px width
+              - Falls back to text title if no image is provided
+            {% endcomment %}
             {% if section.settings.title_image != blank %}
-              <img class="blog-image-title" src="{{ section.settings.title_image | img_url: '500x' }}">
+              <img class="blog-image-title" src="{{ section.settings.title_image | image_url: width: 500 }}">
             {% elsif section.settings.title != blank %}
               <h2 class=" h2">{{ section.settings.title | escape }}</h2>
             {% else %}
               <div></div>
             {% endif %}
 
+            {% comment %}
+              =============================================================================
+              CAROUSEL BODY TEXT
+              =============================================================================
+              Optional descriptive text for carousel layout
+              - body_text: Text input from theme editor
+              - Provides additional context for the carousel section
+            {% endcomment %}
             {% if section.settings.body_text != blank %}
               <p>{{ section.settings.body_text }}</p>
             {% endif %}
 
+            {% comment %}
+              =============================================================================
+              CAROUSEL VIEW ALL LINK
+              =============================================================================
+              Optional link to the full blog page
+              - show_view_all: Boolean setting for link visibility
+              - view-all-link: Link styling class
+              - data-cc-animate-click: Animation hook for link interaction
+              - blog.url: Link to the selected blog page
+              - blogs.general.view_all: Localized "View All" text
+            {% endcomment %}
             {% if section.settings.show_view_all %}
               <a data-cc-animate-click class="view-all-link" href="{{ blog.url }}">
                 {{ 'blogs.general.view_all' | t }}
@@ -295,9 +754,37 @@
           </div>
         {% endif %}
 
+        {% comment %}
+          =============================================================================
+          SWIPER CAROUSEL CONTAINER
+          =============================================================================
+          Main carousel container with Swiper.js integration
+          - swiper-container: Swiper.js main container class
+          - product-list: Product list styling integration
+          - data-products-in-view="3": Shows 3 products per view
+          - data-first-post-big: Boolean for enlarged first post
+          - swiper-wrapper: Swiper.js wrapper for slides
+          - data-normheights: Normalizes heights for consistent layout
+          - data-normheights-inner: Inner element for height normalization
+        {% endcomment %}
         <div class="swiper-container product-list" data-products-in-view="3" data-first-post-big="{{ section.settings.blog_first_post_big }}">
 
           <div class="swiper-wrapper" data-normheights=".image" data-normheights-inner="img">
+            {% comment %}
+              =============================================================================
+              CAROUSEL BLOG ARTICLES
+              =============================================================================
+              Real blog articles for carousel display
+              - section.settings.blog: Blog selection validation
+              - blog.articles: Array of all articles in selected blog
+              - post_limit: Maximum number of articles to display
+              - swiper-slide: Required class for Swiper.js functionality
+              - article-block: Snippet for individual article display
+              - show_date: Boolean setting for date display
+              - show_author: Boolean setting for author display
+              - image_shape: Blog image shape setting from theme
+              - blog_excerpt: Blog excerpt setting from theme
+            {% endcomment %}
             {% if section.settings.blog != blank %}
               {% for article in blog.articles limit: section.settings.post_limit %}
                 <div class="swiper-slide">
@@ -312,6 +799,19 @@
               {% endfor %}
 
             {% else %}
+              {% comment %}
+                =============================================================================
+                CAROUSEL ONBOARDING ARTICLES
+                =============================================================================
+                Placeholder articles for carousel layout (theme editor preview)
+                - Creates 8 placeholder articles for demonstration
+                - swiper-slide: Required class for Swiper.js functionality
+                - article-block third: Article block styling with third width
+                - data-loop-index: Loop index for animation timing
+                - data-cc-animate: Animation hook for article appearance
+                - cc-fade-in-up: Specific animation effect
+                - data-cc-animate-delay: Staggered animation timing (0.15s intervals)
+              {% endcomment %}
               {% for i in (1..8) %}
                 <div class="swiper-slide">
                   <span class="article-block third"
@@ -319,6 +819,16 @@
                     data-cc-animate="cc-fade-in-up"
                     data-cc-animate-delay="{{ forloop.index | times: 0.15 }}s">
 
+                    {% comment %}
+                      =============================================================================
+                      ONBOARDING ARTICLE IMAGE
+                      =============================================================================
+                      Placeholder image for onboarding articles
+                      - article-block__image: Image container styling
+                      - cycle: Alternates between placeholder images (1-6)
+                      - collection-{{ current }}: Placeholder image naming convention
+                      - placeholder_svg_tag: Generates SVG placeholder element
+                    {% endcomment %}
                     <div class="article-block__inner">
                       <div class="article-block__image">
                         {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
@@ -326,6 +836,18 @@
                         <div class="placeholder-image">{{ placeholder_svg_name | placeholder_svg_tag }}</div>
                       </div>
 
+                      {% comment %}
+                        =============================================================================
+                        ONBOARDING ARTICLE CONTENT
+                        =============================================================================
+                        Placeholder content for onboarding articles
+                        - article-block__content: Content container styling
+                        - article-block__title: Title styling with left alignment
+                        - onboarding.article.title: Localized placeholder title
+                        - article-block__excerpt: Excerpt container with RTE styling
+                        - truncate: 150: Limits excerpt to 150 characters
+                        - onboarding.article.excerpt: Localized placeholder excerpt
+                      {% endcomment %}
                       <div class="article-block__content">
                         <h3 class="article-block__title align-left">{{ 'onboarding.article.title' | t }}</h3>
 
@@ -333,6 +855,17 @@
                           <p>{{ 'onboarding.article.excerpt' | t | truncate: 150 }}</p>
                         </div>
 
+                        {% comment %}
+                          =============================================================================
+                          ONBOARDING ARTICLE METADATA
+                          =============================================================================
+                          Placeholder metadata for onboarding articles
+                          - Same structure as real article metadata
+                          - Uses current date for date display
+                          - onboarding.article.author: Localized placeholder author
+                          - Conditional comma separator between date and author
+                          - feature-subheader: Consistent metadata styling
+                        {% endcomment %}
                         {% if section.settings.blog_show_date or section.settings.blog_show_author %}
                           <div class="article-block__meta">
                             {%- if section.settings.blog_show_date -%}
@@ -353,6 +886,20 @@
             {% endif %}
           </div>
 
+          {% comment %}
+            =============================================================================
+            SWIPER CAROUSEL NAVIGATION
+            =============================================================================
+            Navigation controls for carousel functionality
+            - swiper-scrollbar: Horizontal scrollbar for carousel
+            - swiper-button-prev: Previous slide button
+            - swiper-button-next: Next slide button
+            - aria-label: Accessibility labels for screen readers
+            - general.accessibility_labels.previous: Localized previous button text
+            - general.accessibility_labels.next: Localized next button text
+            - svg-chevron-left: Left chevron icon for previous button
+            - svg-chevron-right: Right chevron icon for next button
+          {% endcomment %}
           <div class="swiper-scrollbar"></div>
           <a href="#" class="swiper-button-prev" aria-label="{{ 'general.accessibility_labels.previous' | t | escape }}">{% render 'svg-chevron-left' %}</a>
           <a href="#" class="swiper-button-next" aria-label="{{ 'general.accessibility_labels.next' | t | escape }}">{% render 'svg-chevron-right' %}</a>
@@ -362,234 +909,325 @@
   {% endif %}
 </div>
 
-
+{% comment %}
+  =============================================================================
+  FEATURED BLOG SECTION SCHEMA - CONFIGURATION & CUSTOMIZATION
+  =============================================================================
+  Theme editor configuration for featured blog section customization
+  - name: Section name displayed in theme editor
+  - class: CSS class for section-specific styling
+  - settings: Configurable options for merchants
+  - Layout options: slideshow, carousel
+  - Slideshow settings: height, autoplay, transitions
+  - Carousel settings: first post sizing, navigation
+  - Content settings: title, body text, blog selection
+  - Display settings: date, author, view all link
+  - Styling options: background color, wave effects, title alignment
+{% endcomment %}
 {% schema %}
-  {
-    "name": "Blog posts",
-    "class": "section-featured-blog",
-    "settings": [
-      {
-        "type": "text",
-        "id": "title",
-        "label": "Heading",
-        "default": "Blog posts"
-      },
-      {
-        "type": "image_picker",
-        "id": "title_image",
-        "label": "Heading Image",
-        "info": "This overwrites a text title"
-      },
-      {
-        "type": "blog",
-        "id": "blog",
-        "label": "Blog"
-      },
-      {
-        "type": "select",
-        "id": "title_alignment",
-        "label": "Heading Alignment",
-        "options": [
-          {
-            "value": "left",
-            "label": "Left"
-          },
-          {
-            "value": "center",
-            "label": "Center"
-          },
-          {
-            "value": "right",
-            "label": "right"
-          }
-        ],
-        "default": "left"
-      },
-      {
-        "type": "textarea",
-        "id": "body_text",
-        "label": "Body Text"
-      },
-      {
-        "type": "range",
-        "id": "post_limit",
-        "min": 1,
-        "max": 12,
-        "step": 1,
-        "label": "Posts",
-        "default": 3,
-        "info": "The slideshow will only show a maximum of 7 posts"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_view_all",
-        "label": "Show 'View all' link",
-        "default": true
-      },
-      {
-        "type": "checkbox",
-        "id": "blog_show_author",
-        "label": "Show author",
-        "default": false
-      },
-      {
-        "type": "checkbox",
-        "id": "blog_show_date",
-        "label": "Show date",
-        "default": true
-      },
-      {
-        "type": "radio",
-        "id": "layout",
-        "label": "Layout",
-        "default": "slideshow",
-        "options": [
-          {
-            "value": "carousel",
-            "label": "Carousel"
-          },
-          {
-            "value": "slideshow",
-            "label": "Slideshow"
-          }
-        ]
-      },
-      {
-        "type": "header",
-        "content": "Carousel settings"
-      },
-      {
-        "type": "checkbox",
-        "id": "blog_first_post_big",
-        "label": "Enlarge first blog post",
-        "info": "If selected, the 'Image shape' settings will be ignored",
-        "default": false
-      },
-      {
-        "type": "header",
-        "content": "Slideshow settings"
-      },
-      {
-        "type": "radio",
-        "id": "height",
-        "label": "Slide height",
-        "options": [
-          {
-            "value": "full",
-            "label": "Full screen"
-          },
-          {
-            "value": "fixed",
-            "label": "Fixed height"
-          }
-        ],
-        "default": "full"
-      },
-      {
-        "type": "range",
-        "id": "height_desktop",
-        "min": 600,
-        "max": 1000,
-        "step": 20,
-        "unit": "px",
-        "label": "Desktop fixed height",
-        "default": 700
-      },
-      {
-        "type": "range",
-        "id": "height_mobile",
-        "min": 360,
-        "max": 1000,
-        "step": 20,
-        "unit": "px",
-        "label": "Mobile fixed height",
-        "default": 500
-      },
-      {
-        "id": "full_width",
-        "type": "checkbox",
-        "label": "Full page width",
-        "default": true
-      },
-      {
-        "id": "overlay_style_tint",
-        "type": "checkbox",
-        "label": "Show overlay tint",
-        "default": true
-      },
-      {
-        "id": "autoplay",
-        "type": "checkbox",
-        "label": "Auto-rotate slides",
-        "default": true
-      },
-      {
-        "type": "range",
-        "id": "autoplay_speed",
-        "min": 1,
-        "max": 20,
-        "step": 1,
-        "unit": "s",
-        "label": "Change slides every",
-        "default": 7
-      },
-      {
-        "type": "select",
-        "id": "slide_transition",
-        "label": "Transition",
-        "options": [
-          {
-            "value": "zoom",
-            "label": "Zoom"
-          },
-          {
-            "value": "slide",
-            "label": "Slide"
-          },
-          {
-            "value": "fade",
-            "label": "Fade"
-          }
-        ],
-        "default": "slide"
-      },
-      {
-        "type": "select",
-        "id": "wave",
-        "label": "Wave",
-        "options": [
-          {
-            "value": "none",
-            "label": "None"
-          },
-          {
-            "value": "top",
-            "label": "Top"
-          },
-          {
-            "value": "bottom",
-            "label": "Bottom"
-          },
-          {
-            "value": "both",
-            "label": "Both"
-          }
-        ],
-        "default": "none"
-      },
-      {
-        "id": "color_bg",
-        "type": "color",
-        "label": "Background color",
-        "default": "#ffffff"
-      }
-    ],
-    "presets": [
-      {
-        "name": "Blog posts",
-        "settings": {
+{
+  {% comment %}
+    =============================================================================
+    SCHEMA BASIC CONFIGURATION
+    =============================================================================
+    Core section configuration for theme editor
+    - name: Display name in theme editor sidebar
+    - class: CSS class for section-specific styling
+  {% endcomment %}
+  "name": "Blog posts",
+  "class": "section-featured-blog",
+
+  {% comment %}
+    =============================================================================
+    SECTION SETTINGS - MERCHANT CUSTOMIZATION
+    =============================================================================
+    Configurable options available to merchants in theme editor
+    - All settings are optional and can be customized
+    - Organized into logical groups for better usability
+    - Provides comprehensive control over section appearance and behavior
+  {% endcomment %}
+  "settings": [
+    {% comment %}
+      =============================================================================
+      BASIC CONTENT SETTINGS
+      =============================================================================
+      Core content configuration options
+      - title: Main heading text for the section
+      - title_image: Optional image to replace text title
+      - blog: Blog selection for content display
+      - title_alignment: Text alignment for section heading
+      - body_text: Additional descriptive text
+      - show_view_all: Toggle for blog page link
+      - blog_show_author: Toggle for author display
+      - blog_show_date: Toggle for publication date display
+    {% endcomment %}
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Blog posts"
+    },
+    {
+      "type": "image_picker",
+      "id": "title_image",
+      "label": "Heading Image",
+      "info": "This overwrites a text title"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog"
+    },
+    {
+      "type": "select",
+      "id": "title_alignment",
+      "label": "Heading Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "right"
         }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "textarea",
+      "id": "body_text",
+      "label": "Body Text"
+    },
+    {
+      "type": "range",
+      "id": "post_limit",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "label": "Posts",
+      "default": 3,
+      "info": "The slideshow will only show a maximum of 7 posts"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show 'View all' link",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_show_author",
+      "label": "Show author",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_show_date",
+      "label": "Show date",
+      "default": true
+    },
+    {
+      "type": "radio",
+      "id": "layout",
+      "label": "Layout",
+      "default": "slideshow",
+      "options": [
+        {% comment %}
+          =============================================================================
+          LAYOUT OPTIONS
+          =============================================================================
+          Available layout modes for the section
+          - carousel: Swiper.js-powered horizontal scrolling
+          - slideshow: Slick.js-powered slideshow with transitions
+        {% endcomment %}
+        {
+          "value": "carousel",
+          "label": "Carousel"
+        },
+        {
+          "value": "slideshow",
+          "label": "Slideshow"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Carousel settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_first_post_big",
+      "label": "Enlarge first blog post",
+      "info": "If selected, the 'Image shape' settings will be ignored",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Slideshow settings"
+    },
+    {
+      "type": "radio",
+      "id": "height",
+      "label": "Slide height",
+      "options": [
+        {% comment %}
+          =============================================================================
+          HEIGHT OPTIONS
+          =============================================================================
+          Available height modes for slideshow slides
+          - full: Full screen height for immersive experience
+          - fixed: Custom height with mobile/desktop controls
+        {% endcomment %}
+        {
+          "value": "full",
+          "label": "Full screen"
+        },
+        {
+          "value": "fixed",
+          "label": "Fixed height"
+        }
+      ],
+      "default": "full"
+    },
+    {
+      "type": "range",
+      "id": "height_desktop",
+      "min": 600,
+      "max": 1000,
+      "step": 20,
+      "unit": "px",
+      "label": "Desktop fixed height",
+      "default": 700
+    },
+    {
+      "type": "range",
+      "id": "height_mobile",
+      "min": 360,
+      "max": 1000,
+      "step": 20,
+      "unit": "px",
+      "label": "Mobile fixed height",
+      "default": 500
+    },
+    {
+      "id": "full_width",
+      "type": "checkbox",
+      "label": "Full page width",
+      "default": true
+    },
+    {
+      "id": "overlay_style_tint",
+      "type": "checkbox",
+      "label": "Show overlay tint",
+      "default": true
+    },
+    {
+      "id": "autoplay",
+      "type": "checkbox",
+      "label": "Auto-rotate slides",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "unit": "s",
+      "label": "Change slides every",
+      "default": 7
+    },
+    {
+      "type": "select",
+      "id": "slide_transition",
+      "label": "Transition",
+      "options": [
+        {% comment %}
+          =============================================================================
+          TRANSITION OPTIONS
+          =============================================================================
+          Available slide transition effects
+          - zoom: Zoom transition for dynamic effect
+          - slide: Horizontal slide transition
+          - fade: Fade transition for smooth effect
+        {% endcomment %}
+        {
+          "value": "zoom",
+          "label": "Zoom"
+        },
+        {
+          "value": "slide",
+          "label": "Slide"
+        },
+        {
+          "value": "fade",
+          "label": "Fade"
+        }
+      ],
+      "default": "slide"
+    },
+    {
+      "type": "select",
+      "id": "wave",
+      "label": "Wave",
+      "options": [
+        {% comment %}
+          =============================================================================
+          WAVE OPTIONS
+          =============================================================================
+          Available wave border positions
+          - none: No wave borders
+          - top: Wave border at top of section
+          - bottom: Wave border at bottom of section
+          - both: Wave borders at top and bottom
+        {% endcomment %}
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "id": "color_bg",
+      "type": "color",
+      "label": "Background color",
+      "default": "#ffffff"
+    }
+  ],
+
+  {% comment %}
+    =============================================================================
+    SECTION PRESETS - DEFAULT CONFIGURATION
+    =============================================================================
+    Default section configuration for easy addition to pages
+    - name: "Blog posts": Display name when adding section to page
+    - Provides starting point for merchants to customize
+    - All settings start with default values
+  {% endcomment %}
+  "presets": [
+    {
+      "name": "Blog posts",
+      "settings": {
       }
-    ]
-  }
+    }
+  ]
+}
 {% endschema %}

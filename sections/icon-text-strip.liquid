@@ -1,18 +1,96 @@
+{% comment %}
+  =============================================================================
+  ICON + TEXT STRIP SECTION
+  =============================================================================
+  Simple horizontal layout section with icon and text content
+  - Displays an icon alongside rich text content
+  - Responsive design with mobile/desktop optimizations
+  - Customizable colors, spacing, and typography
+  - Optional wave divider borders for visual interest
+  - Uses Shopify's responsive image system for icon display
+  - Flexible width controls for both icon and text elements
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  DYNAMIC STYLING & RESPONSIVE DESIGN
+  =============================================================================
+  CSS styles for section appearance and responsive behavior
+  - background_color: Custom background color from theme editor
+  - text_color: Custom text color from theme editor
+  - padding_y_mobile/desktop: Vertical padding for different screen sizes
+  - text_size_mobile/desktop: Typography sizing for responsive design
+  - text_max_width_mobile/desktop: Text width constraints for readability
+  - icon_width: Icon width as percentage or fixed value
+  - icon_max_width: Maximum icon width constraint
+  - Responsive breakpoint at 768px for mobile/desktop switching
+{% endcomment %}
 {%- style -%}
+  {% comment %}
+    =============================================================================
+    SECTION BACKGROUND & TEXT COLORS
+    =============================================================================
+    Dynamic color scheme based on theme editor settings
+    - section-id-{{ section.id }}: Unique identifier for section-specific styling
+    - background-color: Custom background color when provided
+    - color: Custom text color when provided
+    - Allows merchants to customize section appearance
+  {% endcomment %}
   #section-id-{{ section.id }} {
     background-color: {{ section.settings.background_color }};
     color: {{ section.settings.text_color }};
   }
+  
+  {% comment %}
+    =============================================================================
+    CONTAINER LAYOUT & MOBILE PADDING
+    =============================================================================
+    Flexbox layout for icon and text positioning
+    - icon-text-strip__container: Main content wrapper
+    - display: flex: Horizontal layout for icon and text
+    - justify-content: center: Centers content horizontally
+    - padding: Vertical padding with mobile-first approach
+    - padding_y_mobile: Mobile vertical padding (default: 24px)
+    - 24px horizontal padding for consistent edge spacing
+  {% endcomment %}
   #section-id-{{ section.id }} .icon-text-strip__container {
     display: flex;
     justify-content: center;
     padding: {{ section.settings.padding_y_mobile | default: 24 }}px 24px;
   }
+  
+  {% comment %}
+    =============================================================================
+    MOBILE TEXT STYLING
+    =============================================================================
+    Mobile-specific typography and layout settings
+    - icon-text-strip__text: Text content container
+    - font-size: Mobile text size from theme editor
+    - text_size_mobile: Customizable mobile font size
+    - max-width: Text width constraint for mobile readability
+    - text_max_width_mobile: Customizable mobile text width
+    - margin-left: 1rem spacing between icon and text
+  {% endcomment %}
   #section-id-{{ section.id }} .icon-text-strip__text {
     font-size: {{ section.settings.text_size_mobile }}px;
     max-width: {{ section.settings.text_max_width_mobile }}px;
     margin-left: 1rem;
   }
+  
+  {% comment %}
+    =============================================================================
+    DESKTOP RESPONSIVE ADJUSTMENTS
+    =============================================================================
+    Desktop-specific styling for larger screens
+    - min-width: 768px: Desktop breakpoint
+    - padding: Increased vertical padding for desktop
+    - padding_y_desktop: Customizable desktop vertical padding (default: 48px)
+    - margin-left: Increased spacing between icon and text (2rem)
+    - font-size: Desktop text size from theme editor
+    - text_size_desktop: Customizable desktop font size
+    - max-width: Desktop text width constraint
+    - text_max_width_desktop: Customizable desktop text width
+  {% endcomment %}
   @media (min-width: 768px) {
     #section-id-{{ section.id }} .icon-text-strip__container {
       padding: {{ section.settings.padding_y_desktop | default: 48 }}px 24px;
@@ -23,16 +101,54 @@
       max-width: {{ section.settings.text_max_width_desktop }}px;
     }
   }
+  
+  {% comment %}
+    =============================================================================
+    ICON SIZING & LAYOUT
+    =============================================================================
+    Icon container styling and size constraints
+    - icon-text-strip__icon: Icon container element
+    - width: Icon width from theme editor (percentage or fixed value)
+    - icon_width: Customizable icon width setting
+    - max-width: Maximum icon width constraint
+    - icon_max_width: Customizable maximum icon width
+    - flex-shrink: 0: Prevents icon from shrinking in flexbox layout
+  {% endcomment %}
   #section-id-{{ section.id }} .icon-text-strip__icon {
     width: {{ section.settings.icon_width | default: '15%' }};
     max-width: {{ section.settings.icon_max_width | default: '100px' }};
     flex-shrink: 0;
   }
+  
+  {% comment %}
+    =============================================================================
+    TEXT MARGIN RESET
+    =============================================================================
+    Removes top margin from first text element
+    - icon-text-strip__container: Container selector
+    - icon-text-strip__text: Text container selector
+    - > :first-child: Direct first child selector
+    - margin-top: 0: Removes default top margin
+    - Ensures consistent spacing in rich text content
+  {% endcomment %}
   .icon-text-strip__container .icon-text-strip__text > :first-child {
     margin-top: 0;
   }
 {%- endstyle -%}
 
+{% comment %}
+  =============================================================================
+  WAVE DIVIDER INTEGRATION
+  =============================================================================
+  Optional decorative wave borders for visual interest
+  - wave: Wave position setting (none/top/bottom/both)
+  - wave-styles: Snippet for rendering wave SVG elements
+  - wave_position: Passes wave position to wave-styles snippet
+  - section_id: Unique section identifier for styling
+  - fill_color: Wave color matches section background color
+  - Creates seamless integration between waves and background
+  - Only renders when wave setting is not "none"
+{% endcomment %}
 {%- if section.settings.wave != "none" -%}
   {%- render 'wave-styles', 
     wave_position: section.settings.wave, 
@@ -40,21 +156,105 @@
     fill_color: section.settings.background_color -%}
 {%- endif -%}
 
+{% comment %}
+  =============================================================================
+  MAIN SECTION CONTAINER
+  =============================================================================
+  Primary container with section identification and component setup
+  - id="section-id-{{ section.id }}": Unique section identifier
+  - class="section-id-{{ section.id }}": CSS class for section-specific styling
+  - data-section-type="icon-text-strip": Identifies section type for JavaScript
+  - Provides foundation for all section content and styling
+{% endcomment %}
 <div
   id="section-id-{{ section.id }}"
   class="section-id-{{ section.id }}"
   data-section-type="icon-text-strip"
 >
+  {% comment %}
+    =============================================================================
+    CONTENT LAYOUT CONTAINER
+    =============================================================================
+    Flexbox container for icon and text positioning
+    - icon-text-strip__container: Main content wrapper
+    - Uses flexbox for horizontal icon + text layout
+    - Centers content horizontally within section
+    - Applies responsive padding and spacing
+  {% endcomment %}
   <div class="icon-text-strip__container">
+    {% comment %}
+      =============================================================================
+      ICON DISPLAY CONTAINER
+      =============================================================================
+      Icon container with responsive image handling
+      - icon-text-strip__icon: Icon wrapper with sizing controls
+      - section.settings.icon: Icon image from theme editor
+      - responsive-image: Responsive image rendering snippet
+      - Handles image optimization and responsive sizing
+      - Applies width and max-width constraints from CSS
+    {% endcomment %}
     <div class="icon-text-strip__icon">
       {%- render 'responsive-image', image: section.settings.icon -%}
     </div>
+    
+    {% comment %}
+      =============================================================================
+      TEXT CONTENT DISPLAY
+      =============================================================================
+      Rich text content with responsive typography
+      - icon-text-strip__text: Text container with styling
+      - rte: Rich text editor styling for consistent typography
+      - section.settings.text: Rich text content from theme editor
+      - Supports HTML formatting and line breaks
+      - Applies responsive font sizing and width constraints
+    {% endcomment %}
     <div class="icon-text-strip__text rte">
       {{ section.settings.text }}
     </div>
   </div>
 </div>
 
+{% comment %}
+  =============================================================================
+  SCHEMA CONFIGURATION SUMMARY
+  =============================================================================
+  Theme editor configuration for the icon + text strip section
+  
+  **SECTION OVERVIEW:**
+  Simple horizontal layout section displaying an icon alongside rich text content.
+  Designed for concise messaging with visual elements and responsive behavior.
+  
+  **KEY FEATURES:**
+  - Icon and text horizontal layout
+  - Responsive design with mobile/desktop optimizations
+  - Customizable colors, spacing, and typography
+  - Optional wave divider borders
+  - Flexible width controls for both elements
+  
+  **CONTENT SETTINGS:**
+  - icon: Image picker for section icon
+  - text: Rich text editor for content
+  
+  **STYLING OPTIONS:**
+  - icon_width: Icon width (CSS values like "20%")
+  - icon_max_width: Maximum icon width (CSS values like "80px")
+  - text_size_mobile: Mobile font size (12-60px)
+  - text_size_desktop: Desktop font size (12-60px)
+  - text_max_width_mobile: Mobile text width constraint
+  - text_max_width_desktop: Desktop text width constraint
+  - padding_y_mobile: Mobile vertical padding (default: 24px)
+  - padding_y_desktop: Desktop vertical padding (default: 48px)
+  - background_color: Custom background color
+  - text_color: Custom text color
+  - wave: Wave divider options (none/top/bottom/both)
+  
+  **RESPONSIVE BEHAVIOR:**
+  - Mobile-first design approach
+  - 768px breakpoint for mobile/desktop switching
+  - Adaptive typography and spacing
+  - Flexible icon sizing with constraints
+  - Optimized text width for readability
+{% endcomment %}
 {% schema %}
 {
   "name": "Icon + Text Strip",
@@ -180,7 +380,8 @@
   "presets": [
     {
       "name": "Icon + Text Strip",
-      "settings": {}
+      "settings": {
+      }
     }
   ]
 }

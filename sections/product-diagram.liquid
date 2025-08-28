@@ -6,9 +6,9 @@
 {% if product.type == 'JamTee' %}
   {% assign product_type = 'JamTees' | handleize %}
 {% endif %}
-{% assign has_product_switcher = false %}
+
 {% if product.type == 'Double Cozy Cloak' or product.type == 'Cozy Cloak' %}
-  {% assign has_product_switcher = true %}
+  
 {% endif %}
 {% assign diagram_title = collections[product_type].metafields.diagram.collection_diagram_title %}
 
@@ -55,8 +55,8 @@
   
   {% if collections[product_type].metafields.diagram.collection_diagram_mobile.value.src and collections[product_type].metafields.diagram.product_type.value.src %}
     <picture>
-      <source srcset="{{ collections[product_type].metafields.diagram.collection_diagram_mobile.value.src | img_url: '720x', scale: 2 }}" media="(max-width: 767px)">
-      <img loading="lazy" src="{{ collections[product_type].metafields.diagram.product_type.value.src | img_url: '720x', scale: 2 }}">
+      <source srcset="{{ collections[product_type].metafields.diagram.collection_diagram_mobile.value.src | image_url: width: 1440 }}" media="(max-width: 767px)">
+      <img loading="lazy" src="{{ collections[product_type].metafields.diagram.product_type.value.src | image_url: width: 1440 }}">
     </picture>
   {% endif %}
 </div>
@@ -64,45 +64,45 @@
 {
   "name": "Product Diagram",
   "class": "product-diagram",
-    "settings": [
-      {
-        "type": "select",
-        "id": "wave",
-        "label": "Wave",
-        "options": [
-          {
-            "value": "none",
-            "label": "None"
-          },
-          {
-            "value": "top",
-            "label": "Top"
-          },
-          {
-            "value": "bottom",
-            "label": "Bottom"
-          },
-          {
-            "value": "both",
-            "label": "Both"
-          }
-        ],
-        "default": "none"
-      },
-      {
-        "type": "color",
-        "id": "color_bg",
-        "label": "Desktop background color"
-      },
-      {
-        "type": "color",
-        "id": "mobile_color_bg",
-        "label": "Mobile background color"
-      }
-    ],
+  "settings": [
+    {
+      "type": "select",
+      "id": "wave",
+      "label": "Wave",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "color",
+      "id": "color_bg",
+      "label": "Desktop background color"
+    },
+    {
+      "type": "color",
+      "id": "mobile_color_bg",
+      "label": "Mobile background color"
+    }
+  ],
   "presets": [
     {
-        "name": "Product Diagram"
+      "name": "Product Diagram"
     }
   ]
 }

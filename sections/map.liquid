@@ -1,9 +1,43 @@
+{% comment %}
+  =============================================================================
+  MAP SECTION
+  =============================================================================
+  Interactive map section with Google Maps integration and custom styling
+  - Displays store location with embedded Google Maps
+  - Supports custom background images with fallback placeholders
+  - Configurable color schemes and text alignment
+  - Responsive design with mobile-optimized image handling
+  - Google Maps API integration for interactive location display
+  - Custom styling options for background, text, and button elements
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  MAP DISPLAY CONDITIONAL LOGIC
+  =============================================================================
+  Determines whether to show Google Maps or static image
+  - display_map: Boolean flag for map visibility
+  - section.settings.api_key: Google Maps API key from theme settings
+  - section.settings.map_address: Physical address for map display
+  - Both conditions must be met for map to display
+  - Falls back to static image when map cannot be displayed
+{% endcomment %}
 {% assign display_map = false %}
 {%- if section.settings.api_key != blank and section.settings.map_address -%}
   {% assign display_map = true %}
 {%- endif -%}
 
-
+{% comment %}
+  =============================================================================
+  DYNAMIC STYLING & COLOR CUSTOMIZATION
+  =============================================================================
+  CSS styles for custom color schemes and responsive image handling
+  - color_scheme: Theme color scheme selection (custom vs predefined)
+  - color_bg: Custom background color when using custom scheme
+  - color_text: Custom text color when using custom scheme
+  - image.aspect_ratio: Calculates mobile image padding for responsive design
+  - section-id-{{ section.id }}: Unique identifier for section-specific styling
+{% endcomment %}
 {% style %}
   {% if section.settings.color_scheme == "custom" %}
     .section-id-{{ section.id }} .map-section__wrapper {
@@ -12,33 +46,129 @@
     }
   {% endif %}
 
+  {% comment %}
+    =============================================================================
+    MOBILE RESPONSIVE IMAGE HANDLING
+    =============================================================================
+    Calculates proper image padding for mobile devices
+    - Uses aspect ratio to maintain image proportions
+    - Prevents layout shift during image loading
+    - Applies only to mobile screens (max-width: 749px)
+    - Ensures consistent image display across devices
+  {% endcomment %}
   {% unless section.settings.image == blank %}
     @media screen and (max-width: 749px) {
       .map-section__image--{{ section.id }} {
-        padding-top: {{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100}}%;
+        padding-top: {{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%;
       }
     }
   {% endunless %}
 {% endstyle %}
 
+{% comment %}
+  =============================================================================
+  MAIN MAP SECTION CONTAINER
+  =============================================================================
+  Primary container with dynamic classes and data attributes
+  - section-spacing: Consistent vertical spacing between sections
+  - map-section: Base map section styling class
+  - map-section--display-map: Conditional class when map is active
+  - data-section-type: JavaScript identifier for map functionality
+  - data-api-key: Google Maps API key for JavaScript integration
+  - data-map-style: Map style configuration for visual customization
+{% endcomment %}
 <div class="section-id-{{ section.id }} section section-spacing map-section{% if display_map %} map-section--display-map{% endif %}" data-section-type="map" data-api-key="{{ section.settings.api_key }}" data-map-style="{{ section.settings.map_style }}">
+  {% comment %}
+    =============================================================================
+    WIDE CONTAINER FOR FULL-WIDTH LAYOUT
+    =============================================================================
+    Container wrapper for full-width map section display
+    - wide-container: Full-width layout class
+    - Allows map to span entire viewport width
+    - Maintains consistent spacing and alignment
+  {% endcomment %}
   <div class="wide-container">
+    {% comment %}
+      =============================================================================
+      MAP SECTION WRAPPER WITH COLOR SCHEME
+      =============================================================================
+      Inner wrapper with dynamic color scheme and background
+      - use-{{ section.settings.color_scheme }}-bg: Dynamic color scheme class
+      - map-section__wrapper: Base wrapper styling
+      - Supports both predefined and custom color schemes
+      - Provides consistent theming across different sections
+    {% endcomment %}
     <div class="map-section__wrapper use-{{ section.settings.color_scheme }}-bg">
+      {% comment %}
+        =============================================================================
+        MAP CONTENT AREA WITH IMAGE AND MAP
+        =============================================================================
+        Left side content area containing image and map display
+        - map-section__content: Base content styling
+        - map-section__map: Map-specific content styling
+        - Contains background image, map container, and fallback elements
+        - Responsive layout that adapts to content availability
+      {% endcomment %}
       <div class="map-section__content map-section__map">
+        {% comment %}
+          =============================================================================
+          BACKGROUND IMAGE WITH RESPONSIVE HANDLING
+          =============================================================================
+          Custom background image with lazy loading and responsive sizing
+          - section.settings.image: Background image from theme settings
+          - map-section__image: Base image styling class
+          - map-section__image--{{ section.id }}: Section-specific image styling
+          - supports-js: JavaScript-enabled styling class
+          - lazyload: Lazy loading for performance optimization
+          - data-bgset: Responsive image sources for different screen sizes
+          - data-sizes: Responsive sizing information for CSS
+          - data-parent-fit: Image fitting behavior within container
+        {% endcomment %}
         {% if section.settings.image %}
           <div class="map-section__image map-section__image--{{ section.id }} supports-js lazyload"
               data-bgset="{% render 'bgset', image: section.settings.image %}"
               data-sizes="auto"
               data-parent-fit="cover">
           </div>
+          {% comment %}
+            =============================================================================
+            NOSCRIPT FALLBACK FOR IMAGE DISPLAY
+            =============================================================================
+            Fallback image display when JavaScript is disabled
+            - noscript: Content displayed without JavaScript
+            - Static background image with inline styling
+            - Ensures image visibility regardless of JavaScript status
+            - Uses standard Shopify image URL with fixed dimensions
+          {% endcomment %}
           <noscript>
-            <div class="map-section__image  map-section__image--{{ section.id }}" style="background-image: url({{ section.settings.image | img_url: '400x400'}});"></div>
+            <div class="map-section__image  map-section__image--{{ section.id }}" style="background-image: url({{ section.settings.image | image_url: width: 400, height: 400 }});"></div>
           </noscript>
         {% else %}
+          {% comment %}
+            =============================================================================
+            PLACEHOLDER IMAGE WHEN NO CUSTOM IMAGE
+            =============================================================================
+            Default placeholder when no custom image is provided
+            - placeholder-image: Base placeholder styling
+            - lifestyle-2: Shopify placeholder SVG icon
+            - Provides visual consistency when no image is set
+            - Maintains layout structure regardless of image availability
+          {% endcomment %}
           <div class="map-section__placeholder placeholder-image">
             {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
           </div>
         {% endif %}
+        {% comment %}
+          =============================================================================
+          GOOGLE MAPS CONTAINER
+          =============================================================================
+          Interactive Google Maps display when conditions are met
+          - display_map: Boolean flag for map visibility
+          - map-section__map-container: Map container styling
+          - id="Map-{{ section.id }}": Unique map identifier
+          - data-address-setting: Address data for JavaScript map initialization
+          - Only renders when API key and address are provided
+        {% endcomment %}
         {% if display_map %}
           <div class="map-section__map-container"
               id="Map-{{ section.id }}"
@@ -47,13 +177,64 @@
         {% endif %}
       </div>
 
+      {% comment %}
+        =============================================================================
+        TEXT CONTENT AREA WITH HEADING AND ADDRESS
+        =============================================================================
+        Right side content area with text information and call-to-action
+        - map-section__content: Base content styling
+        - map-section__text: Text-specific content styling
+        - padded-block: Consistent padding for text content
+        - Contains heading, address, and button elements
+        - Responsive text alignment based on theme settings
+      {% endcomment %}
       <div class="map-section__content map-section__text padded-block">
+        {% comment %}
+          =============================================================================
+          SECTION HEADING WITH ANIMATION
+          =============================================================================
+          Main section heading with dynamic alignment and entrance animation
+          - section.settings.heading: Custom heading text from theme settings
+          - feature-header: Consistent heading styling across theme
+          - align-{{ section.settings.text_alignment }}: Dynamic text alignment
+          - data-cc-animate: JavaScript animation trigger
+          - cc-fade-in-right: Right-to-left entrance animation
+          - data-cc-animate-delay: Animation timing delay for staggered effects
+        {% endcomment %}
         {% if section.settings.heading != blank %}
           <h2 class="feature-header align-{{ section.settings.text_alignment }}" data-cc-animate="cc-fade-in-right" data-cc-animate-delay="0.1s">{{ section.settings.heading | escape }}</h2>
         {% endif %}
+        {% comment %}
+          =============================================================================
+          ADDRESS INFORMATION WITH ANIMATION
+          =============================================================================
+          Store address and hours with rich text formatting
+          - section.settings.address: Rich text address content
+          - rte: Rich text editor styling for consistent typography
+          - align-{{ section.settings.text_alignment }}: Dynamic text alignment
+          - data-cc-animate: JavaScript animation trigger
+          - cc-fade-in-right: Right-to-left entrance animation
+          - data-cc-animate-delay: Animation timing delay for staggered effects
+        {% endcomment %}
         {% if section.settings.address != blank %}
           <div class="rte align-{{ section.settings.text_alignment }}" data-cc-animate="cc-fade-in-right" data-cc-animate-delay="0.2s">{{ section.settings.address }}</div>
         {% endif %}
+        {% comment %}
+          =============================================================================
+          DIRECTIONS BUTTON WITH GOOGLE MAPS LINK
+          =============================================================================
+          Call-to-action button linking to Google Maps directions
+          - section.settings.button: Custom button text from theme settings
+          - section.settings.map_address: Address for Google Maps integration
+          - map-section__button-row: Button container styling
+          - button-row: Base button row styling
+          - align-{{ section.settings.text_alignment }}: Dynamic button alignment
+          - data-cc-animate: JavaScript animation trigger
+          - cc-fade-in-right: Right-to-left entrance animation
+          - data-cc-animate-delay: Animation timing delay for staggered effects
+          - Google Maps URL with encoded address for directions
+          - target="_blank": Opens directions in new tab
+        {% endcomment %}
         {% if section.settings.button != blank and section.settings.map_address != blank %}
           <div class="map-section__button-row button-row align-{{ section.settings.text_alignment }}" data-cc-animate="cc-fade-in-right" data-cc-animate-delay="0.3s">
             <a href="https://maps.google.com?daddr={{ section.settings.map_address | url_encode }}" target="_blank" class="button">
@@ -66,139 +247,156 @@
   </div>
 </div>
 
+{% comment %}
+  =============================================================================
+  SCHEMA CONFIGURATION
+  =============================================================================
+  Theme editor configuration for map section customization
+  - name: Section name displayed in theme editor
+  - class: CSS class for section-specific styling
+  - settings: Configurable options for merchants
+  - heading: Custom section heading text
+  - address: Rich text for store address and hours
+  - button: Custom text for directions button
+  - text_alignment: Text alignment options (left, center, right)
+  - map_address: Physical address for Google Maps integration
+  - api_key: Google Maps API key for interactive functionality
+  - map_style: Map visual style customization
+  - color_scheme: Color scheme selection (background, accent, custom)
+  - color_bg: Custom background color when using custom scheme
+  - color_text: Custom text color when using custom scheme
+  - image: Custom background image selection
+  - presets: Default section configuration for easy addition
+{% endcomment %}
 {% schema %}
-  {
-    "name": "Map",
-    "class": "index-section",
-    "settings": [
-      {
-        "type": "text",
-        "id": "heading",
-        "label": "Heading",
-        "default": "Our store"
-      },
-      {
-        "type": "richtext",
-        "id": "address",
-        "label": "Address and hours",
-        "default": "<p>123 Fake St.<br>Toronto, Canada</p><p>Mon - Fri, 10am - 9pm<br>Saturday, 11am - 9pm<br>Sunday, 11am - 5pm</p>"
-      },
-      {
-        "type": "text",
-        "id": "button",
-        "label": "Map link label",
-        "default": "Directions"
-      },
-      {
-        "type": "select",
-        "id": "text_alignment",
-        "label": "Alignment",
-        "default": "left",
-        "options": [
-          {
-            "label": "Left",
-            "value": "left"
-          },
-          {
-            "label": "Center",
-            "value": "center"
-          },
-          {
-            "label": "Right",
-            "value": "right"
-          }
-        ]
-      },
-      {
-        "type": "radio",
-        "id": "color_scheme",
-        "label": "Color scheme",
-        "default": "standard",
-        "options": [
-          {
-            "value": "standard",
-            "label": "Standard"
-          },
-          {
-            "value": "alt",
-            "label": "Alternate colors"
-          },
-          {
-            "value": "custom",
-            "label": "Custom colors"
-          }
-        ]
-      },
-      {
-        "type": "color",
-        "id": "color_bg",
-        "label": "Custom background color"
-      },
-      {
-        "type": "color",
-        "id": "color_text",
-        "label": "Custom text color"
-      },
-      {
-        "type": "header",
-        "content": "Map"
-      },
-      {
-        "id": "map_address",
-        "type": "text",
-        "label": "Map address",
-        "info": "Google Maps will find the exact location",
-        "default": "80 Spadina Ave, Toronto"
-      },
-      {
-        "id": "api_key",
-        "type": "text",
-        "label": "Google Maps API key",
-        "info": "You’ll need to [register a Google Maps API Key](https://help.shopify.com/manual/using-themes/troubleshooting/map-section-api-key) to display the map"
-      },
-      {
-        "type": "select",
-        "id": "map_style",
-        "label": "Style",
-        "default": "silver",
-        "options": [
-          {
-            "label": "Default",
-            "value": "default"
-          },
-          {
-            "label": "Silver",
-            "value": "silver"
-          },
-          {
-            "label": "Retro",
-            "value": "retro"
-          },
-          {
-            "label": "Dark",
-            "value": "dark"
-          },
-          {
-            "label": "Night",
-            "value": "night"
-          },
-          {
-            "label": "Aubergine",
-            "value": "aubergine"
-          }
-        ]
-      },
-      {
-        "type": "image_picker",
-        "id": "image",
-        "label": "Image",
-        "info": "To display if there is no map key"
-      }
-    ],
-    "presets": [
-      {
-        "name": "Map"
-      }
-    ]
-  }
+{
+  "name": "Map",
+  "class": "index-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Our store"
+    },
+    {
+      "type": "richtext",
+      "id": "address",
+      "label": "Address and hours",
+      "default": "<p>123 Fake St.<br>Toronto, Canada</p><p>Mon - Fri, 10am - 9pm<br>Saturday, 11am - 9pm<br>Sunday, 11am - 5pm</p>"
+    },
+    {
+      "type": "text",
+      "id": "button",
+      "label": "Map link label",
+      "default": "Directions"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Alignment",
+      "default": "left",
+      "options": [
+        {
+          "label": "Left",
+          "value": "left"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "right"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "id": "map_address",
+      "label": "Map address",
+      "info": "Google Maps will find the exact location"
+    },
+    {
+      "type": "text",
+      "id": "api_key",
+      "label": "Google Maps API key",
+      "info": "You'll need to register a Google Maps API key to display the map"
+    },
+    {
+      "type": "select",
+      "id": "map_style",
+      "label": "Map style",
+      "default": "default",
+      "options": [
+        {
+          "label": "Default",
+          "value": "default"
+        },
+        {
+          "label": "Silver",
+          "value": "silver"
+        },
+        {
+          "label": "Retro",
+          "value": "retro"
+        },
+        {
+          "label": "Dark",
+          "value": "dark"
+        },
+        {
+          "label": "Night",
+          "value": "night"
+        },
+        {
+          "label": "Aubergine",
+          "value": "aubergine"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "background",
+      "options": [
+        {
+          "label": "Background",
+          "value": "background"
+        },
+        {
+          "label": "Accent",
+          "value": "accent"
+        },
+        {
+          "label": "Custom",
+          "value": "custom"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "color_bg",
+      "label": "Background color",
+      "default": "#f4f4f4"
+    },
+    {
+      "type": "color",
+      "id": "color_text",
+      "label": "Text color",
+      "default": "#000000"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Map"
+    }
+  ]
+}
 {% endschema %}

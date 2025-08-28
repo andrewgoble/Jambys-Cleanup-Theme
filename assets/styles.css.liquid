@@ -4,7 +4,7 @@
   {%- assign custom_base_font_name = settings.custom_base_font_name -%}
   {%- if settings.typekit_embed_file == blank -%}
     @font-face {
-      font-family: {{ custom_base_font_name  }};
+      font-family: {{ custom_base_font_name }};
       src: url({{ settings.custom_base_font_woff2 }}) format("woff2"), 
           url({{ settings.custom_base_font_woff }}) format("woff"), 
           url({{ settings.custom_base_font_open }}) format("opentype");
@@ -13,7 +13,7 @@
       font-display: swap;
     }
     @font-face {
-      font-family: {{ custom_base_font_bold_name  }};
+      font-family: {{ custom_base_font_bold_name }};
       src:  url({{ settings.custom_base_font_bold_woff2 }}) format("woff2"), 
             url({{ settings.custom_base_font_bold_woff }}) format("woff"), 
             url({{ settings.custom_base_font_bold_open }}) format("opentype");
@@ -28,7 +28,7 @@
   {%- assign custom_heading_font_name = settings.custom_heading_font_name -%}
   {%- if settings.typekit_embed_file == blank -%}
     @font-face {
-      font-family: {{ custom_heading_font_name  }};
+      font-family: {{ custom_heading_font_name }};
       src: url({{ settings.custom_heading_font_woff2 }}) format("woff2"), 
           url({{ settings.custom_heading_font_woff }}) format("woff"), 
           url({{ settings.custom_heading_font_open }}) format("opentype");
@@ -51,7 +51,7 @@ File structure:
 {%- assign content_row_padding = 100 -%}
 {%- assign product_detail_box_width = 328 -%}
 {%- assign block_gutters = 50 -%}
-{%- assign edge_gutter_md = 16 -%}
+
 {%- assign edge_gutter = 26 -%}
 {%- assign mobile_edge_gutter = gutter -%}
 {%- assign wide_content_gutters = gutter -%}
@@ -100,15 +100,15 @@ File structure:
 {%- assign image_overlay_text = settings.image_overlay_text -%}
 {%- assign image_overlay_bg = settings.image_overlay_bg -%}
 {%- assign image_overlay_opacity = settings.image_overlay_opacity | divided_by: 100.0 -%}
-{%- assign image_overlay_opacity_darker = settings.image_overlay_opacity | times: 2 | divided_by: 100.0 -%}
+
 {%- assign alt_bg_col = settings.alt_bg_col -%}
 {%- assign alt_bg_text_col = settings.alt_bg_text_col -%}
 {%- assign font_size_base_int = settings.font_size_base_int -%}
 {%- assign font_size_nav_int = settings.font_size_nav_int -%}
 {%- assign font_size_nav_sub_int = settings.font_size_nav_sub_int -%}
 {%- assign font_size_loader_int = settings.animation_loading_message_size -%}
-{%- assign buttons_style = settings.buttons_style -%}
-{%- assign buttons_shape = settings.buttons_shape -%}
+
+
 {%- assign collection_image_position = settings.collection_image_position -%}
 {%- assign collection_image_shape = settings.collection_thumb_shape -%}
 {%- assign prod_image_shape = settings.prod_thumb_shape -%}
@@ -144,7 +144,7 @@ File structure:
 {%- assign col_page_bg_alpha = col_page_bg | color_extract: 'alpha' -%}
 {%- assign col_swatch_border =  col_text | color_mix: col_page_bg, 15 -%}
 {%- if col_page_bg_brightness < 60 and col_page_bg_alpha > 0 -%}
-{%- assign col_swatch_border = col_text | color_mix: col_page_bg, 30  -%}
+{%- assign col_swatch_border = col_text | color_mix: col_page_bg, 30 -%}
 {%- endif -%}
 {%- assign btn_brightness = settings.col_btn_bg | color_brightness -%}
 {%- assign btn_alpha = settings.col_btn_bg | color_extract: 'alpha' -%}
@@ -3586,7 +3586,7 @@ body.cc-popup-no-scroll {
 
 .cc-rating-stars--inactive {
   display: block;
-  color: {{ col_stars | color_modify: "alpha", 0.15 |  color_mix: '#ddd', 70 | color_to_rgb }};
+  color: {{ col_stars | color_modify: "alpha", 0.15 | color_mix: '#ddd', 70 | color_to_rgb }};
 }
 
 .cc-rating-stars__svg {
@@ -4665,7 +4665,7 @@ body:not(.user-is-tabbing) .cc-accordion-item__title {
   left: 0;
   width: 100%;
   height: 100%;
-  background: no-repeat url("data:image/svg+xml,%3Csvg fill='{{ col_stars | color_modify: "alpha", 0.15 |  color_mix: '#ddd', 70 | color_to_rgb }}' width='13' height='13' viewBox='0 0 13 13' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M8.43579 4.9459L13.63 4.9536L9.42653 8.01929L11.0329 12.97L6.81981 9.91778L2.60673 12.97L4.20346 8.01929L0 4.9536L5.20383 4.9459L6.81981 0L8.43579 4.9459Z'%3E%3C/path%3E%3C/svg%3E") top left;
+  background: no-repeat url("data:image/svg+xml,%3Csvg fill='{{ col_stars | color_modify: "alpha", 0.15 | color_mix: '#ddd', 70 | color_to_rgb }}' width='13' height='13' viewBox='0 0 13 13' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M8.43579 4.9459L13.63 4.9536L9.42653 8.01929L11.0329 12.97L6.81981 9.91778L2.60673 12.97L4.20346 8.01929L0 4.9536L5.20383 4.9459L6.81981 0L8.43579 4.9459Z'%3E%3C/path%3E%3C/svg%3E") top left;
   background-size: 100% 100%;
 }
 #shopify-product-reviews .spr-icon-star::after,
@@ -17485,7 +17485,7 @@ div.dtc-collection-name > h1 {
 
 .rebuy-cart__checkout-button span{
   {% if settings.color_font_cart != blank %}
-    color: {{ settings.color_font_cart}} !important;
+    color: {{ settings.color_font_cart }} !important;
   {% endif %}
 }
 .rebuy-cart__checkout-button{

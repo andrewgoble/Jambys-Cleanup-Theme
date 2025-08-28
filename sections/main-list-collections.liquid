@@ -1,3 +1,28 @@
+{% comment %}
+  =============================================================================
+  MAIN LIST COLLECTIONS SECTION - COLLECTION GRID & LAYOUT
+  =============================================================================
+  Displays all collections or selected collections in configurable layouts
+  - Supports both grid and collage layout options
+  - Configurable grid sizes (2, 3, or 4 columns)
+  - Pagination for large collection catalogs
+  - Optional custom title display
+  - Collection block rendering with responsive design
+  - Onboarding support for empty collections
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  OPTIONAL SECTION TITLE
+  =============================================================================
+  Conditional title display based on theme editor setting
+  - section.settings.title: Custom title from theme editor
+  - central: Centers title within page width constraints
+  - content: Applies consistent content styling
+  - transparent: Optional transparent background class
+  - feature-header__no-gap: Title styling without bottom margin
+  - data-cc-animate: Animation hook for title appearance
+{% endcomment %}
 {% unless section.settings.title == blank %}
   <div class="central">
     <div class="content {% unless settings.coll_content_bg_show %}transparent{% endunless %}">
@@ -8,7 +33,30 @@
   </div>
 {% endunless %}
 
+{% comment %}
+  =============================================================================
+  MAIN COLLECTIONS CONTAINER
+  =============================================================================
+  Primary container for collections display with responsive layout
+  - wide-container: Full-width container for collections
+  - half-gutter: Reduced spacing for tighter layout
+  - data-section-type="list-collections": JavaScript hook for functionality
+  - data-cc-animate: Animation trigger for entrance effects
+  - data-cc-animate-delay="0.2s": Staggered animation timing
+{% endcomment %}
 <div class="wide-container half-gutter" data-section-type="list-collections" data-cc-animate data-cc-animate-delay="0.2s">
+  {% comment %}
+    =============================================================================
+    GRID LAYOUT CLASS ASSIGNMENT
+    =============================================================================
+    Sets responsive grid classes based on layout and grid settings
+    - layout == 'rows': Grid layout option
+    - grid: Number of columns per row (2, 3, or 4)
+    - column half: 2-column grid (50% width each)
+    - column third: 3-column grid (33.33% width each)
+    - column quarter: 4-column grid (25% width each)
+    - Only applies to grid layout, not collage layout
+  {% endcomment %}
   {%- if section.settings.layout == 'rows' -%}
     {%- if section.settings.grid == 2 -%}
       {%- assign product_class = 'column half' -%}
@@ -19,15 +67,58 @@
     {%- endif -%}
   {%- endif -%}
 
+  {% comment %}
+    =============================================================================
+    ALL COLLECTIONS DISPLAY MODE
+    =============================================================================
+    Shows all available collections with pagination
+    - display_type == 'all': Display mode setting
+    - paginate collections by 26: 26 collections per page
+    - product-list: Main container for collections grid
+    - product-list--{{ layout }}: Layout-specific styling class
+    - Conditional CSS classes for different layout types
+  {% endcomment %}
   {% if section.settings.display_type == 'all' %}
 
     {%- paginate collections by 26 -%}
+      {% comment %}
+        =============================================================================
+        COLLECTIONS GRID CONTAINER
+        =============================================================================
+        Main grid container with layout-specific styling
+        - data-cc-animate: Animation hook for grid appearance
+        - product-list: Base grid styling class
+        - product-list--{{ layout }}: Layout-specific styling
+        - jiggly-split dynamic-col-{{ grid }}: Collage layout classes
+        - grid--uniform: Uniform grid layout classes
+      {% endcomment %}
       <div data-cc-animate class="product-list product-list--{{ section.settings.layout }} {% if section.settings.layout == 'columns' %}jiggly-split dynamic-col-{{ section.settings.grid }}{% else %}grid--uniform{% endif %}">
+        {% comment %}
+          =============================================================================
+          COLLECTIONS LOOP & RENDERING
+          =============================================================================
+          Iterates through all collections and renders them
+          - collections: Array of all available collections
+          - collection-block: Snippet for individual collection display
+          - collection: Individual collection object
+          - product_class: Responsive grid column class
+          - forloop.index: Loop index for collection positioning
+        {% endcomment %}
         {%- for collection in collections -%}
           {%- render 'collection-block', collection: collection, product_class: product_class, i: forloop.index -%}
         {%- endfor -%}
       </div>
 
+      {% comment %}
+        =============================================================================
+        COLLECTIONS PAGINATION
+        =============================================================================
+        Pagination controls for navigating through collection pages
+        - paginate.pages > 1: Only shows pagination when multiple pages exist
+        - data-cc-animate: Animation hook for pagination appearance
+        - pagination: CSS class for pagination styling
+        - default_pagination: Shopify's built-in pagination helper
+      {% endcomment %}
       {%- if paginate.pages > 1 -%}
         <div data-cc-animate class="pagination">
           {{ paginate | default_pagination }}
@@ -36,8 +127,37 @@
     {%- endpaginate -%}
 
   {% else %}
+    {% comment %}
+      =============================================================================
+      SELECTED COLLECTIONS DISPLAY MODE
+      =============================================================================
+      Shows only collections selected in theme editor blocks
+      - display_type != 'all': Custom collection selection mode
+      - section.blocks: Array of collection selection blocks
+      - collections[block.settings.collection]: Collection lookup by handle
+      - Conditional rendering for existing vs. onboarding collections
+    {% endcomment %}
 
+      {% comment %}
+        =============================================================================
+        SELECTED COLLECTIONS GRID
+        =============================================================================
+        Grid container for selected collections with same styling options
+        - Same layout and styling as all collections mode
+        - Supports both grid and collage layouts
+        - Responsive design with configurable columns
+      {% endcomment %}
       <div data-cc-animate class="product-list product-list--{{ section.settings.layout }} {% if section.settings.layout == 'columns' %}jiggly-split dynamic-col-{{ section.settings.grid }}{% else %}grid--uniform{% endif %}">
+        {% comment %}
+          =============================================================================
+          SELECTED COLLECTIONS LOOP
+          =============================================================================
+          Loops through selected collections from theme editor blocks
+          - block.settings.collection: Collection handle from block settings
+          - collections[handle]: Collection object lookup
+          - onboarding-collection-block: Fallback for missing collections
+          - collection-block: Standard collection display for existing collections
+        {% endcomment %}
         {% for block in section.blocks %}
           {%- assign collection = collections[block.settings.collection] -%}
           {%- if collection == blank -%}
@@ -51,76 +171,88 @@
   {% endif %}
 </div>
 
-
+{% comment %}
+  =============================================================================
+  COLLECTION LIST SECTION SCHEMA - CONFIGURATION & CUSTOMIZATION
+  =============================================================================
+  Theme editor configuration for collection list section
+  - name: Section name displayed in theme editor
+  - class: CSS class for section styling (py-medium)
+  - title: Custom heading text for the section
+  - layout: Grid vs collage layout selection
+  - grid: Number of collections per row (2-4)
+  - display_type: All collections vs selected collections
+  - Collection selection blocks for custom display
+{% endcomment %}
 {% schema %}
-  {
-    "name": "Collection list",
-    "class": "py-medium",
-    "settings": [
-      {
-        "type": "text",
-        "id": "title",
-        "label": "Heading",
-        "default": "Collections"
-      },
-      {
-        "type": "select",
-        "id": "layout",
-        "label": "Collection layout",
-        "options": [
-          {
-            "value": "columns",
-            "label": "Collage"
-          },
-          {
-            "value": "rows",
-            "label": "Grid"
-          }
-        ],
-        "default": "rows",
-        "info": "Collage will only work when the 'Image shape'  is set to Natural - in Collections / Image shape"
-      },
-      {
-        "type": "range",
-        "id": "grid",
-        "label": "Collections per row",
-        "min": 2,
-        "max": 4,
-        "default": 3
-      },
-      {
-        "type": "radio",
-        "id": "display_type",
-        "label": "Select collections to show",
-        "default": "all",
-        "options": [
-          {
-            "value": "all",
-            "label": "All"
-          },
-          {
-            "value": "selected",
-            "label": "Selected"
-          }
-        ]
-      },
-      {
-        "type": "paragraph",
-        "content": "All of your collections are listed by default. To customize your list, choose 'Selected' and add collections."
-      }
-    ],
-    "blocks": [
-      {
-        "type": "image",
-        "name": "Collection",
-        "settings": [
-          {
-            "type": "collection",
-            "id": "collection",
-            "label": "Collection"
-          }
-        ]
-      }
-    ]
-  }
+{
+  "name": "Collection list",
+  "class": "py-medium",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Collections"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Collection layout",
+      "options": [
+        {
+          "value": "columns",
+          "label": "Collage"
+        },
+        {
+          "value": "rows",
+          "label": "Grid"
+        }
+      ],
+      "default": "rows",
+      "info": "Collage will only work when the 'Image shape'  is set to Natural - in Collections / Image shape"
+    },
+    {
+      "type": "range",
+      "id": "grid",
+      "label": "Collections per row",
+      "min": 2,
+      "max": 4,
+      "default": 3
+    },
+    {
+      "type": "radio",
+      "id": "display_type",
+      "label": "Select collections to show",
+      "default": "all",
+      "options": [
+        {
+          "value": "all",
+          "label": "All"
+        },
+        {
+          "value": "selected",
+          "label": "Selected"
+        }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "content": "All of your collections are listed by default. To customize your list, choose 'Selected' and add collections."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        }
+      ]
+    }
+  ]
+}
 {% endschema %}

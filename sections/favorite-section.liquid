@@ -1,25 +1,176 @@
+{% comment %}
+  =============================================================================
+  FAVORITE SECTION - PRODUCT FAVORITES WITH TOGGLE SYSTEM
+  =============================================================================
+  Interactive product favorites section with category-based filtering
+  - Three-toggle system for organizing favorite products
+  - Swiper.js carousel integration for product image galleries
+  - Dynamic product filtering based on collection context
+  - Alt tag priority system for collection-specific image display
+  - Responsive carousel with pagination and lazy loading
+  - Product information display with titles and pricing
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  EXTERNAL CSS ASSET LOADING
+  =============================================================================
+  Loads dedicated CSS file for favorite section styling
+  - favorite-section.css: Section-specific stylesheet
+  - asset_url filter: Generates proper asset URL
+  - stylesheet_tag: Renders as <link> tag for CSS loading
+{% endcomment %}
 {{ 'favorite-section.css' | asset_url | stylesheet_tag }}
 
+{% comment %}
+  =============================================================================
+  MAIN FAVORITES CONTAINER
+  =============================================================================
+  Primary container for favorites section layout
+  - favorites__container: Main wrapper for all favorites content
+  - Contains title, toggle system, and product carousels
+{% endcomment %}
 <div class="favorites__container">
+  {% comment %}
+    =============================================================================
+    SECTION TITLE
+    =============================================================================
+    Main heading for the favorites section
+    - favorites__title: Title styling class
+    - section.settings.title: Custom title from theme editor
+  {% endcomment %}
   <h1 class="favorites__title">{{ section.settings.title }}</h1>
+
+  {% comment %}
+    =============================================================================
+    TOGGLE SYSTEM CONTAINER
+    =============================================================================
+    Three-toggle system for switching between favorite categories
+    - favorites__toggler-wrapper: Container for all toggle buttons
+    - Three toggle buttons: left, center, right
+    - Dynamic visibility based on toggle content availability
+    - favorites__toggler-active: Currently active toggle state
+  {% endcomment %}
   <div class="favorites__toggler-wrapper ">
    
+    {% comment %}
+      =============================================================================
+      LEFT TOGGLE BUTTON
+      =============================================================================
+      First toggle button for category A favorites
+      - favorites__toggler: Base toggle button styling
+      - favorites__toggler-active: Active state styling
+      - favorites__toggler-alone: Single toggle styling when others are empty
+      - hidden-favorite__products: Hides when no content available
+      - id="toggler-btn-left": Unique identifier for JavaScript interaction
+    {% endcomment %}
     <div class="favorites__toggler favorites__toggler-active {% if section.settings.toggler-right == blank %} favorites__toggler-alone {% endif %} {% if section.settings.toggler-left == blank %} hidden-favorite__products {% endif %}"  id="toggler-btn-left">{{ section.settings.toggler-left }}</div>
+
+    {% comment %}
+      =============================================================================
+      CENTER TOGGLE BUTTON
+      =============================================================================
+      Second toggle button for category B favorites
+      - favorites__toggler: Base toggle button styling
+      - favorites__toggler-alone: Single toggle styling when others are empty
+      - hidden-favorite__products: Hides when no content available
+      - id="toggler-btn-center": Unique identifier for JavaScript interaction
+    {% endcomment %}
     <div class="favorites__toggler {% if section.settings.toggler-center == blank %} favorites__toggler-alone {% endif %} {% if section.settings.toggler-center == blank %} hidden-favorite__products {% endif %}" id="toggler-btn-center">{{ section.settings.toggler-center }}</div>
+
+    {% comment %}
+      =============================================================================
+      RIGHT TOGGLE BUTTON
+      =============================================================================
+      Third toggle button for category C favorites
+      - favorites__toggler: Base toggle button styling
+      - favorites__toggler-alone: Single toggle styling when others are empty
+      - hidden-favorite__products: Hides when no content available
+      - id="toggler-btn-right": Unique identifier for JavaScript interaction
+    {% endcomment %}
     <div class="favorites__toggler {% if section.settings.toggler-left == blank %} favorites__toggler-alone {% endif %} {% if section.settings.toggler-right == blank %} hidden-favorite__products {% endif %}" id="toggler-btn-right">{{ section.settings.toggler-right }}</div>
   </div>
 
+  {% comment %}
+    =============================================================================
+    FAVORITES CONTENT CONTAINER
+    =============================================================================
+    Main content area containing product carousels
+    - favorites__content-container: Wrapper for all product content
+    - favorites-carousel-outer: Outer carousel container
+    - swiper-wrapper: Swiper.js carousel wrapper
+  {% endcomment %}
   <div class="favorites__content-container">
     <div class="favorites-carousel-outer">
       <div class="swiper-wrapper">
+        {% comment %}
+          =============================================================================
+          FAVORITE CATEGORY A PRODUCTS
+          =============================================================================
+          First category of favorite products
+          - section.blocks | where: 'type', 'favorite-a': Filters blocks by type
+          - favorite-a: Block type for category A products
+          - Loops through all category A favorite products
+        {% endcomment %}
         {% assign favoritesA = section.blocks | where: 'type', 'favorite-a' %}
         {% for block in favoritesA %}
+            {% comment %}
+              =============================================================================
+              PRODUCT DATA ASSIGNMENT
+              =============================================================================
+              Retrieves product information from block settings
+              - all_products[block.settings.product]: Product lookup by handle
+              - product_url: Product detail page URL
+              - Used for linking and product information display
+            {% endcomment %}
             {% assign product = all_products[block.settings.product] %}
             {% assign product_url = product.url %}
+
+            {% comment %}
+              =============================================================================
+              FAVORITE PRODUCT CONTAINER
+              =============================================================================
+              Individual favorite product wrapper
+              - favorites__content: Base product styling class
+              - favorite-products-a: Category A specific styling
+              - swiper-slide: Swiper.js slide class
+              - hidden-favorite__products: Hidden when toggle is empty
+            {% endcomment %}
             <div class="favorites__content favorite-products-a swiper-slide {% if section.settings.toggler-left == blank %} hidden-favorite__products {% endif %}">
+              {% comment %}
+                =============================================================================
+                PRODUCT CAROUSEL CONTENT
+                =============================================================================
+                Carousel container for product image gallery
+                - favorites-carousel-content: Carousel wrapper
+                - swiper-wrapper: Swiper.js carousel wrapper
+                - Contains product images with priority system
+              {% endcomment %}
               <div class="favorites-carousel-content">
                 <div class="swiper-wrapper">
-                  {% assign product_only_images = product.media | where:'media_type', 'image' %}
+                  {% comment %}
+                    =============================================================================
+                    PRODUCT IMAGE FILTERING
+                    =============================================================================
+                    Filters product media to show only images
+                    - product.media: All product media (images, videos, 3D models)
+                    - where: 'media_type', 'image': Filters to images only
+                    - limit: 5: Maximum of 5 images per carousel
+                  {% endcomment %}
+                  {% assign product_only_images = product.media | where: 'media_type', 'image' %}
+
+                  {% comment %}
+                    =============================================================================
+                    ALT TAG PRIORITY SYSTEM
+                    =============================================================================
+                    Complex logic for determining which image to show first
+                    - collection_handle: Current collection context
+                    - alt_tags: Splits alt text by pipe separator
+                    - alt_colletions: Array for collection-specific tags
+                    - images_index: Current image loop index
+                    - has_alt_priority: Boolean for priority image found
+                    - item_to_show: Selected image for priority display
+                  {% endcomment %}
                   {% for itemImage in product_only_images limit: 5 %}
                     {% assign collection_handle = collection.handle %}
                     {% assign alt_tags = itemImage.alt | split: "|" %}
@@ -27,6 +178,17 @@
                     {% assign images_index = forloop.index0 %}
                     {% assign has_alt_priority = false %}
                     {% assign item_to_show = itemImage %}
+
+                    {% comment %}
+                      =============================================================================
+                      ALT TAG PARSING LOOP
+                      =============================================================================
+                      Processes alt text for collection-specific priority
+                      - tags: Individual alt tag segments
+                      - tag[0]: Tag name (e.g., "first")
+                      - tag[1]: Tag value (comma-separated collection list)
+                      - Checks if current collection matches priority collections
+                    {% endcomment %}
                     {% for tags in alt_tags %}
                       {% assign tag = tags | split: ":" %}
                       {% assign tag_name = tag[0] | strip %}
@@ -48,11 +210,30 @@
                       {% endif %}
                     {% endfor %}
         
+                    {% comment %}
+                      =============================================================================
+                      PRIORITY IMAGE BREAK
+                      =============================================================================
+                      Exits loop when priority image is found
+                      - has_alt_priority: Boolean indicating priority found
+                      - item_to_show: Selected priority image
+                      - first_image: Index of priority image
+                    {% endcomment %}
                     {% if has_alt_priority %}
                       {% break %}
                     {% endif %}
                   {% endfor %}
 
+                  {% comment %}
+                    =============================================================================
+                    PRIORITY IMAGE DISPLAY
+                    =============================================================================
+                    Shows the priority image first if one was found
+                    - has_alt_priority: Boolean for priority image availability
+                    - forloop.index0 <= 4: Ensures image is within limit
+                    - item_to_show: Priority image for display
+                    - tabindex="-1": Removes from tab order (mouse-only interaction)
+                  {% endcomment %}
                   {% if has_alt_priority %}
                     <div class="swiper-slide">
                       {% if forloop.index0 <= 4 %}
@@ -67,6 +248,16 @@
                     </div>
                   {% endif %}          
         
+                  {% comment %}
+                    =============================================================================
+                    REMAINING PRODUCT IMAGES
+                    =============================================================================
+                    Displays remaining product images in carousel
+                    - Skips priority image if already displayed
+                    - forloop.index0 == first_image: Checks for priority image
+                    - has_alt_priority: Only skips if priority system is active
+                    - continue: Skips to next iteration when priority image found
+                  {% endcomment %}
                   {% for itemImage in product_only_images limit: 5 %}
                     {% if forloop.index0 == first_image and has_alt_priority %}
                       {% continue %}
@@ -84,21 +275,109 @@
                   </div>
                 {% endfor %}
                 </div>
+
+                {% comment %}
+                  =============================================================================
+                  CAROUSEL PAGINATION
+                  =============================================================================
+                  Swiper.js pagination dots for carousel navigation
+                  - swiper-pagination: Pagination container class
+                  - Automatically generated by Swiper.js
+                  - Shows current slide position and total slides
+                {% endcomment %}
               <div class="swiper-pagination"></div>
             </div>
+
+            {% comment %}
+              =============================================================================
+              PRODUCT INFORMATION
+              =============================================================================
+              Product title and pricing display
+              - favorites__product-title: Product name styling
+              - favorites__product-price: Price styling
+              - product.title: Product title from Shopify
+              - product.price: Product price with money formatting
+              - money_without_trailing_zeros: Removes unnecessary decimal places
+            {% endcomment %}
             <p class="favorites__product-title">{{ product.title }}</p>
             <p class="favorites__product-price">{{ product.price | money_without_trailing_zeros }}</p>
           </div>
         {% endfor %}
 
+        {% comment %}
+          =============================================================================
+          FAVORITE CATEGORY B PRODUCTS
+          =============================================================================
+          Second category of favorite products
+          - section.blocks | where: 'type', 'favorite-b': Filters blocks by type
+          - favorite-b: Block type for category B products
+          - hidden-favorite__products-favorite__products: Complex visibility logic
+          - shown-favorite__products: Shows when left toggle is empty
+          - hidden-favorite__products: Hidden when toggles are configured
+        {% endcomment %}
+        {% comment %}
+          =============================================================================
+          FAVORITE CATEGORY B PRODUCTS - COMPLETE IMPLEMENTATION
+          =============================================================================
+          Second category of favorite products with identical logic to category A
+          - Same image priority system and carousel functionality
+          - Complex visibility logic for toggle system integration
+          - Hidden by default, shown when center toggle is active
+        {% endcomment %}
         {% assign favoritesB = section.blocks | where: 'type', 'favorite-b' %}
         {% for block in favoritesB %}
+          {% comment %}
+            =============================================================================
+            PRODUCT DATA ASSIGNMENT FOR CATEGORY B
+            =============================================================================
+            Same product lookup logic as category A
+            - all_products[block.settings.product]: Product lookup by handle
+            - product_url: Product detail page URL
+          {% endcomment %}
           {% assign product = all_products[block.settings.product] %}
           {% assign product_url = product.url %}
+
+          {% comment %}
+            =============================================================================
+            CATEGORY B PRODUCT CONTAINER
+            =============================================================================
+            Category B specific styling and visibility logic
+            - favorite-products-b: Category B specific styling class
+            - hidden-favorite__products-favorite__products: Complex visibility logic
+            - shown-favorite__products: Shows when left toggle is empty
+            - hidden-favorite__products: Hidden when toggles are configured
+          {% endcomment %}
           <div class="favorites__content favorite-products-b hidden-favorite__products-favorite__products swiper-slide {% if section.settings.toggler-left == blank %} shown-favorite__products {% endif %} {% if section.settings.toggler-right == blank or section.settings.toggler-left != blank %} hidden-favorite__products {% endif %}">
+            {% comment %}
+              =============================================================================
+              CATEGORY B CAROUSEL CONTENT
+              =============================================================================
+              Same carousel structure as category A
+              - favorites-carousel-content: Carousel wrapper
+              - swiper-wrapper: Swiper.js carousel wrapper
+              - Identical image priority and display logic
+            {% endcomment %}
             <div class="favorites-carousel-content">
               <div class="swiper-wrapper">
-                {% assign product_only_images = product.media | where:'media_type', 'image' %}
+                {% comment %}
+                  =============================================================================
+                  CATEGORY B IMAGE FILTERING
+                  =============================================================================
+                  Same image filtering logic as category A
+                  - product.media | where: 'media_type', 'image': Images only
+                  - limit: 5: Maximum of 5 images per carousel
+                {% endcomment %}
+                {% assign product_only_images = product.media | where: 'media_type', 'image' %}
+
+                {% comment %}
+                  =============================================================================
+                  CATEGORY B ALT TAG PRIORITY SYSTEM
+                  =============================================================================
+                  Identical priority logic to category A
+                  - collection_handle: Current collection context
+                  - alt_tags: Splits alt text by pipe separator
+                  - Same priority image selection algorithm
+                {% endcomment %}
                 {% for itemImage in product_only_images limit: 5 %}
                   {% assign collection_handle = collection.handle %}
                   {% assign alt_tags = itemImage.alt | split: "|" %}
@@ -106,6 +385,16 @@
                   {% assign images_index = forloop.index0 %}
                   {% assign has_alt_priority = false %}
                   {% assign item_to_show = itemImage %}
+
+                  {% comment %}
+                    =============================================================================
+                    CATEGORY B ALT TAG PARSING
+                    =============================================================================
+                    Same parsing logic as category A
+                    - tags: Individual alt tag segments
+                    - tag[0]: Tag name (e.g., "first")
+                    - tag[1]: Tag value (comma-separated collection list)
+                  {% endcomment %}
                   {% for tags in alt_tags %}
                     {% assign tag = tags | split: ":" %}
                     {% assign tag_name = tag[0] | strip %}
@@ -127,11 +416,28 @@
                     {% endif %}
                   {% endfor %}
       
+                  {% comment %}
+                    =============================================================================
+                    CATEGORY B PRIORITY IMAGE BREAK
+                    =============================================================================
+                    Same break logic as category A
+                    - has_alt_priority: Boolean indicating priority found
+                    - Exits loop when priority image is identified
+                  {% endcomment %}
                   {% if has_alt_priority %}
                     {% break %}
                   {% endif %}
                 {% endfor %}
 
+                {% comment %}
+                  =============================================================================
+                  CATEGORY B PRIORITY IMAGE DISPLAY
+                  =============================================================================
+                  Same priority display logic as category A
+                  - has_alt_priority: Boolean for priority image availability
+                  - item_to_show: Priority image for display
+                  - tabindex="-1": Removes from tab order
+                {% endcomment %}
                 {% if has_alt_priority %}
                   <div class="swiper-slide">
                     {% if forloop.index0 <= 4 %}
@@ -146,6 +452,15 @@
                   </div>
                 {% endif %}          
       
+                {% comment %}
+                  =============================================================================
+                  CATEGORY B REMAINING IMAGES
+                  =============================================================================
+                  Same remaining image logic as category A
+                  - Skips priority image if already displayed
+                  - forloop.index0 == first_image: Checks for priority image
+                  - continue: Skips to next iteration when priority image found
+                {% endcomment %}
                 {% for itemImage in product_only_images limit: 5 %}
                   {% if forloop.index0 == first_image and has_alt_priority %}
                     {% continue %}
@@ -163,20 +478,96 @@
                 </div>
               {% endfor %}
               </div>
+
+              {% comment %}
+                =============================================================================
+                CATEGORY B CAROUSEL PAGINATION
+                =============================================================================
+                Same pagination as category A
+                - swiper-pagination: Pagination container class
+                - Automatically generated by Swiper.js
+              {% endcomment %}
               <div class="swiper-pagination"></div>
             </div>
+
+            {% comment %}
+              =============================================================================
+              CATEGORY B PRODUCT INFORMATION
+              =============================================================================
+              Same product info display as category A
+              - favorites__product-title: Product name styling
+              - favorites__product-price: Price styling
+              - product.title: Product title from Shopify
+              - product.price: Product price with money formatting
+            {% endcomment %}
             <p class="favorites__product-title">{{ product.title }}</p>
             <p class="favorites__product-price">{{ product.price | money_without_trailing_zeros }}</p>
           </div>
         {% endfor %}
+
+        {% comment %}
+          =============================================================================
+          FAVORITE CATEGORY C PRODUCTS - COMPLETE IMPLEMENTATION
+          =============================================================================
+          Third category of favorite products with identical logic to A and B
+          - Same image priority system and carousel functionality
+          - Complex visibility logic for toggle system integration
+          - Hidden by default, shown when right toggle is active
+        {% endcomment %}
         {% assign favoritesC = section.blocks | where: 'type', 'favorite-c' %}
         {% for block in favoritesC %}
+          {% comment %}
+            =============================================================================
+            PRODUCT DATA ASSIGNMENT FOR CATEGORY C
+            =============================================================================
+            Same product lookup logic as categories A and B
+            - all_products[block.settings.product]: Product lookup by handle
+            - product_url: Product detail page URL
+          {% endcomment %}
           {% assign product = all_products[block.settings.product] %}
           {% assign product_url = product.url %}
+
+          {% comment %}
+            =============================================================================
+            CATEGORY C PRODUCT CONTAINER
+            =============================================================================
+            Category C specific styling and visibility logic
+            - favorite-products-c: Category C specific styling class
+            - hidden-favorite__products-favorite__products: Complex visibility logic
+            - shown-favorite__products: Shows when left toggle is empty
+            - hidden-favorite__products: Hidden when toggles are configured
+          {% endcomment %}
           <div class="favorites__content favorite-products-c hidden-favorite__products-favorite__products swiper-slide {% if section.settings.toggler-left == blank %} shown-favorite__products {% endif %} {% if section.settings.toggler-right == blank or section.settings.toggler-left != blank %} hidden-favorite__products {% endif %}">
+            {% comment %}
+              =============================================================================
+              CATEGORY C CAROUSEL CONTENT
+              =============================================================================
+              Same carousel structure as categories A and B
+              - favorites-carousel-content: Carousel wrapper
+              - swiper-wrapper: Swiper.js carousel wrapper
+              - Identical image priority and display logic
+            {% endcomment %}
             <div class="favorites-carousel-content">
               <div class="swiper-wrapper">
-                {% assign product_only_images = product.media | where:'media_type', 'image' %}
+                {% comment %}
+                  =============================================================================
+                  CATEGORY C IMAGE FILTERING
+                  =============================================================================
+                  Same image filtering logic as categories A and B
+                  - product.media | where: 'media_type', 'image': Images only
+                  - limit: 5: Maximum of 5 images per carousel
+                {% endcomment %}
+                {% assign product_only_images = product.media | where: 'media_type', 'image' %}
+
+                {% comment %}
+                  =============================================================================
+                  CATEGORY C ALT TAG PRIORITY SYSTEM
+                  =============================================================================
+                  Identical priority logic to categories A and B
+                  - collection_handle: Current collection context
+                  - alt_tags: Splits alt text by pipe separator
+                  - Same priority image selection algorithm
+                {% endcomment %}
                 {% for itemImage in product_only_images limit: 5 %}
                   {% assign collection_handle = collection.handle %}
                   {% assign alt_tags = itemImage.alt | split: "|" %}
@@ -184,6 +575,16 @@
                   {% assign images_index = forloop.index0 %}
                   {% assign has_alt_priority = false %}
                   {% assign item_to_show = itemImage %}
+
+                  {% comment %}
+                    =============================================================================
+                    CATEGORY C ALT TAG PARSING
+                    =============================================================================
+                    Same parsing logic as categories A and B
+                    - tags: Individual alt tag segments
+                    - tag[0]: Tag name (e.g., "first")
+                    - tag[1]: Tag value (comma-separated collection list)
+                  {% endcomment %}
                   {% for tags in alt_tags %}
                     {% assign tag = tags | split: ":" %}
                     {% assign tag_name = tag[0] | strip %}
@@ -205,11 +606,28 @@
                     {% endif %}
                   {% endfor %}
       
+                  {% comment %}
+                    =============================================================================
+                    CATEGORY C PRIORITY IMAGE BREAK
+                    =============================================================================
+                    Same break logic as categories A and B
+                    - has_alt_priority: Boolean indicating priority found
+                    - Exits loop when priority image is identified
+                  {% endcomment %}
                   {% if has_alt_priority %}
                     {% break %}
                   {% endif %}
                 {% endfor %}
 
+                {% comment %}
+                  =============================================================================
+                  CATEGORY C PRIORITY IMAGE DISPLAY
+                  =============================================================================
+                  Same priority display logic as categories A and B
+                  - has_alt_priority: Boolean for priority image availability
+                  - item_to_show: Priority image for display
+                  - tabindex="-1": Removes from tab order
+                {% endcomment %}
                 {% if has_alt_priority %}
                   <div class="swiper-slide">
                     {% if forloop.index0 <= 4 %}
@@ -224,6 +642,15 @@
                   </div>
                 {% endif %}          
       
+                {% comment %}
+                  =============================================================================
+                  CATEGORY C REMAINING IMAGES
+                  =============================================================================
+                  Same remaining image logic as categories A and B
+                  - Skips priority image if already displayed
+                  - forloop.index0 == first_image: Checks for priority image
+                  - continue: Skips to next iteration when priority image found
+                {% endcomment %}
                 {% for itemImage in product_only_images limit: 5 %}
                   {% if forloop.index0 == first_image and has_alt_priority %}
                     {% continue %}
@@ -241,132 +668,435 @@
                 </div>
               {% endfor %}
               </div>
+
+              {% comment %}
+                =============================================================================
+                CATEGORY C CAROUSEL PAGINATION
+                =============================================================================
+                Same pagination as categories A and B
+                - swiper-pagination: Pagination container class
+                - Automatically generated by Swiper.js
+              {% endcomment %}
               <div class="swiper-pagination"></div>
             </div>
+
+            {% comment %}
+              =============================================================================
+              CATEGORY C PRODUCT INFORMATION
+              =============================================================================
+              Same product info display as categories A and B
+              - favorites__product-title: Product name styling
+              - favorites__product-price: Price styling
+              - product.title: Product title from Shopify
+              - product.price: Product price with money formatting
+            {% endcomment %}
             <p class="favorites__product-title">{{ product.title }}</p>
             <p class="favorites__product-price">{{ product.price | money_without_trailing_zeros }}</p>
           </div>
         {% endfor %}
       </div>
+
+      {% comment %}
+        =============================================================================
+        CAROUSEL NAVIGATION ARROWS
+        =============================================================================
+        Swiper.js navigation controls for carousel interaction
+        - swiper-arrows__container: Container for navigation arrows
+        - swiper-button-prev favorites: Previous slide button
+        - swiper-button-next favorites: Next slide button
+        - Automatically positioned and styled by Swiper.js
+      {% endcomment %}
       <div class="swiper-arrows__container">
-      <div class="swiper-button-prev favorites"></div>
-      <div class="swiper-button-next favorites"></div>
+        <div class="swiper-button-prev favorites"></div>
+        <div class="swiper-button-next favorites"></div>
       </div>
     </div>
   </div>
 
+  {% comment %}
+    =============================================================================
+    CALL-TO-ACTION BUTTONS
+    =============================================================================
+    Three CTA buttons corresponding to each favorite category
+    - Dynamic visibility based on toggle system configuration
+    - Each CTA links to different URLs with custom text
+    - Complex visibility logic for proper toggle integration
+  {% endcomment %}
+
+  {% comment %}
+    =============================================================================
+    CATEGORY A CTA BUTTON
+    =============================================================================
+    Call-to-action button for category A favorites
+    - cta-container__a: Category A specific styling
+    - hidden-favorite__products: Hidden when left toggle is empty
+    - section.settings.cta-url-a: Custom URL from theme editor
+    - section.settings.cta-text-a: Custom text from theme editor
+    - id="favorites-cta-a": Unique identifier for JavaScript interaction
+  {% endcomment %}
   <div class="favorites__cta-container cta-container__a {% if section.settings.toggler-left == blank %} hidden-favorite__products {% endif %}">
     <a href="{{ section.settings.cta-url-a }}" class="favorites__cta" id="favorites-cta-a">{{ section.settings.cta-text-a }}</a>
   </div>
+
+  {% comment %}
+    =============================================================================
+    CATEGORY C CTA BUTTON
+    =============================================================================
+    Call-to-action button for category C favorites
+    - cta-container__c: Category C specific styling
+    - hidden-favorite__products-favorite__products: Complex visibility logic
+    - hidden-favorite__products: Hidden when center toggle is empty or left toggle exists
+    - section.settings.cta-url-c: Custom URL from theme editor
+    - section.settings.cta-text-c: Custom text from theme editor
+    - id="favorites-cta-c": Unique identifier for JavaScript interaction
+  {% endcomment %}
   <div class="favorites__cta-container cta-container__c hidden-favorite__products-favorite__products {% if section.settings.toggler-center == blank or section.settings.toggler-left != blank %} hidden-favorite__products {% endif %}">
     <a href="{{ section.settings.cta-url-c }}" class="favorites__cta" id="favorites-cta-c">{{ section.settings.cta-text-c }}</a>
   </div>
+
+  {% comment %}
+    =============================================================================
+    CATEGORY B CTA BUTTON
+    =============================================================================
+    Call-to-action button for category B favorites
+    - cta-container__b: Category B specific styling
+    - hidden-favorite__products-favorite__products: Complex visibility logic
+    - hidden-favorite__products: Hidden when right toggle is empty or left toggle exists
+    - section.settings.cta-url-b: Custom URL from theme editor
+    - section.settings.cta-text-b: Custom text from theme editor
+    - id="favorites-cta-b": Unique identifier for JavaScript interaction
+  {% endcomment %}
   <div class="favorites__cta-container cta-container__b hidden-favorite__products-favorite__products {% if section.settings.toggler-right == blank or section.settings.toggler-left != blank %} hidden-favorite__products {% endif %}">
     <a href="{{ section.settings.cta-url-b }}" class="favorites__cta" id="favorites-cta-b">{{ section.settings.cta-text-b }}</a>
   </div>
   
 </div>
 
+{% comment %}
+  =============================================================================
+  JAVASCRIPT ASSET LOADING
+  =============================================================================
+  Loads dedicated JavaScript file for favorite section functionality
+  - favorite-section.js: Section-specific JavaScript functionality
+  - asset_url filter: Generates proper asset URL
+  - defer: Loads script after HTML parsing for performance
+  - Handles toggle system, carousel initialization, and interactions
+{% endcomment %}
 <script src="{{ 'favorite-section.js' | asset_url }}" defer></script>
 
 
+{% comment %}
+  =============================================================================
+  FAVORITE SECTION SCHEMA - CONFIGURATION & CUSTOMIZATION
+  =============================================================================
+  Theme editor configuration for favorites section customization
+  - name: Section name displayed in theme editor
+  - limit: 1: Maximum of one favorites section per page
+  - settings: Configurable options for merchants
+  - blocks: Three block types for different favorite categories
+  - presets: Default section configuration
+{% endcomment %}
 {% schema %}
-  {
-    "name": "Favorites",
-    "limit": 1,
-    "settings": [
-      {
-        "type": "text",
-        "id": "title",
-        "label": "Title"
-      },
-      {
-        "type": "text",
-        "id": "toggler-left",
-        "label": "Switcher Left Text"
-      },
-      {
-        "type": "text",
-        "id": "toggler-center",
-        "label": "Switcher Center Text"
-      },
-      {
-        "type": "text",
-        "id": "toggler-right",
-        "label": "Switcher Right Text"
-      },
-      {
-        "type": "url",
-        "id": "cta-url-a",
-        "label": "CTA Url A"
-      },
-      {
-        "type": "url",
-        "id": "cta-url-b",
-        "label": "CTA Url B"
-      },
-      {
-        "type": "url",
-        "id": "cta-url-c",
-        "label": "CTA Url C"
-      },
-      {
-        "type": "text",
-        "id": "cta-text-a",
-        "label": "CTA Text A"
-      },
-      {
-        "type": "text",
-        "id": "cta-text-b",
-        "label": "CTA Text B"
-      },
-      {
-        "type": "text",
-        "id": "cta-text-c",
-        "label": "CTA Text C"
-      }
-    ],
-    "blocks": [
-       {
-         "name": "Favorite A",
-         "type": "favorite-a",
-         "settings": [
-          {
-            "type": "product",
-            "id": "product",
-            "label": "Product"
-          }
-         ]
-       },
-       {
-         "name": "Favorite B",
-         "type": "favorite-b",
-         "settings": [
-          {
-            "type": "product",
-            "id": "product",
-            "label": "Product"
-          }
-         ]
-       }
-       ,
-       {
-         "name": "Favorite C",
-         "type": "favorite-c",
-         "settings": [
-          {
-            "type": "product",
-            "id": "product",
-            "label": "Product"
-          }
-         ]
-       }
-    ],
-    "presets": [
-      {
-        "name": "Favorites"
-      }
-    ]
-  }
-  {% endschema %} 
+{
+  {% comment %}
+    =============================================================================
+    SCHEMA BASIC CONFIGURATION
+    =============================================================================
+    Core section configuration for theme editor
+    - name: Display name in theme editor sidebar
+    - limit: 1: Maximum of one favorites section per page
+  {% endcomment %}
+  "name": "Favorites",
+  "limit": 1,
+
+  {% comment %}
+    =============================================================================
+    SECTION SETTINGS - MERCHANT CUSTOMIZATION
+    =============================================================================
+    Configurable options available to merchants in theme editor
+    - All settings are optional and can be left blank
+    - Toggle text controls visibility of corresponding product categories
+    - CTA settings provide custom call-to-action buttons for each category
+  {% endcomment %}
+  "settings": [
+    {% comment %}
+      =============================================================================
+      SECTION TITLE SETTING
+      =============================================================================
+      Main heading for the favorites section
+      - type: "text": Simple text input field
+      - id: "title": Internal identifier for Liquid access
+      - label: "Title": User-friendly label in theme editor
+    {% endcomment %}
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+
+    {% comment %}
+      =============================================================================
+      LEFT TOGGLE BUTTON TEXT
+      =============================================================================
+      Text for first toggle button (Category A)
+      - Controls visibility of favorite-a product blocks
+      - When blank, category A products are hidden
+      - Used for first favorite product category
+    {% endcomment %}
+    {
+      "type": "text",
+      "id": "toggler-left",
+      "label": "Switcher Left Text"
+    },
+
+    {% comment %}
+      =============================================================================
+      CENTER TOGGLE BUTTON TEXT
+      =============================================================================
+      Text for second toggle button (Category B)
+      - Controls visibility of favorite-b product blocks
+      - When blank, category B products are hidden
+      - Used for second favorite product category
+    {% endcomment %}
+    {
+      "type": "text",
+      "id": "toggler-center",
+      "label": "Switcher Center Text"
+    },
+
+    {% comment %}
+      =============================================================================
+      RIGHT TOGGLE BUTTON TEXT
+      =============================================================================
+      Text for third toggle button (Category C)
+      - Controls visibility of favorite-c product blocks
+      - When blank, category C products are hidden
+      - Used for third favorite product category
+    {% endcomment %}
+    {
+      "type": "text",
+      "id": "toggler-right",
+      "label": "Switcher Right Text"
+    },
+
+    {% comment %}
+      =============================================================================
+      CATEGORY A CTA URL
+      =============================================================================
+      Call-to-action button URL for category A
+      - type: "url": URL input field with validation
+      - id: "cta-url-a": Internal identifier for Liquid access
+      - label: "CTA Url A": User-friendly label in theme editor
+      - Links to collection, product, or external page
+    {% endcomment %}
+    {
+      "type": "url",
+      "id": "cta-url-a",
+      "label": "CTA Url A"
+    },
+
+    {% comment %}
+      =============================================================================
+      CATEGORY B CTA URL
+      =============================================================================
+      Call-to-action button URL for category B
+      - type: "url": URL input field with validation
+      - id: "cta-url-b": Internal identifier for Liquid access
+      - label: "CTA Url B": User-friendly label in theme editor
+      - Links to collection, product, or external page
+    {% endcomment %}
+    {
+      "type": "url",
+      "id": "cta-url-b",
+      "label": "CTA Url B"
+    },
+
+    {% comment %}
+      =============================================================================
+      CATEGORY C CTA URL
+      =============================================================================
+      Call-to-action button URL for category C
+      - type: "url": URL input field with validation
+      - id: "cta-url-c": Internal identifier for Liquid access
+      - label: "CTA Url C": User-friendly label in theme editor
+      - Links to collection, product, or external page
+    {% endcomment %}
+    {
+      "type": "url",
+      "id": "cta-url-c",
+      "label": "CTA Url C"
+    },
+
+    {% comment %}
+      =============================================================================
+      CATEGORY A CTA TEXT
+      =============================================================================
+      Call-to-action button text for category A
+      - type: "text": Simple text input field
+      - id: "cta-text-a": Internal identifier for Liquid access
+      - label: "CTA Text A": User-friendly label in theme editor
+      - Displayed on the CTA button (e.g., "Shop Now", "Learn More")
+    {% endcomment %}
+    {
+      "type": "text",
+      "id": "cta-text-a",
+      "label": "CTA Text A"
+    },
+
+    {% comment %}
+      =============================================================================
+      CATEGORY B CTA TEXT
+      =============================================================================
+      Call-to-action button text for category B
+      - type: "text": Simple text input field
+      - id: "cta-text-b": Internal identifier for Liquid access
+      - label: "CTA Text B": User-friendly label in theme editor
+      - Displayed on the CTA button (e.g., "Shop Now", "Learn More")
+    {% endcomment %}
+    {
+      "type": "text",
+      "id": "cta-text-b",
+      "label": "CTA Text B"
+    },
+
+    {% comment %}
+      =============================================================================
+      CATEGORY C CTA TEXT
+      =============================================================================
+      Call-to-action button text for category C
+      - type: "text": Simple text input field
+      - id: "cta-text-c": Internal identifier for Liquid access
+      - label: "CTA Text C": User-friendly label in theme editor
+      - Displayed on the CTA button (e.g., "Shop Now", "Learn More")
+    {% endcomment %}
+    {
+      "type": "text",
+      "id": "cta-text-c",
+      "label": "CTA Text C"
+    }
+  ],
+
+  {% comment %}
+    =============================================================================
+    SECTION BLOCKS - PRODUCT MANAGEMENT
+    =============================================================================
+    Three block types for organizing favorite products by category
+    - Each block type corresponds to a toggle button
+    - Merchants can add multiple products to each category
+    - Block visibility controlled by corresponding toggle text setting
+  {% endcomment %}
+  "blocks": [
+    {% comment %}
+      =============================================================================
+      FAVORITE A BLOCK TYPE
+      =============================================================================
+      First category of favorite products
+      - name: "Favorite A": Display name in theme editor
+      - type: "favorite-a": Internal identifier for Liquid filtering
+      - settings: Product selection for this category
+      - Controlled by toggler-left setting
+    {% endcomment %}
+    {
+      "name": "Favorite A",
+      "type": "favorite-a",
+      "settings": [
+        {% comment %}
+          =============================================================================
+          PRODUCT SELECTION SETTING
+          =============================================================================
+          Product picker for category A favorites
+          - type: "product": Shopify product selector
+          - id: "product": Internal identifier for Liquid access
+          - label: "Product": User-friendly label in theme editor
+          - Allows merchants to select specific products for this category
+        {% endcomment %}
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    },
+
+    {% comment %}
+      =============================================================================
+      FAVORITE B BLOCK TYPE
+      =============================================================================
+      Second category of favorite products
+      - name: "Favorite B": Display name in theme editor
+      - type: "favorite-b": Internal identifier for Liquid filtering
+      - settings: Product selection for this category
+      - Controlled by toggler-center setting
+    {% endcomment %}
+    {
+      "name": "Favorite B",
+      "type": "favorite-b",
+      "settings": [
+        {% comment %}
+          =============================================================================
+          PRODUCT SELECTION SETTING
+          =============================================================================
+          Product picker for category B favorites
+          - type: "product": Shopify product selector
+          - id: "product": Internal identifier for Liquid access
+          - label: "Product": User-friendly label in theme editor
+          - Allows merchants to select specific products for this category
+        {% endcomment %}
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    },
+
+    {% comment %}
+      =============================================================================
+      FAVORITE C BLOCK TYPE
+      =============================================================================
+      Third category of favorite products
+      - name: "Favorite C": Display name in theme editor
+      - type: "favorite-c": Internal identifier for Liquid filtering
+      - settings: Product selection for this category
+      - Controlled by toggler-right setting
+    {% endcomment %}
+    {
+      "name": "Favorite C",
+      "type": "favorite-c",
+      "settings": [
+        {% comment %}
+          =============================================================================
+          PRODUCT SELECTION SETTING
+          =============================================================================
+          Product picker for category C favorites
+          - type: "product": Shopify product selector
+          - id: "product": Internal identifier for Liquid access
+          - label: "Product": User-friendly label in theme editor
+          - Allows merchants to select specific products for this category
+        {% endcomment %}
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    }
+  ],
+
+  {% comment %}
+    =============================================================================
+    SECTION PRESETS - DEFAULT CONFIGURATION
+    =============================================================================
+    Default section configuration for easy addition to pages
+    - name: "Favorites": Display name when adding section to page
+    - Provides starting point for merchants to customize
+    - All settings and blocks start empty by default
+  {% endcomment %}
+  "presets": [
+    {
+      "name": "Favorites"
+    }
+  ]
+}
+{% endschema %} 
   

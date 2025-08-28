@@ -65,7 +65,7 @@
   {% assign swatches = 'Black, Navy' | split: ', ' %} 
 {%- endif -%}
 
-<div class="dtc-collection-swatches dtc-collection-swatches__container dtc-{{product_type}}">
+<div class="dtc-collection-swatches dtc-collection-swatches__container dtc-{{ product_type }}">
   {% comment %}Create an inline swatches with available product variants and their images, limited by 6 elements{% endcomment %}
   {% assign limit = 6 %}
   {% assign limit_mobile = 3 %}
@@ -88,7 +88,7 @@
         data-js-product-id="{{ product.id }}"
         data-js-product-type="{{ product.type }}"
         data-js-product-title="{{ product.title }}"
-        data-js-product-feat-img="{{ product.featured_image | img_url: '600x600' }}"
+        data-js-product-feat-img="{{ product.featured_image | image_url: width: 600, height: 600 }}"
         data-js-product-url="{{ product.url }}"
       ></li>
         {% for collection_product in color_collection %}
@@ -116,7 +116,7 @@
                     data-js-product-id="{{ collection_product.id }}"
                     data-js-product-type="{{ collection_product.type }}"
                     data-js-product-title="{{ collection_product.title }}"
-                    data-js-product-feat-img="{{ collection_product.featured_image | img_url: '600x600' }}"
+                    data-js-product-feat-img="{{ collection_product.featured_image | image_url: width: 600, height: 600 }}"
                     data-js-product-url="{{ collection_product.url }}"
                     data-order="{{ forloop.index }}"
                   ></li>

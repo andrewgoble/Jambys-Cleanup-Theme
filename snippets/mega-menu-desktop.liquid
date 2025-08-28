@@ -135,14 +135,14 @@
                         {% case block.type %}
                           {% when 'link' %}
                             <div class="menu_item{% if linklists[block.settings.category_link_list] == blank %}-empty{% endif %}">
-                              {% if block.settings.new_menu_link != blank%}
+                              {% if block.settings.new_menu_link != blank %}
                                 <a href="{{ block.settings.new_menu_link }}" {% if link.active %}class="link_active"{% endif %} >
                                   <span class="menu-title">{{ block.settings.new_menu_title }}</span>
                                 </a>
                               {% else %}
                                 <span class="menu-title">{{ block.settings.new_menu_title }}</span>
                               {% endif %} 
-                              {% if linklists[block.settings.category_link_list] != blank%}
+                              {% if linklists[block.settings.category_link_list] != blank %}
                                 {% if linklists[block.settings.category_link_list].levels > 0 %}
                                   <div class="icon-switcher"> </div>
                                 {% else %}
@@ -176,7 +176,7 @@
                                     {% if block.settings.product_1 != blank %}
                                       <div class="featured-container">
                                         <a href="{{ block.settings.product_1.url }}">
-                                          <img loading="lazy" src={{ block.settings.product_1.featured_image | image_url}}  width="150" height="166">
+                                          <img loading="lazy" src={{ block.settings.product_1.featured_image | image_url }}  width="150" height="166">
                                         </a>
                                         <div class="featured-information">
                                           <div class="featured-title">
@@ -217,7 +217,7 @@
                       
                           {% when 'categories'%}
                             <div class="menu_item">
-                              {% if block.settings.first_category_url != blank%}
+                              {% if block.settings.first_category_url != blank %}
                                 <a href="{{ block.settings.first_category_url }}" {% if link.active %}class="link_active"{% endif %} >
                                   <span class="menu-title">{{ block.settings.first_category_title }}</span>
                                 </a>
@@ -347,7 +347,7 @@
                                         {% if block.settings.product_1_custom != blank %}
                                           <div class="featured-container">
                                             <a href="{{ block.settings.product_1_custom.url }}">
-                                              <img loading="lazy" src={{ block.settings.product_1_custom.featured_image | image_url}}  width="150" height="166">
+                                              <img loading="lazy" src={{ block.settings.product_1_custom.featured_image | image_url }}  width="150" height="166">
                                             </a>
                                             <div class="featured-information">
                                               <div class="featured-title">
@@ -434,7 +434,7 @@
                       {% endif %}
 
                       {% if section.settings.sub_nav_quote != blank %}
-                        <div class="bottom_menu_desktop">{{ section.settings.sub_nav_quote }}&nbsp;<img src="{{ section.settings.sub_tagline | img_url: "50x" }}"></div>
+                        <div class="bottom_menu_desktop">{{ section.settings.sub_nav_quote }}&nbsp;<img src="{{ section.settings.sub_tagline | image_url: width: 50 }}"></div>
                       {% endif %}
 
                       <div style="height: 165px; "></div>

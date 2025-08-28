@@ -1,33 +1,141 @@
+{% comment %}
+  =============================================================================
+  MAIN ARTICLE SECTION - BLOG POST DISPLAY & INTERACTION
+  =============================================================================
+  Complete article functionality with featured images, comments, and navigation
+  - Dynamic featured image layouts (none, narrow, wide)
+  - Article comments system with moderation support
+  - Social sharing integration for content distribution
+  - Article navigation (previous/next post links)
+  - Structured data for SEO optimization
+  - Responsive design with conditional styling
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  ARTICLE CONTAINER & LAYOUT CONFIGURATION
+  =============================================================================
+  Main article container with dynamic layout classes
+  - article-container: Base container for article content
+  - central content: Standard centered layout for narrow content
+  - header-overlap-section: Full-width layout for wide featured images
+  - with-featured-image: Additional styling for narrow featured images
+  - data-section-type: JavaScript hook for article functionality
+{% endcomment %}
 <div class="article-container {% unless article.image and section.settings.featured_image == "wide" %}central content{% else %}header-overlap-section{% endunless %} {% if article.image and section.settings.featured_image == "narrow" %}with-featured-image{% endif %}" data-section-type="article-template">
+  {% comment %}
+    =============================================================================
+    ARTICLE COMMENTS PAGINATION
+    =============================================================================
+    Pagination for article comments (50 per page)
+    - article.comments: Array of approved comments
+    - 50 comments per page for performance optimization
+    - Wraps entire article content for proper comment display
+  {% endcomment %}
   {% paginate article.comments by 50 %}
 
+  {% comment %}
+    =============================================================================
+    WIDE FEATURED IMAGE HEADER
+    =============================================================================
+    Full-width featured image with overlay content
+    - article.image: Article's featured image
+    - featured_image == "wide": Section setting for wide layout
+    - image-overlay: Background image with content overlay
+    - needs-alt-logo: CSS class for logo visibility adjustments
+    - data-cc-animate: Animation hook for header appearance
+  {% endcomment %}
   {% if article.image and section.settings.featured_image == "wide" %}
     <div class="article-header image-overlay image-overlay--bg-full needs-alt-logo" data-cc-animate>
+      {% comment %}
+        =============================================================================
+        RESPONSIVE BACKGROUND IMAGE
+        =============================================================================
+        Background image with lazy loading and responsive sizing
+        - rimage-outer-wrapper: Responsive image container
+        - rimage-background: Background image styling
+        - lazyload: Performance optimization for image loading
+        - fade-in: CSS animation for image appearance
+        - data-bgset: Responsive image source set
+        - data-sizes: Responsive image sizing information
+        - data-parent-fit: Image fitting behavior
+      {% endcomment %}
       <div class="rimage-outer-wrapper rimage-background lazyload fade-in"
            data-cc-animate="cc-fade-in-zoom-out"
            data-bgset="{% render 'bgset', image: article.image %}"
            data-sizes="auto"
            data-parent-fit="cover">
+        {% comment %}
+          =============================================================================
+          NOSCRIPT IMAGE FALLBACK
+          =============================================================================
+          Fallback image for users with JavaScript disabled
+          - rimage-wrapper: Image container with aspect ratio
+          - padding-top: Calculated aspect ratio for proper sizing
+          - image_url: Direct image URL with dimensions
+          - alt: Image alt text for accessibility
+        {% endcomment %}
         <noscript>
           <div class="rimage-wrapper" style="padding-top:{{ 1 | divided_by: article.image.aspect_ratio | times: 100 }}%">
-            <img src="{{ article.image | img_url: '1024x1024' }}" alt="{{ article.image.alt | escape }}" class="rimage__image">
+            <img src="{{ article.image | image_url: width: 1024, height: 1024 }}" alt="{{ article.image.alt | escape }}" class="rimage__image">
           </div>
         </noscript>
       </div>
 
+      {% comment %}
+        =============================================================================
+        FEATURED IMAGE OVERLAY CONTENT
+        =============================================================================
+        Article metadata displayed over featured image
+        - overlay-type overlay: Overlay styling and positioning
+        - data-cc-animate: Animation hook for overlay content
+        - cc-fade-in-zoom-out: Specific animation effect
+        - central transparent: Centered content with transparent background
+      {% endcomment %}
       <div class="overlay-type overlay" data-cc-animate="cc-fade-in-zoom-out">
         <div class="overlay__content">
           <div class="content central transparent">
+            {% comment %}
+              =============================================================================
+              ARTICLE PUBLICATION DATE
+              =============================================================================
+              Article publication date with optional display
+              - blog_show_date: Section setting toggle
+              - feature-subheader: Consistent subtitle styling
+              - datetime: Semantic HTML for machine readability
+              - month_date_year: Localized date format
+              - data-cc-animate-delay: Staggered animation timing
+            {% endcomment %}
             {%- if section.settings.blog_show_date -%}
               <div class="feature-subheader" data-cc-animate data-cc-animate-delay=".4s">
                 <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: format: 'month_date_year' }}</time>
               </div>
             {%- endif -%}
 
+            {% comment %}
+              =============================================================================
+              ARTICLE TITLE
+              =============================================================================
+              Primary article heading with animation
+              - line-1 h1: Consistent heading styling
+              - data-cc-animate: Animation hook for title
+              - data-cc-animate-delay: Staggered animation timing
+              - article.title: Article title from Shopify
+            {% endcomment %}
             <h1 class="line-1 h1" data-cc-animate data-cc-animate-delay=".2s">
               {{ article.title }}
             </h1>
 
+            {% comment %}
+              =============================================================================
+              ARTICLE AUTHOR
+              =============================================================================
+              Article author information with optional display
+              - blog_show_author: Section setting toggle
+              - feature-subheader: Consistent subtitle styling
+              - article.author: Author name from Shopify
+              - data-cc-animate-delay: Staggered animation timing
+            {% endcomment %}
             {% if section.settings.blog_show_author %}
               <div class="feature-subheader" data-cc-animate data-cc-animate-delay=".6s">
                 <span class="author">{{ article.author }}</span>
@@ -39,10 +147,30 @@
     </div>
   {% endif %}
 
+  {% comment %}
+    =============================================================================
+    CONTENT WRAPPER FOR WIDE FEATURED IMAGES
+    =============================================================================
+    Wraps article content when using wide featured image layout
+    - central content: Centers content within page constraints
+    - Only applies when featured_image == "wide"
+    - Ensures proper content alignment with full-width header
+  {% endcomment %}
   {% if article.image and section.settings.featured_image == "wide" %}
     <div class="central content">
   {% endif %}
 
+  {% comment %}
+    =============================================================================
+    COMMENT SYSTEM EXPLANATION
+    =============================================================================
+    Detailed explanation of Shopify's comment system behavior
+    - Comment moderation: Comments require approval before display
+    - Author visibility: Authors can see their own comments immediately
+    - URL structure: Comment IDs are included in article URLs
+    - Comment object: Full comment data available when comment ID present
+    - Spam protection: Shopify automatically filters spam comments
+  {% endcomment %}
   {% comment %}
   When a comment has just been submitted, it's not shown right away.
   Shopify needs to wait until it knows for sure that it is not spam to publish it.
@@ -59,6 +187,16 @@
   — was posted without error.
   {% endcomment %}
 
+  {% comment %}
+    =============================================================================
+    COMMENT COUNT CALCULATION
+    =============================================================================
+    Dynamic comment count including newly submitted comments
+    - article.comments_count: Published comments from Shopify
+    - comment.created_at: Check if new comment was submitted successfully
+    - number_of_comments: Updated count for display purposes
+    - Handles both published and pending comment states
+  {% endcomment %}
   {% assign number_of_comments = article.comments_count %}
 
   {% comment %}If a comment was just submitted, and it has no blank fields.{% endcomment %}
@@ -66,13 +204,44 @@
   {% assign number_of_comments = article.comments_count | plus: 1 %}
   {% endif %}
 
+  {% comment %}
+    =============================================================================
+    MAIN ARTICLE CONTENT AREA
+    =============================================================================
+    Primary article content with conditional featured image
+    - article: Main content container
+    - Conditional featured image display based on settings
+    - Article title and metadata (when not using wide layout)
+    - Rich text content with full-width image support
+  {% endcomment %}
   <div class="article">
+    {% comment %}
+      =============================================================================
+      NARROW FEATURED IMAGE DISPLAY
+      =============================================================================
+      Featured image above article content (narrow layout)
+      - featured_image == "narrow": Section setting for narrow layout
+      - article-image: Container for featured image
+      - responsive-image: Snippet for optimized image display
+      - animateZoom: Enables zoom animation on image hover
+    {% endcomment %}
     {% if article.image and section.settings.featured_image == "narrow" %}
       <div class="article-image">
         {% render 'responsive-image', image: article.image, animateZoom: true %}
       </div>
     {% endif %}
 
+    {% comment %}
+      =============================================================================
+      ARTICLE TITLE & METADATA (NON-WIDE LAYOUT)
+      =============================================================================
+      Article title and metadata when not using wide featured image
+      - feature-header: Consistent heading styling
+      - blog_show_date: Section setting toggle for date
+      - blog_show_author: Section setting toggle for author
+      - Conditional comma separator between date and author
+      - Staggered animation timing for visual hierarchy
+    {% endcomment %}
     {% unless article.image and section.settings.featured_image == "wide" %}
       <h1 class="feature-header" data-cc-animate data-cc-animate-delay=".4s">
         {{ article.title }}
@@ -92,11 +261,35 @@
       {% endif %}
     {% endunless %}
 
+    {% comment %}
+      =============================================================================
+      ARTICLE CONTENT WITH RICH TEXT EDITOR
+      =============================================================================
+      Main article content with rich text formatting
+      - rte: Rich text editor styling for consistent typography
+      - rte--allow-full-width-images: Enables full-width image display
+      - wide-image: Additional styling for wide featured image layouts
+      - data-cc-animate: Animation hook for content appearance
+      - Conditional animation delay based on featured image layout
+      - article.content: Rich text content from Shopify
+    {% endcomment %}
     <div class="rte rte--allow-full-width-images {% if article.image and section.settings.featured_image == "wide" %}wide-image{% endif %}"
          data-cc-animate {% if article.image and section.settings.featured_image == "wide" %}data-cc-animate-delay="0.8s"{% else %}data-cc-animate-delay="0.2s"{% endif %}>
       {{ article.content }}
     </div>
 
+    {% comment %}
+      =============================================================================
+      SOCIAL SHARING INTEGRATION
+      =============================================================================
+      Social media sharing buttons for article content
+      - blog_show_social: Section setting toggle
+      - social-sharing: Snippet for social media buttons
+      - share_title: Article title for social sharing
+      - share_permalink: Article URL for social sharing
+      - share_image: Featured image for social sharing
+      - data-cc-animate: Animation hook for social buttons
+    {% endcomment %}
     {% if section.settings.blog_show_social %}
       <div data-cc-animate data-cc-animate-delay=".5s">
         {% render 'social-sharing', share_title: article.title, share_permalink: article.url, share_image: article.image %}
@@ -104,7 +297,28 @@
     {% endif %}
   </div>
 
+  {% comment %}
+    =============================================================================
+    ARTICLE COMMENTS SYSTEM
+    =============================================================================
+    Complete comment functionality with moderation and pagination
+    - blog.comments_enabled?: Check if comments are enabled for blog
+    - Conditional display based on comment availability
+    - Comment moderation status and feedback messages
+    - Comment pagination for large comment threads
+    - Comment submission form with validation
+  {% endcomment %}
   {% if blog.comments_enabled? %}
+    {% comment %}
+      =============================================================================
+      COMMENTS DISPLAY SECTION
+      =============================================================================
+      Container for displaying existing article comments
+      - id="comments": Anchor for comment navigation
+      - content-row: Consistent content spacing
+      - data-cc-animate: Animation hook for comments
+      - blogs.comments.title: Localized comments heading
+    {% endcomment %}
     {% if article.comments != blank %}
       <div id="comments" class="content-row" data-cc-animate data-cc-animate-delay=".5s">
         <h2 class="align-left">{{ 'blogs.comments.title' | t }}</h2>
@@ -120,7 +334,18 @@
           </p>
         {% endif %}
 
-        {% comment %} Loop through approved comments: {% endcomment %}
+        {% comment %}
+          =============================================================================
+          APPROVED COMMENTS LOOP
+          =============================================================================
+          Display loop for approved and published comments
+          - number_of_comments > 0: Check if comments exist
+          - comment.id: Unique comment identifier for styling
+          - comment-author: Author name display
+          - comment-content: Comment text content
+          - comment-date: Comment creation date
+          - Conditional CSS classes for first/last comment styling
+        {% endcomment %}
         {% if number_of_comments > 0 %}
           <ul>
             {% for comment in article.comments %}
@@ -146,19 +371,52 @@
         {% endif %}
       {% endif %}
 
-      {% comment %}Comment submission form.{% endcomment %}
+      {% comment %}
+        =============================================================================
+        COMMENT SUBMISSION FORM
+        =============================================================================
+        Form for users to submit new comments
+        - form article: Shopify comment form helper
+        - hr: Visual separator above form
+        - blogs.comments.form_title: Localized form heading
+        - Form validation and error display
+        - Required fields: name, email, and message
+        - aria-label: Accessibility labels for form fields
+      {% endcomment %}
 
       <div data-cc-animate data-cc-animate-delay=".5s">
         {% form article %}
           <hr>
           <h3 id="add-comment-title">{{ 'blogs.comments.form_title' | t }}</h3>
 
+          {% comment %}
+            =============================================================================
+            FORM VALIDATION ERRORS
+            =============================================================================
+            Display validation errors from comment submission
+            - form.errors: Shopify form validation errors
+            - default_errors: Standard error message formatting
+            - error: CSS class for error styling
+            - Conditional display based on error presence
+          {% endcomment %}
           {% if form.errors %}
             <div class="feedback error">
               {{ form.errors | default_errors }}
             </div>
           {% endif %}
 
+          {% comment %}
+            =============================================================================
+            COMMENT FORM FIELDS
+            =============================================================================
+            Input fields for comment submission
+            - input-row: Consistent field styling and spacing
+            - aria-label: Accessibility labels for screen readers
+            - placeholder: Helpful text for form fields
+            - required: HTML5 validation requirement
+            - error: CSS class for validation error styling
+            - value: Pre-fill fields with previous input on error
+          {% endcomment %}
           <div class="form">
             <div class="input-row">
               <input aria-label="{{ 'blogs.comments.name' | t }}" placeholder="{{ 'blogs.comments.name' | t }}" required{% if form.errors contains "author" %} class="error"{% endif %} type="text" name="comment[author]" id="comment-author" value="{{ form.author }}" />
@@ -172,6 +430,15 @@
               <textarea aria-label="{{ 'blogs.comments.message' | t }}" placeholder="{{ 'blogs.comments.message' | t }}" required{% if form.errors contains "body" %} class="error"{% endif %} name="comment[body]" id="comment-body">{{ form.body }}</textarea>
             </div>
 
+            {% comment %}
+              =============================================================================
+              COMMENT SUBMISSION BUTTON
+              =============================================================================
+              Submit button for comment form
+              - wide-action: Full-width button styling
+              - blogs.comments.post: Localized submit button text
+              - type="submit": Form submission trigger
+            {% endcomment %}
             <div class="wide-action">
               <input type="submit" value="{{ 'blogs.comments.post' | t }}" />
             </div>
@@ -182,12 +449,42 @@
   {% endif %}
 
 
+  {% comment %}
+    =============================================================================
+    ARTICLE NAVIGATION - PREVIOUS/NEXT POSTS
+    =============================================================================
+    Navigation between articles in the same blog
+    - blog.next_article: Link to newer article
+    - blog.previous_article: Link to older article
+    - other-products--articles: CSS class for article-specific styling
+    - Back to blog link for main blog navigation
+    - Arrow indicators for navigation direction
+  {% endcomment %}
   {% if blog.next_article or blog.previous_article %}
   <div class="other-products other-products--articles" data-cc-animate data-cc-animate-delay=".5s">
+    {% comment %}
+      =============================================================================
+      BACK TO BLOG LINK
+      =============================================================================
+      Return link to main blog listing
+      - blogs.article.back_to_blog_html: Localized link text
+      - blog.title: Blog name for link text
+      - data-cc-animate-click: Animation hook for click
+    {% endcomment %}
     <div class="other-products__label">
       <a data-cc-animate-click href="{{ blog.url }}">{{ 'blogs.article.back_to_blog_html' | t: blog: blog.title }}</a>
     </div>
     <div class="other-products__products">
+      {% comment %}
+        =============================================================================
+        PREVIOUS ARTICLE LINK
+        =============================================================================
+        Link to older article in chronological order
+        - blog.previous_article: URL to previous article
+        - other-products__product previous: CSS class for styling
+        - svg-chevron-left: Left arrow icon
+        - blogs.article.older_post: Localized link text
+      {% endcomment %}
       {% if blog.previous_article %}
       <span class="other-products__product previous">
         <a data-cc-animate-click href="{{ blog.previous_article }}">
@@ -196,6 +493,16 @@
         </a>
       </span>
       {% endif %}
+      {% comment %}
+        =============================================================================
+        NEXT ARTICLE LINK
+        =============================================================================
+        Link to newer article in chronological order
+        - blog.next_article: URL to next article
+        - other-products__product next: CSS class for styling
+        - svg-chevron-right: Right arrow icon
+        - blogs.article.newer_post: Localized link text
+      {% endcomment %}
       {% if blog.next_article %}
       <span class="other-products__product next">
         <a data-cc-animate-click href="{{ blog.next_article }}" >
@@ -208,6 +515,14 @@
   </div>
   {% endif %}
 
+  {% comment %}
+    =============================================================================
+    CLOSE CONTENT WRAPPER FOR WIDE FEATURED IMAGES
+    =============================================================================
+    Closes the content wrapper div for wide featured image layouts
+    - Only applies when featured_image == "wide"
+    - Maintains proper HTML structure and styling
+  {% endcomment %}
   {% if article.image and section.settings.featured_image == "wide" %}
     </div>
   {% endif %}
@@ -215,51 +530,112 @@
   {% endpaginate %}
 </div>
 
+{% comment %}
+  =============================================================================
+  STRUCTURED DATA FOR SEO
+  =============================================================================
+  JSON-LD structured data for article content
+  - structured-data-article: Snippet for article schema markup
+  - article: Article object for structured data generation
+  - Improves search engine understanding of content
+  - Enhances rich snippets in search results
+{% endcomment %}
 {% render 'structured-data-article', article: article %}
 
-
+{% comment %}
+  =============================================================================
+  ARTICLE SECTION SCHEMA - CONFIGURATION & CUSTOMIZATION
+  =============================================================================
+  Theme editor configuration for article functionality and appearance
+  - Featured image settings: Layout options for article images
+  - Display settings: Author, date, and social sharing toggles
+  - Layout options: Wide, narrow, or no featured image display
+  - Content styling: Conditional styling based on image layout
+{% endcomment %}
 {% schema %}
-  {
-    "name": "Article pages",
-    "settings": [
-      {
-        "type": "select",
-        "id": "featured_image",
-        "label": "Featured image",
-        "default": "wide",
-        "options": [
-          {
-            "value": "none",
-            "label": "None"
-          },
-          {
-            "value": "narrow",
-            "label": "Narrow"
-          },
-          {
-            "value": "wide",
-            "label": "Wide"
-          }
-        ]
-      },
-      {
-        "type": "checkbox",
-        "id": "blog_show_author",
-        "label": "Show author",
-        "default": false
-      },
-      {
-        "type": "checkbox",
-        "id": "blog_show_date",
-        "label": "Show date",
-        "default": true
-      },
-      {
-        "type": "checkbox",
-        "id": "blog_show_social",
-        "label": "Show social icons",
-        "default": true
-      }
-	  ]
-  }
+{
+  "name": "Article pages",
+  "settings": [
+    {% comment %}
+      =============================================================================
+      FEATURED IMAGE LAYOUT CONFIGURATION
+      =============================================================================
+      Controls how featured images are displayed in articles
+      - none: No featured image display
+      - narrow: Image above article content with standard width
+      - wide: Full-width image with overlay content
+      - Default: wide (most visually impactful)
+      - Affects overall article layout and styling
+    {% endcomment %}
+    {
+      "type": "select",
+      "id": "featured_image",
+      "label": "Featured image",
+      "default": "wide",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        }
+      ]
+    },
+    {% comment %}
+      =============================================================================
+      AUTHOR DISPLAY CONFIGURATION
+      =============================================================================
+      Controls whether article author information is shown
+      - blog_show_author: Toggle for author visibility
+      - Default: false (cleaner article display)
+      - Displays in both wide and narrow image layouts
+      - Important for multi-author blogs and attribution
+    {% endcomment %}
+    {
+      "type": "checkbox",
+      "id": "blog_show_author",
+      "label": "Show author",
+      "default": false
+    },
+    {% comment %}
+      =============================================================================
+      PUBLICATION DATE DISPLAY
+      =============================================================================
+      Controls whether article publication date is shown
+      - blog_show_date: Toggle for date visibility
+      - Default: true (shows publication date)
+      - Displays in both wide and narrow image layouts
+      - Important for content freshness and SEO
+    {% endcomment %}
+    {
+      "type": "checkbox",
+      "id": "blog_show_date",
+      "label": "Show date",
+      "default": true
+    },
+    {% comment %}
+      =============================================================================
+      SOCIAL SHARING INTEGRATION
+      =============================================================================
+      Controls social media sharing buttons display
+      - blog_show_social: Toggle for social sharing
+      - Default: true (enables content distribution)
+      - social-sharing snippet: Renders sharing buttons
+      - share_title, share_permalink, share_image: Data for social platforms
+      - Important for content marketing and engagement
+    {% endcomment %}
+    {
+      "type": "checkbox",
+      "id": "blog_show_social",
+      "label": "Show social icons",
+      "default": true
+    }
+  ]
+}
 {% endschema %}

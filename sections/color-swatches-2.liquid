@@ -58,7 +58,7 @@
 
         {% if block.settings.primary_image != blank %}
 
-          <img class="color-swatch-img" src="{{ block.settings.primary_image | img_url }}">
+          <img class="color-swatch-img" src="{{ block.settings.primary_image | image_url: width: 100, height: 100 }}">
 
         {% else %}
 
@@ -167,56 +167,60 @@
   </script>
 {% endif %}
 {% schema %}
-  {
-    "name": "Color Swatches 2",
-    "blocks": [
-      {
-        "type": "swatch",
-        "name": "Swatch",
-        "settings": [
-          {
-            "type": "text",
-            "id": "title",
-            "label": "Swatch Name"
-          },
-          {
-            "type": "select",
-            "id": "category",
-            "label": "Swatch Category",
-            "options": [
-              {
-                "value": "",
-                "label": "None"
-              }, {
-                "value": "Classics",
-                "label": "Classics"
-              }, {
-                "value": "Prints",
-                "label": "Prints"
-              }, {
-                "value": "Limited",
-                "label": "Limited"
-              }
-            ],
-            "default": ""
-          },
-          {
-            "type": "color",
-            "id": "primary_color_code",
-            "label": "Primary Color"
-          },
-          {
-            "type": "color",
-            "id": "secondary_color_code",
-            "label": "Secondary Color",
-            "info": "If there is only 1 color, this field can be left blank"
-          }, {
-            "type": "image_picker",
-            "id": "primary_image",
-            "label": "Use an image instead"
-          }
-        ]
-      }
-    ]
-  }
+{
+  "name": "Color Swatches 2",
+  "blocks": [
+    {
+      "type": "swatch",
+      "name": "Swatch",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Swatch Name"
+        },
+        {
+          "type": "select",
+          "id": "category",
+          "label": "Swatch Category",
+          "options": [
+            {
+              "value": "",
+              "label": "None"
+            },
+            {
+              "value": "Classics",
+              "label": "Classics"
+            },
+            {
+              "value": "Prints",
+              "label": "Prints"
+            },
+            {
+              "value": "Limited",
+              "label": "Limited"
+            }
+          ],
+          "default": ""
+        },
+        {
+          "type": "color",
+          "id": "primary_color_code",
+          "label": "Primary Color"
+        },
+        {
+          "type": "color",
+          "id": "secondary_color_code",
+          "label": "Secondary Color",
+          "info": "If there is only 1 color, this field can be left blank"
+        },
+        {
+          "type": "image_picker",
+          "id": "primary_image",
+          "label": "Use an image instead"
+        }
+      ]
+    }
+  ]
+}
 {% endschema %}

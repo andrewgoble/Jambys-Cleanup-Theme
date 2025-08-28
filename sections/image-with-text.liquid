@@ -1,5 +1,41 @@
+{% comment %}
+  =============================================================================
+  IMAGE WITH TEXT SECTION
+  =============================================================================
+  Flexible content section combining images and text content
+  - Supports side-by-side image and text layouts
+  - Configurable color schemes with custom color options
+  - Background image support with parallax effects
+  - Responsive typography with mobile/desktop size adjustments
+  - Dynamic image sizing (cover, contain) and positioning
+  - Mobile-specific heading display and responsive behavior
+  - Custom font weights and sizes with responsive scaling
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  TITLE LINE BREAK PROCESSING
+  =============================================================================
+  Processes title text to preserve line breaks for formatting
+  - title_with_line_breaks: Title with newlines converted to <br> tags
+  - newline_to_br filter: Converts newlines to HTML line breaks
+  - Used for maintaining text formatting in titles
+  - Enables multi-line titles with proper line breaks
+{% endcomment %}
 {%- assign title_with_line_breaks = section.settings.title | newline_to_br -%}
 
+{% comment %}
+  =============================================================================
+  DYNAMIC COLOR SCHEME STYLING
+  =============================================================================
+  CSS styles for custom color schemes and button interactions
+  - color_scheme == "custom": Custom color scheme option
+  - color_bg: Custom background color from theme editor
+  - --cust-text-color: CSS custom property for text color
+  - button_style == 'auto': Automatic button color scheme
+  - Hover effects: Button colors invert on hover for custom schemes
+  - Ensures proper contrast and visual hierarchy
+{% endcomment %}
 {% style %}
   {% if section.settings.color_scheme == "custom" %}
     .section-id-{{ section.id }} {
@@ -16,6 +52,19 @@
     {% endif %}
   {% endif %}
 
+{% comment %}
+  =============================================================================
+  BACKGROUND IMAGE STYLING
+  =============================================================================
+  Optional background image with parallax and responsive effects
+  - bg_image: Background image from theme editor
+  - background-attachment: fixed for parallax scrolling effect
+  - background-size: cover for full container coverage
+  - background-repeat: no-repeat to prevent tiling
+  - padding: 5rem for content spacing around background
+  - lazy-background: Class for background image loading
+  - image_url: Optimized background image URL with width constraint
+{% endcomment %}
   {% unless section.settings.bg_image == blank %}
     .section-id-{{ section.id }} {
       background-attachment: fixed;
@@ -25,9 +74,20 @@
     }
 
     .section-id-{{ section.id }}.lazy-background {
-      background-image: url("{{ section.settings.bg_image | img_url: '2000x' }}");
+      background-image: url("{{ section.settings.bg_image | image_url: width: 2000 }}");
     }
 
+{% comment %}
+  =============================================================================
+  BACKGROUND IMAGE TEXT STYLING
+  =============================================================================
+  Enhanced text styling for better readability over background images
+  - h2: Title styling with custom font family
+  - kansasnew,serif: Custom serif font for elegant typography
+  - text-shadow: Drop shadow for text contrast over images
+  - p: Paragraph text with consistent shadow styling
+  - rgba(0,0,0,0.2): Semi-transparent black shadow
+{% endcomment %}
     #section-id-{{ section.id }} h2 {
       font-family: kansasnew,serif;
       text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
@@ -36,6 +96,16 @@
       text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
     }
 
+{% comment %}
+  =============================================================================
+  MOBILE BACKGROUND IMAGE ADJUSTMENTS
+  =============================================================================
+  Mobile-specific background image behavior
+  - max-width: 768px: Mobile breakpoint
+  - padding: 50px 0 0 for mobile spacing
+  - background-attachment: initial removes parallax on mobile
+  - Prevents performance issues on mobile devices
+{% endcomment %}
      @media(max-width: 768px) {
         .section-id-{{ section.id }} {
           padding: 50px 0 0;
@@ -45,11 +115,33 @@
     
   {% endunless %}
 
+{% comment %}
+  =============================================================================
+  TYPOGRAPHY STYLING
+  =============================================================================
+  Custom font weight and size settings
+  - font_weight: Font weight setting from theme editor
+  - font_size: Font size in pixels from theme editor
+  - Applies to entire section for consistent typography
+  - Allows merchants to customize text appearance
+{% endcomment %}
   .section-id-{{ section.id }} {
-     font-weight: {{ section.settings.font_weight}};
+     font-weight: {{ section.settings.font_weight }};
      font-size: {{ section.settings.font_size }}px;
   }
 
+{% comment %}
+  =============================================================================
+  DESKTOP RESPONSIVE STYLES
+  =============================================================================
+  Desktop-specific styles for devices 768px and wider
+  - image-with-text__image: Image container with desktop padding
+  - padding: 3rem 0 for vertical spacing
+  - media_size: Image sizing option (cover or contain)
+  - image_width: Percentage-based image width control
+  - text_width: Percentage-based text width control
+  - title_size_medium: Scaled title size (70% of desktop)
+{% endcomment %}
   @media(min-width: 768px) {
     .image-with-text__image {
       padding: 3rem 0;
@@ -77,12 +169,32 @@
     }
   }
 
+{% comment %}
+  =============================================================================
+  LARGE DESKTOP TITLE SIZING
+  =============================================================================
+  Full-size typography for large desktop devices (992px+)
+  - title_size: Full title size from section settings
+  - Applies to devices 992px and wider
+  - Provides optimal readability on large screens
+{% endcomment %}
   @media (min-width: 992px) {
     .section-id-{{ section.id }} .feature-header {
       font-size: {{ section.settings.title_size }}px;
     }
   }
 
+{% comment %}
+  =============================================================================
+  LINE BREAK PRESERVATION STYLING
+  =============================================================================
+  Maintains line breaks in titles for proper formatting
+  - title_with_line_breaks: Processed title with <br> tags
+  - contains '<br />': Checks if title contains line breaks
+  - white-space: nowrap prevents text wrapping
+  - min-width: 375px: Applies to small mobile devices and up
+  - Ensures multi-line titles display correctly
+{% endcomment %}
   /* Maintain newlines if specified */
   {%- if title_with_line_breaks != blank and title_with_line_breaks contains '<br />' -%}
     @media (min-width: 375px) {
@@ -92,6 +204,17 @@
     }
   {%- endif -%}
 
+{% comment %}
+  =============================================================================
+  MOBILE HEADING DISPLAY
+  =============================================================================
+  Mobile-specific heading display above image
+  - image-with-text__mobile_heading: Mobile heading container
+  - display: none by default (hidden on desktop)
+  - max-width: 767px: Mobile breakpoint
+  - Shows mobile heading only on small screens
+  - Enables different heading placement for mobile layouts
+{% endcomment %}
   /* Styling to allow duplicate mobile-only heading above image */
   .image-with-text__mobile_heading {
     display: none;
@@ -111,6 +234,19 @@
     }
   }
 
+{% comment %}
+  =============================================================================
+  BULLET POINT STYLING
+  =============================================================================
+  Custom styling for bullet point list items
+  - .h3: Title styling with left alignment and reduced margin
+  - .rte > :first-child: Removes top margin from first paragraph
+  - custom_bullet_point_icon: Custom icon URL from block settings
+  - icon-checkmark.svg: Default fallback icon from assets
+  - background-size: 32px 32px for consistent icon sizing
+  - padding-left: 48px for text spacing from icon
+  - min-height: 32px ensures proper vertical alignment
+{% endcomment %}
   /* Bulleted list */
   .image-with-text__bullet .h3 {
     text-align: left;
@@ -134,6 +270,18 @@
   }
 {% endstyle %}
 
+{% comment %}
+  =============================================================================
+  WAVE STYLING INTEGRATION
+  =============================================================================
+  Optional decorative wave borders for visual interest
+  - wave: Wave position setting (none/top/bottom/both)
+  - wave-styles: Snippet for rendering wave SVG elements
+  - wave_position: Passes wave position to wave-styles snippet
+  - section_id: Unique section identifier for styling
+  - fill_color: Wave color matches section background color
+  - Creates seamless integration between waves and background
+{% endcomment %}
 {%- if section.settings.wave != "none" -%}
   {%- render 'wave-styles', 
               wave_position: section.settings.wave, 
@@ -141,6 +289,20 @@
               fill_color: section.settings.color_bg -%}
 {%- endif -%}
 
+{% comment %}
+  =============================================================================
+  IMAGE HTML CAPTURE
+  =============================================================================
+  Captures image HTML for conditional rendering based on position
+  - image_html: Variable containing complete image markup
+  - lazyload--placeholder: Lazy loading container class
+  - Conditional rendering based on content availability:
+    - No image/video: Placeholder SVG image
+    - Image only: Responsive image with lazy loading
+    - Video: Inline video with fallback image
+  - data-cc-animate="cc-zoom-out": Animation trigger for image entrance
+  - Responsive image sizing with aspect ratio calculations
+{% endcomment %}
 {% capture image_html %}
   <div class="image-with-text__image lazyload--placeholder">
     <div class="image-with-text__image__inner">
@@ -155,7 +317,7 @@
             style="max-width: {{ section.settings.image.width }}px; max-height: {{ section.settings.image.height }}px">
           <div class="rimage-wrapper" style="padding-top:{{ 1 | divided_by: section.settings.image.aspect_ratio | times: 100 }}%">
             <noscript>
-              <img src="{{ section.settings.image | img_url: '1024x1024' }}" alt="{{ section.settings.image.alt | escape }}" class="rimage__image">
+              <img src="{{ section.settings.image | image_url: width: 1024, height: 1024 }}" alt="{{ section.settings.image.alt | escape }}" class="rimage__image">
             </noscript>
           </div>
         </div>
@@ -166,12 +328,40 @@
   </div>
 {% endcapture %}
 
+{% comment %}
+  =============================================================================
+  MAIN SECTION CONTAINER
+  =============================================================================
+  Primary container with dynamic classes and section identification
+  - image-with-text: Base section class
+  - cf: Clearfix utility class for layout
+  - lazy-background: Background image lazy loading class
+  - section-id-{{ section.id }}: Unique identifier for section-specific styling
+  - use-{{ section.settings.color_scheme }}-bg: Dynamic color scheme class
+  - section-spacing-sm: Reduced spacing for contained media
+  - image-with-text--{{ section.settings.media_size }}: Dynamic media size class
+  - data-section-type="image-with-text": Identifies section type for JavaScript
+  - data-cc-animate: JavaScript animation trigger for entrance effects
+{% endcomment %}
 <div class="image-with-text cf lazy-background
   section-id-{{ section.id }} use-{{ section.settings.color_scheme }}-bg
   {% if section.settings.image_width < 100 and section.settings.media_size == "contain" %}section-spacing-sm{% endif %}
   image-with-text--{{ section.settings.media_size }}
 " id="section-id-{{ section.id }}" data-section-type="image-with-text" data-cc-animate>
 
+{% comment %}
+  =============================================================================
+  MOBILE HEADING DISPLAY
+  =============================================================================
+  Optional mobile heading displayed above image on small screens
+  - title_above_image_mobile: Boolean setting for mobile heading display
+  - image-with-text__mobile_heading: Mobile heading container
+  - feature-subheader: Subheading styling with animation
+  - feature-header: Title styling with animation
+  - data-cc-animate: Animation triggers for entrance effects
+  - data-cc-animate-delay: Staggered animation delays
+  - Only renders when mobile heading option is enabled
+{% endcomment %}
   {%- if section.settings.title_above_image_mobile -%}
     <div class="image-with-text__mobile_heading">
       {% if section.settings.subheading != blank %}
@@ -188,26 +378,85 @@
 
   {% if section.settings.image_position == 'left' %}{{ image_html }}{% endif %}
 
+{% comment %}
+  =============================================================================
+  TEXT CONTENT CONTAINER
+  =============================================================================
+  Main text content area with alignment and spacing controls
+  - image-with-text__text: Text content container class
+  - align-{{ section.settings.text_alignment }}: Dynamic text alignment
+  - image-with-text__text__wrap: Text wrapper with conditional styling
+  - inherit-colors: Inherits colors when brightness/alpha conditions met
+  - padded-block-y: Vertical padding for contained media
+  - padded-block: Standard padding for full-width media
+{% endcomment %}
   <div class="image-with-text__text align-{{ section.settings.text_alignment }}">
     <div class="image-with-text__text__wrap
         {% if brightness < 190 and alpha > 0 %}inherit-colors{% endif %}
         {% if section.settings.image_width < 100 and section.settings.media_size == "contain" %}padded-block-y{% else %}padded-block{% endif %}
       ">
+
+{% comment %}
+  =============================================================================
+  SUBHEADING TEXT
+  =============================================================================
+  Displays subheading text above main title
+  - feature-subheader: Subheading styling class
+  - section.settings.subheading: Subheading text from theme editor
+  - escape filter: Prevents XSS in text content
+  - data-cc-animate="cc-fade-in-up": Animation trigger for entrance
+  - data-cc-animate-delay="0.1s": Staggered animation delay
+  - Only renders when subheading is not blank
+{% endcomment %}
       {% if section.settings.subheading != blank %}
         <div class="feature-subheader" data-cc-animate="cc-fade-in-up" data-cc-animate-delay="0.1s">{{ section.settings.subheading | escape }}</div>
       {% endif %}
 
+{% comment %}
+  =============================================================================
+  MAIN HEADING TITLE
+  =============================================================================
+  Displays main section title with preserved line breaks
+  - feature-header: Title styling class
+  - h2: Semantic heading level for section structure
+  - align-{{ section.settings.text_alignment }}: Dynamic text alignment
+  - title_with_line_breaks: Title with newlines converted to <br> tags
+  - data-cc-animate="cc-fade-in-up": Animation trigger for entrance
+  - data-cc-animate-delay="0.2s": Staggered animation delay
+{% endcomment %}
       {% if section.settings.title != blank %}
         <h2 class="feature-header h2 align-{{ section.settings.text_alignment }}" data-cc-animate="cc-fade-in-up" data-cc-animate-delay="0.2s">
           {{ title_with_line_breaks }}
         </h2>
       {% endif %}
 
+{% comment %}
+  =============================================================================
+  BODY TEXT CONTENT
+  =============================================================================
+  Displays main text content below title
+  - rte: Rich text editor styling for formatted content
+  - align-{{ section.settings.text_alignment }}: Dynamic text alignment
+  - data-cc-animate="cc-fade-in-up": Animation trigger for entrance
+  - data-cc-animate-delay="0.3s": Staggered animation delay
+  - section.settings.text: Text content from theme editor
+{% endcomment %}
       {%- if section.settings.text != blank -%}
         <div class="rte align-{{ section.settings.text_alignment }}" data-cc-animate="cc-fade-in-up" data-cc-animate-delay="0.3s">{{ section.settings.text }}</div>
       {%- endif -%}
 
-
+{% comment %}
+  =============================================================================
+  BULLET POINT LIST
+  =============================================================================
+  Dynamic bullet point list from section blocks
+  - bullet_points: Filters blocks by type 'bullet_point'
+  - where filter: Selects only bullet point type blocks
+  - image-with-text__bullet-list: Container for bullet points
+  - image-with-text__bullet: Individual bullet point styling
+  - h3: Bullet point title with proper heading hierarchy
+  - rte: Rich text styling for bullet point content
+{% endcomment %}
       {%- assign bullet_points = section.blocks | where: 'type', 'bullet_point' -%}
       {%- if bullet_points.size > 0 -%}
         <div class="image-with-text__bullet-list">
@@ -254,286 +503,299 @@
 </div>
 
 
+{% comment %}
+  =============================================================================
+  SCHEMA CONFIGURATION
+  =============================================================================
+  Theme editor configuration for image with text section
+  - name: Section name displayed in theme editor
+  - class: CSS class for section-specific styling
+  - settings: Global section settings for appearance and behavior
+  - blocks: Block types that can be added to this section
+  - Includes text content, media, styling, and bullet point options
+  - Provides comprehensive customization for image-text layouts
+{% endcomment %}
 {% schema %}
-  {
-    "name": "Media with text",
-    "class": "section-image-with-text",
-    "settings": [
-      {
-        "type": "header",
-        "content": "Text"
-      },
-      {
-        "type": "text",
-        "id": "subheading",
-        "label": "Subheading"
-      },
-      {
-        "type": "textarea",
-        "id": "title",
-        "label": "Heading",
-        "default": "Media with text"
-      },
-      {
-        "type": "checkbox",
-        "id": "title_above_image_mobile",
-        "label": "Show title above image on mobile"
-      },
-      {
-        "type": "range",
-        "id": "title_size",
-        "min": 16,
-        "max": 100,
-        "step": 2,
-        "unit": "px",
-        "label": "Heading text size",
-        "default": 28
-      },
-      {
-        "type": "richtext",
-        "id": "text",
-        "label": "Text",
-        "default": "<p>Use this text to share information about your store with your customers. Describe product, share announcements, or welcome customers to your store.</p>"
-      },
-      {
-        "type": "text",
-        "id": "button_label",
-        "label": "Button"
-      },
-      {
-        "type": "url",
-        "id": "button_link",
-        "label": "Button link"
-      },
-      {
-        "type": "checkbox",
-        "id": "button_arrowless",
-        "label": "Hide button arrow?"
-      },
-      {
-        "type": "select",
-        "id": "text_alignment",
-        "label": "Text alignment",
-        "default": "center",
-        "options": [
-          {
-            "label": "Left",
-            "value": "left"
-          },
-          {
-            "label": "Center",
-            "value": "center"
-          },
-          {
-            "label": "Right",
-            "value": "right"
-          }
-        ]
-      },
-      {
-        "type": "range",
-        "id": "text_width",
-        "min": 30,
-        "max": 70,
-        "step": 1,
-        "unit": "%",
-        "label": "Text width",
-        "default": 50
-      },
-      {
-        "type": "select",
-        "id": "button_style",
-        "label": "Button style",
-        "default": "auto",
-        "options": [
-          {
-            "label": "Button - primary",
-            "value": "primary"
-          },
-          {
-            "label": "Button - secondary",
-            "value": "secondary"
-          },
-          {
-            "label": "Button - auto",
-            "value": "auto"
-          },
-          {
-            "label": "Link",
-            "value": "link"
-          }
-        ]
-      },
-      {
-        "type": "header",
-        "content": "Media"
-      },
-      {
-        "type": "image_picker",
-        "id": "image",
-        "label": "Image",
-        "info": "If you're using an mp4 video, it's recommended to also add an image, which will be shown while the video loads"
-      },
-      {
-        "id": "video",
-        "type": "text",
-        "label": "MP4 video URL",
-        "info": "E.g. https://example.com/video.mp4 - will not work with YouTube or Vimeo. [Learn more](https://cleancanvas.co.uk/support/showcase/sections/#inner-anchor-5)"
-      },
-      {
-        "type": "range",
-        "id": "image_width",
-        "min": 40,
-        "max": 100,
-        "step": 1,
-        "unit": "%",
-        "label": "Media scale",
-        "default": 100
-      },
-      {
-        "type": "select",
-        "id": "image_position",
-        "label": "Media position",
-        "default": "right",
-        "options": [
-          {
-            "value": "right",
-            "label": "Right"
-          },
-          {
-            "value": "left",
-            "label": "Left"
-          }
-        ]
-      },
-      {
-        "type": "select",
-        "id": "media_size",
-        "label": "Media size",
-        "options": [
-          {
-            "value": "cover",
-            "label": "Fill"
-          },
-          {
-            "value": "contain",
-            "label": "Natural"
-          }
-        ],
-        "default": "cover"
-      },
-      {
-        "type": "header",
-        "content": "Style"
-      },
-      {
-        "type": "radio",
-        "id": "color_scheme",
-        "label": "Color scheme",
-        "default": "standard",
-        "options": [
-          {
-            "value": "standard",
-            "label": "Standard"
-          },
-          {
-            "value": "alt",
-            "label": "Alternate colors"
-          },
-          {
-            "value": "custom",
-            "label": "Custom colors"
-          }
-        ]
-      },
-      {
-        "type": "color",
-        "id": "color_bg",
-        "label": "Custom background color"
-      },
-      {
-        "type": "color",
-        "id": "color_text",
-        "label": "Custom text color"
-      },
-      {
-        "type": "image_picker",
-        "id": "bg_image",
-        "label": "Background Image"
-      },
-      {
-        "type": "range",
-        "id": "font_size",
-        "min": 12,
-        "max": 24,
-        "step": 1,
-        "unit": "px",
-        "label": "Body font size",
-        "default": 18
-      },
-      {
-        "type": "range",
-        "id": "font_weight",
-        "min": 100,
-        "max": 900,
-        "step": 100,
-        "label": "Body font weight",
-        "default": 600
-      },
-      {
-        "type": "select",
-        "id": "wave",
-        "label": "Wave",
-        "options": [
-          {
-            "value": "none",
-            "label": "None"
-          },
-          {
-            "value": "top",
-            "label": "Top"
-          },
-          {
-            "value": "bottom",
-            "label": "Bottom"
-          },
-          {
-            "value": "both",
-            "label": "Both"
-          }
-        ],
-        "default": "none"
-      },
-      {
-        "type": "text",
-        "id": "custom_bullet_point_icon",
-        "label": "Custom bullet point icon",
-        "info": "Enter the URL of an SVG or PNG uploaded to Shopify."
+{
+  "name": "Media with text",
+  "class": "section-image-with-text",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Heading",
+      "default": "Media with text"
+    },
+    {
+      "type": "checkbox",
+      "id": "title_above_image_mobile",
+      "label": "Show title above image on mobile"
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "min": 16,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Heading text size",
+      "default": 28
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Use this text to share information about your store with your customers. Describe product, share announcements, or welcome customers to your store.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "checkbox",
+      "id": "button_arrowless",
+      "label": "Hide button arrow?"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "default": "center",
+      "options": [
+        {
+          "label": "Left",
+          "value": "left"
+        },
+        {
+          "label": "Center",
+          "value": "center"
+        },
+        {
+          "label": "Right",
+          "value": "right"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "text_width",
+      "min": 30,
+      "max": 70,
+      "step": 1,
+      "unit": "%",
+      "label": "Text width",
+      "default": 50
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "default": "auto",
+      "options": [
+        {
+          "label": "Button - primary",
+          "value": "primary"
+        },
+        {
+          "label": "Button - secondary",
+          "value": "secondary"
+        },
+        {
+          "label": "Button - auto",
+          "value": "auto"
+        },
+        {
+          "label": "Link",
+          "value": "link"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "If you're using an mp4 video, it's recommended to also add an image, which will be shown while the video loads"
+    },
+    {
+      "id": "video",
+      "type": "text",
+      "label": "MP4 video URL",
+      "info": "E.g. https://example.com/video.mp4 - will not work with YouTube or Vimeo. [Learn more](https://cleancanvas.co.uk/support/showcase/sections/#inner-anchor-5)"
+    },
+    {
+      "type": "range",
+      "id": "image_width",
+      "min": 40,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Media scale",
+      "default": 100
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Media position",
+      "default": "right",
+      "options": [
+        {
+          "value": "right",
+          "label": "Right"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "media_size",
+      "label": "Media size",
+      "options": [
+        {
+          "value": "cover",
+          "label": "Fill"
+        },
+        {
+          "value": "contain",
+          "label": "Natural"
+        }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "radio",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "standard",
+      "options": [
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "alt",
+          "label": "Alternate colors"
+        },
+        {
+          "value": "custom",
+          "label": "Custom colors"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "color_bg",
+      "label": "Custom background color"
+    },
+    {
+      "type": "color",
+      "id": "color_text",
+      "label": "Custom text color"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "label": "Body font size",
+      "default": 18
+    },
+    {
+      "type": "range",
+      "id": "font_weight",
+      "min": 100,
+      "max": 900,
+      "step": 100,
+      "label": "Body font weight",
+      "default": 600
+    },
+    {
+      "type": "select",
+      "id": "wave",
+      "label": "Wave",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        },
+        {
+          "value": "both",
+          "label": "Both"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "text",
+      "id": "custom_bullet_point_icon",
+      "label": "Custom bullet point icon",
+      "info": "Enter the URL of an SVG or PNG uploaded to Shopify."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "bullet_point",
+      "name": "Bullet Point",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Media with text",
+      "settings": {
       }
-    ],
-    "blocks": [
-      {
-        "type": "bullet_point",
-        "name": "Bullet Point",
-        "settings": [
-          {
-            "type": "textarea",
-            "id": "title",
-            "label": "Title"
-          },
-          {
-            "type": "richtext",
-            "id": "text",
-            "label": "Text"
-          }
-        ]
-      }
-    ],
-    "presets": [
-      {
-        "name": "Media with text",
-        "settings": {}
-      }
-    ]
-  }
+    }
+  ]
+}
 {% endschema %}

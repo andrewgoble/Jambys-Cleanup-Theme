@@ -1,3 +1,28 @@
+{% comment %}
+  =============================================================================
+  MAIN BLOG SECTION - BLOG LISTING & FILTERING
+  =============================================================================
+  Complete blog listing page with article grid, filtering, and pagination
+  - Configurable grid layout (2, 3, or 4 columns)
+  - Blog filtering by tags with dropdown selection
+  - RSS feed integration for content syndication
+  - Responsive design with mobile-specific column options
+  - Pagination for large blog collections
+  - Article block rendering with customizable display options
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  GRID LAYOUT CONFIGURATION
+  =============================================================================
+  Sets up responsive grid classes based on column count
+  - columns: Default 4-column layout for desktop
+  - article_class: CSS class for responsive grid columns
+  - column half: 2-column grid (50% width each)
+  - column third: 3-column grid (33.33% width each)
+  - column quarter: 4-column grid (25% width each)
+  - Responsive breakpoints handled by CSS grid system
+{% endcomment %}
 {%- liquid
   assign columns = 4
 
@@ -9,19 +34,62 @@
     assign article_class = 'column quarter'
   endif
 
+  {% comment %}
+    =============================================================================
+    BLOG FILTERING SETUP
+    =============================================================================
+    Determines if blog filtering should be displayed
+    - show_blog_filters: Boolean flag for filter visibility
+    - blog.all_tags.size: Count of available blog tags
+    - section.settings.blog_show_filter: Theme editor setting for filter display
+    - Only shows filters when tags exist and setting is enabled
+  {% endcomment %}
   assign show_blog_filters = false
   if blog.all_tags.size > 0 and section.settings.blog_show_filter
     assign show_blog_filters = true
   endif
 -%}
 
+{% comment %}
+  =============================================================================
+  MAIN BLOG CONTAINER
+  =============================================================================
+  Primary blog page container with conditional spacing
+  - data-section-type="blog-template": JavaScript hook for blog functionality
+  - sm:pt-medium pb-medium: Reduced top padding when title is hidden
+  - py-medium: Standard vertical padding when title is shown
+  - Responsive spacing based on title visibility setting
+{% endcomment %}
 <div data-section-type="blog-template" class="{% if section.settings.blog_show_title == false %}sm:pt-medium pb-medium{% else %}py-medium{% endif %}">
+  {% comment %}
+    =============================================================================
+    BLOG TITLE & RSS LINK DISPLAY
+    =============================================================================
+    Conditional blog title display with RSS feed integration
+    - section.settings.blog_show_title: Theme editor setting for title visibility
+    - central align-center: Centered title layout
+    - feature-header: Consistent heading styling across theme
+    - blog.title: Blog name from Shopify admin
+    - RSS link: Atom feed for content syndication
+    - aria-label: Accessibility label for screen readers
+  {% endcomment %}
   {% if section.settings.blog_show_title %}
     <div class="central align-center">
       <h1 class="feature-header" data-cc-animate>
         <span>
           {{ blog.title }}
 
+          {% comment %}
+            =============================================================================
+            RSS FEED LINK INTEGRATION
+            =============================================================================
+            RSS feed link displayed next to blog title
+            - blog_show_rss_link: Theme editor setting for RSS visibility
+            - show_blog_filters: Only shows RSS when filters are disabled
+            - blog.all_tags.size: Ensures tags exist for proper display
+            - blog.url.atom: Generates Atom feed URL for the blog
+            - svg-rss: RSS icon snippet for visual representation
+          {% endcomment %}
           {% if show_blog_filters == false and section.settings.blog_show_rss_link %}
             <a class="rsslink {% if section.settings.blog_show_filter == false or blog.all_tags.size == 0 %}no-filter{% endif %}"
                href="{{ blog.url }}.atom" title="{{ blog.title | escape }} RSS" aria-label="{{ blog.title | escape }} RSS">
@@ -33,11 +101,48 @@
     </div>
   {% endif %}
 
+  {% comment %}
+    =============================================================================
+    BLOG ARTICLES PAGINATION
+    =============================================================================
+    Paginates blog articles for performance optimization
+    - section.settings.blog_posts_per_page: Articles per page from theme editor
+    - Wraps entire article grid for proper pagination
+    - Prevents loading all articles at once for large blogs
+  {% endcomment %}
   {% paginate blog.articles by section.settings.blog_posts_per_page %}
+    {% comment %}
+      =============================================================================
+      BLOG CONTENT CONTAINER
+      =============================================================================
+      Main content area with responsive grid layout
+      - wide-container: Full-width container for blog content
+      - half-gutter: Reduced spacing for tighter layout
+      - Responsive design that adapts to different screen sizes
+    {% endcomment %}
     <div class="wide-container half-gutter">
+      {% comment %}
+        =============================================================================
+        BLOG TOOLBAR & FILTERING
+        =============================================================================
+        Toolbar containing RSS link and tag filtering
+        - blog-toolbar: Container for blog controls
+        - data-cc-animate: Animation hook for toolbar appearance
+        - data-cc-animate-delay="0.2s": Staggered animation timing
+        - Conditional display based on filter and RSS settings
+      {% endcomment %}
       {% if show_blog_filters %}
         <div class="blog-toolbar" data-cc-animate data-cc-animate-delay="0.2s">
           <div>
+            {% comment %}
+              =============================================================================
+              TOOLBAR RSS LINK
+              =============================================================================
+              RSS feed link in toolbar when filters are enabled
+              - Only shows when blog_show_rss_link is enabled
+              - Positioned in toolbar for consistent access
+              - Same functionality as title RSS link
+            {% endcomment %}
             {% if section.settings.blog_show_rss_link %}
               <a class="rsslink {% if section.settings.blog_show_filter == false or blog.all_tags.size == 0 %}no-filter{% endif %}"
                  href="{{ blog.url }}.atom" title="{{ blog.title | escape }} RSS" aria-label="{{ blog.title | escape }} RSS">
@@ -46,6 +151,18 @@
             {% endif %}
           </div>
 
+          {% comment %}
+            =============================================================================
+            TAG FILTERING DROPDOWN
+            =============================================================================
+            Dropdown menu for filtering blog articles by tags
+            - filter-by: Unique ID for the filter dropdown
+            - redirecter: CSS class for automatic page redirection
+            - blog.all_tags: Loop through all available blog tags
+            - current_tags: Currently selected tags for highlighting
+            - handle: Converts tag text to URL-friendly format
+            - capitalize: Capitalizes tag text for display
+          {% endcomment %}
           {% if show_blog_filters %}
             <div class="option option--gap-top">
               <label for="filter-by">{{ 'blogs.filtering.filter' | t }}</label>
@@ -60,8 +177,33 @@
         </div>
       {% endif %}
 
+      {% comment %}
+        =============================================================================
+        ARTICLES GRID CONTAINER
+        =============================================================================
+        Main container for blog articles display
+        - product-list-container: Container for article grid
+        - cc-articles: Article-specific styling class
+        - product-list grid--uniform: CSS Grid layout system
+        - mob-two-col: Mobile-specific 2-column layout option
+        - blog_layout: Theme editor setting for grid layout style
+      {% endcomment %}
       <div class="product-list-container">
         <div class="cc-articles product-list grid--uniform{% if section.settings.blog_posts_per_row_mobile == '2' %} mob-two-col{% endif %} product-list--{{ section.settings.blog_layout }}">
+          {% comment %}
+            =============================================================================
+            ARTICLES LOOP & RENDERING
+            =============================================================================
+            Iterates through all blog articles and renders them
+            - blog.articles: Array of all blog articles
+            - article_class: Responsive grid column class
+            - article-column: Additional styling class
+            - article-block: Snippet for individual article display
+            - show_date: Theme setting for publication date display
+            - show_author: Theme setting for author display
+            - image_shape: Theme setting for article image styling
+            - blog_excerpt: Theme setting for article excerpt display
+          {% endcomment %}
           {% for article in blog.articles %}
             <div class="{{ article_class }} article-column">
               {% render 'article-block',
@@ -73,16 +215,42 @@
               %}
             </div>
           {% else %}
+            {% comment %}
+              =============================================================================
+              NO ARTICLES MESSAGE
+              =============================================================================
+              Displayed when no articles match current filters
+              - blogs.general.no_matches: Localized "no articles found" message
+              - align-centre: Centers the message for better UX
+              - Italic styling for emphasis
+            {% endcomment %}
             <p class="align-centre"><em>{{ 'blogs.general.no_matches' | t }}</em></p>
           {% endfor %}
         </div>
 
+        {% comment %}
+          =============================================================================
+          BLOG PAGINATION
+          =============================================================================
+          Pagination controls for navigating through blog pages
+          - paginate.pages > 1: Only shows pagination when multiple pages exist
+          - central content: Centers pagination controls
+          - data-cc-animate: Animation hook for pagination appearance
+          - default_pagination: Shopify's built-in pagination helper
+          - replace: Customizes pagination text for blog context
+        {% endcomment %}
         {% if paginate.pages > 1 %}
           <div class="pagination central content" data-cc-animate>
             {% comment %}
-            When paginating blog articles, a previous article is actually a newer article, not an older one,
-            because blog articles are shown and paginated in a reversed chronological order.
-            The word 'previous' can be confusing, hence we'll change it.
+              =============================================================================
+              PAGINATION TEXT CUSTOMIZATION
+              =============================================================================
+              Customizes pagination text for blog context
+              - Blog articles are shown in reverse chronological order
+              - 'Previous' actually shows newer articles
+              - 'Next' actually shows older articles
+              - Replaces confusing pagination text with clear labels
+              - Uses localized strings for internationalization
             {% endcomment %}
             {% assign older_articles = 'blogs.pagination.older_articles' | t %}
             {% assign newer_articles = 'blogs.pagination.newer_articles' | t %}
@@ -94,11 +262,34 @@
   {% endpaginate %}
 </div>
 
-
+{% comment %}
+  =============================================================================
+  BLOG SECTION SCHEMA - CONFIGURATION & CUSTOMIZATION
+  =============================================================================
+  Theme editor configuration for blog section customization
+  - name: Section name displayed in theme editor
+  - settings: Configurable options for merchants
+  - blog_show_title: Toggle for blog title visibility
+  - blog_show_filter: Toggle for tag filtering functionality
+  - blog_show_rss_link: Toggle for RSS feed link display
+  - blog_posts_per_page: Number of articles per page
+  - blog_posts_per_row_mobile: Mobile column layout option
+  - blog_layout: Grid layout style selection
+{% endcomment %}
 {% schema %}
   {
     "name": "Blog pages",
     "settings": [
+      {% comment %}
+        =============================================================================
+        BLOG LAYOUT CONFIGURATION
+        =============================================================================
+        Controls how blog articles are displayed
+        - collage: Varied article heights for visual interest
+        - rows: Uniform grid layout with consistent spacing
+        - Default: collage (more visually appealing)
+        - Info: Collage applies to larger screens only
+      {% endcomment %}
       {
         "type": "select",
         "id": "blog_layout",
@@ -116,6 +307,16 @@
         "default": "collage",
         "info": "Collage applies to larger screens only"
       },
+      {% comment %}
+        =============================================================================
+        POSTS PER PAGE CONFIGURATION
+        =============================================================================
+        Controls number of blog posts displayed per page
+        - Range: 6-24 posts per page
+        - Step: 1 post (fine-grained control)
+        - Default: 10 posts (balanced performance and UX)
+        - Affects pagination and page load performance
+      {% endcomment %}
       {
         "type": "range",
         "id": "blog_posts_per_page",
@@ -125,6 +326,16 @@
         "step": 1,
         "default": 10
       },
+      {% comment %}
+        =============================================================================
+        MOBILE LAYOUT CONFIGURATION
+        =============================================================================
+        Controls number of posts per row on mobile devices
+        - Options: 1 or 2 posts per row
+        - Default: 2 posts (optimized for mobile viewing)
+        - mob-two-col: CSS class for mobile-specific styling
+        - Ensures proper touch target sizes on small screens
+      {% endcomment %}
       {
         "type": "select",
         "id": "blog_posts_per_row_mobile",
@@ -141,18 +352,49 @@
         ],
         "default": "2"
       },
+      {% comment %}
+        =============================================================================
+        BLOG TITLE DISPLAY
+        =============================================================================
+        Controls whether the blog title is shown
+        - blog_show_title: Toggle for title visibility
+        - Default: true (shows blog name as page heading)
+        - Affects page spacing and visual hierarchy
+        - Conditional padding adjustments when hidden
+      {% endcomment %}
       {
         "type": "checkbox",
         "id": "blog_show_title",
         "label": "Show page title",
         "default": true
       },
+      {% comment %}
+        =============================================================================
+        TAG FILTERING SYSTEM
+        =============================================================================
+        Enables tag-based filtering of blog posts
+        - blog_show_filter: Toggle for filter dropdown
+        - Default: false (no filtering by default)
+        - Requires blog.all_tags.size > 0 to function
+        - Provides navigation between tagged content
+      {% endcomment %}
       {
         "type": "checkbox",
         "id": "blog_show_filter",
         "label": "Show tag filter",
         "default": false
       },
+      {% comment %}
+        =============================================================================
+        RSS FEED INTEGRATION
+        =============================================================================
+        Enables RSS feed link for content syndication
+        - blog_show_rss_link: Toggle for RSS link visibility
+        - Default: false (no RSS link by default)
+        - blog.url.atom: Standard RSS feed URL format
+        - Conditional display based on filter settings
+        - Important for content distribution and SEO
+      {% endcomment %}
       {
         "type": "checkbox",
         "id": "blog_show_rss_link",

@@ -3,7 +3,7 @@
           {% for linklist in linklists %}
           { "id" : "{{ linklist.handle }}",
             "handle" : "{{ linklist.handle }}",
-            "title" : {{ linklist.title | strip_html | json  }},
+            "title" : {{ linklist.title | strip_html | json }},
             "links" : [
                 {% for link in linklist.links %}
                   {"url" : "{{ link.url }}",

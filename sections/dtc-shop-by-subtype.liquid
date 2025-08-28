@@ -1,15 +1,90 @@
-<!-- dtc-shop-by-subtype.liquid -->
+{% comment %}
+  =============================================================================
+  DTC SHOP BY SUBTYPE SECTION - COLLECTION SUBTYPE NAVIGATION
+  =============================================================================
+  Collection subtype navigation system for organizing product categories
+  - Displays subtype options as clickable image boxes
+  - Automatically highlights active subtype based on current collection
+  - Links to different collection subtypes for easy navigation
+  - Responsive grid layout with image and label display
+  - Used for organizing products by style, category, or type
+{% endcomment %}
+
+{% comment %}
+  =============================================================================
+  CONDITIONAL SECTION DISPLAY
+  =============================================================================
+  Only displays section when subtype blocks are configured
+  - section.blocks.size > 0: Checks if any subtype blocks exist
+  - Prevents empty section from displaying
+  - Ensures content is available before rendering
+{% endcomment %}
 {% if section.blocks.size > 0 %}    
+  {% comment %}
+    =============================================================================
+    SUBTYPE NAVIGATION CONTAINER
+    =============================================================================
+    Main container for subtype navigation grid
+    - dtc-shop-by-subtype_container: Primary wrapper for subtype navigation
+    - wide-container: Full-width container for responsive layout
+    - Contains all subtype navigation boxes
+  {% endcomment %}
   <div class="dtc-shop-by-subtype_container wide-container">
+    {% comment %}
+      =============================================================================
+      SUBTYPE BLOCKS ITERATION
+      =============================================================================
+      Loops through all configured subtype blocks
+      - section.blocks: Array of subtype blocks from theme editor
+      - block: Individual subtype block with settings
+      - Each block represents one subtype navigation option
+    {% endcomment %}
     {% for block in section.blocks %}
+      {% comment %}
+        =============================================================================
+        INDIVIDUAL SUBTYPE BOX
+        =============================================================================
+        Single subtype navigation box with conditional active state
+        - dtc-shop-by-subtype_box: Base styling for subtype box
+        - active: CSS class applied when subtype matches current collection
+        - block.settings.label contains collection.title: Active state logic
+        - Links to subtype-specific collection or page
+      {% endcomment %}
       <div class="dtc-shop-by-subtype_box{% if block.settings.label contains collection.title %} active{% endif %}">
+        {% comment %}
+          =============================================================================
+          SUBTYPE NAVIGATION LINK
+          =============================================================================
+          Clickable link to subtype destination
+          - block.settings.link: Link destination from theme editor
+          - Links to collection, product, or external page
+        {% endcomment %}
         <a href="{{ block.settings.link }}">
+          {% comment %}
+            =============================================================================
+            SUBTYPE IMAGE
+            =============================================================================
+            Visual representation of subtype category
+            - block.settings.image: Subtype image from theme editor
+            - image_url: width: 300: Optimized image with 300px width
+            - alt: block.settings.label: Accessibility alt text using subtype label
+            - width="150" height="150": Fixed dimensions for consistent layout
+          {% endcomment %}
           <img 
-              src="{{ block.settings.image | img_url: '300x' }}" 
+              src="{{ block.settings.image | image_url: width: 300 }}" 
               alt="{{ block.settings.label }}"
               width="150"
               height="150"
           />
+
+          {% comment %}
+            =============================================================================
+            SUBTYPE LABEL
+            =============================================================================
+            Text label identifying the subtype category
+            - block.settings.label: Subtype name from theme editor
+            - Displayed below subtype image for clear identification
+          {% endcomment %}
           <p>{{ block.settings.label }}</p>
         </a>
       </div>
@@ -17,27 +92,106 @@
   </div>
 {% endif %}
 
-
+{% comment %}
+  =============================================================================
+  DTC SHOP BY SUBTYPE SECTION SCHEMA - CONFIGURATION & CUSTOMIZATION
+  =============================================================================
+  Theme editor configuration for DTC subtype navigation
+  - name: Section name displayed in theme editor
+  - class: CSS class for section styling
+  - blocks: Subtype block configuration for merchants
+  - presets: Default section configuration with collection category
+{% endcomment %}
 {% schema %}
 {
+  {% comment %}
+    =============================================================================
+    SCHEMA BASIC CONFIGURATION
+    =============================================================================
+    Core section configuration for theme editor
+    - name: Display name in theme editor sidebar
+    - class: CSS class for section styling and functionality
+  {% endcomment %}
   "name": "DTC Shop By Subtype",
-  "settings": [],
   "class": "dtc-shop-by-subtype",
+
+  {% comment %}
+    =============================================================================
+    SECTION SETTINGS
+    =============================================================================
+    No configurable settings for this section
+    - Empty array: Section has no merchant-configurable options
+    - All customization done through subtype blocks
+  {% endcomment %}
+  "settings": [
+
+  ],
+
+  {% comment %}
+    =============================================================================
+    SECTION BLOCKS - SUBTYPE NAVIGATION MANAGEMENT
+    =============================================================================
+    Subtype block configuration for dynamic navigation
+    - Merchants can add multiple subtype blocks
+    - Each block represents one subtype navigation option
+    - All blocks are displayed in navigation grid
+  {% endcomment %}
   "blocks": [
+    {% comment %}
+      =============================================================================
+      SUBTYPE BLOCK TYPE
+      =============================================================================
+      Individual subtype navigation block
+      - name: "Subtype Box": Display name in theme editor
+      - type: "subtype": Internal identifier for block type
+      - settings: Configurable options for subtype navigation
+    {% endcomment %}
     {
       "type": "subtype",
       "name": "Subtype Box",
       "settings": [
+        {% comment %}
+          =============================================================================
+          SUBTYPE IMAGE SETTING
+          =============================================================================
+          Subtype category image selection
+          - type: "image_picker": Image selector in theme editor
+          - id: "image": Internal identifier for Liquid access
+          - label: "Image": User-friendly label in theme editor
+          - Visual representation of subtype category
+        {% endcomment %}
         {
           "type": "image_picker",
           "id": "image",
           "label": "Image"
         },
+
+        {% comment %}
+          =============================================================================
+          SUBTYPE LABEL SETTING
+          =============================================================================
+          Text label for subtype category
+          - type: "text": Simple text input field
+          - id: "label": Internal identifier for Liquid access
+          - label: "Label": User-friendly label in theme editor
+          - Used for active state detection and accessibility
+        {% endcomment %}
         {
           "type": "text",
           "id": "label",
           "label": "Label"
         },
+
+        {% comment %}
+          =============================================================================
+          SUBTYPE LINK SETTING
+          =============================================================================
+          Navigation destination for subtype
+          - type: "url": URL input field with validation
+          - id: "link": Internal identifier for Liquid access
+          - label: "Link": User-friendly label in theme editor
+          - Links to subtype-specific collection or page
+        {% endcomment %}
         {
           "type": "url",
           "id": "link",
@@ -46,6 +200,17 @@
       ]
     }
   ],
+
+  {% comment %}
+    =============================================================================
+    SECTION PRESETS - DEFAULT CONFIGURATION
+    =============================================================================
+    Default section configuration for easy addition to pages
+    - name: "DTC Shop By Subtype": Display name when adding section to page
+    - category: "Collection": Groups section with collection-related sections
+    - Provides starting point for merchants to customize
+    - All blocks start empty by default
+  {% endcomment %}
   "presets": [
     {
       "name": "DTC Shop By Subtype",

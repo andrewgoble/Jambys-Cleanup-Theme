@@ -5,21 +5,21 @@
 
   {% comment %} START {% endcomment %}
   <div class="step-start js-start bundle-builder-step">
-      <div class="bundle-builder-picture js-bundle-builder-picture desktop-only"  style="background-color:{{section.settings.start_bg_color}};">
+      <div class="bundle-builder-picture js-bundle-builder-picture desktop-only"  style="background-color:{{ section.settings.start_bg_color }};">
       <div class="bundle-single-picture">
         <div class="bundle-builder-savings">
           <div class="savings-layout">
-            <span class="discount-value">{{section.settings.discount_value}}</span>
-            <span class="discount-label">{{section.settings.discount_label}}</span>
+            <span class="discount-value">{{ section.settings.discount_value }}</span>
+            <span class="discount-label">{{ section.settings.discount_label }}</span>
           </div>
         </div>
-        <img src="{{section.settings.start_image | img_url: 'master'}}" alt="{{section.settings.start_image.alt}}" class="desktop-only" />
+        <img src="{{ section.settings.start_image | image_url }}" alt="{{ section.settings.start_image.alt }}" class="desktop-only" />
       </div>
     </div>
     <div class="bundle-builder-details step-start js-start">
       <div class="bundle-start-title bundle-title">
-        <h1>{{section.settings.start_title}}</h1>
-        <div class="start-text">{{section.settings.start_text}}</div>
+        <h1>{{ section.settings.start_title }}</h1>
+        <div class="start-text">{{ section.settings.start_text }}</div>
       </div>
       <div class="bundle-start-info">
         <div class="start-steps">
@@ -30,21 +30,21 @@
                   {% if section.settings.show_must_popular_1 %}
                     <div class="pill red whitespace-no-wrap">Most popular</div>
                   {% endif %}
-                  <div class="pill yellow whitespace-no-wrap">ONLY ${{section.settings.pack_individual_price_1}} A PAIR</div>
+                  <div class="pill yellow whitespace-no-wrap">ONLY ${{ section.settings.pack_individual_price_1 }} A PAIR</div>
                 </div>
-                <h2 class="h2">{{section.settings.pack_size_1}} Pack</h2>
+                <h2 class="h2">{{ section.settings.pack_size_1 }} Pack</h2>
                 <div class="pack-price">
-                  <span class="old-price" style="">${{section.settings.pack_old_price_1}}</span>
-                  <span class="new-price">${{section.settings.pack_new_price_1}}</span>
+                  <span class="old-price" style="">${{ section.settings.pack_old_price_1 }}</span>
+                  <span class="new-price">${{ section.settings.pack_new_price_1 }}</span>
                 </div>
               </div>
-              <p class="js-build-bundle build-bundle-link" data-picked-quantity="{{section.settings.pack_size_1}}">
+              <p class="js-build-bundle build-bundle-link" data-picked-quantity="{{ section.settings.pack_size_1 }}">
                 <span class="desktop-only-flex">
-                  {{section.settings.start_txt_desktop_1}}
+                  {{ section.settings.start_txt_desktop_1 }}
                   <i class="bundle-back bundle-forward" ecl="true"></i>
                 </span>
                 <span class="mobile-only-flex whitespace-no-wrap">
-                  {{section.settings.start_txt_mobile_1}}
+                  {{ section.settings.start_txt_mobile_1 }}
                   <i class="bundle-back bundle-forward" ecl="true"></i>
                 </span>
               </p>
@@ -55,21 +55,21 @@
                   {% if section.settings.show_must_popular_2 %}
                     <div class="pill red whitespace-no-wrap">Most popular</div>
                   {% endif %}
-                  <div class="pill yellow whitespace-no-wrap">ONLY ${{section.settings.pack_individual_price_2}} A PAIR</div>
+                  <div class="pill yellow whitespace-no-wrap">ONLY ${{ section.settings.pack_individual_price_2 }} A PAIR</div>
                 </div>
-                <h2 class="h2">{{section.settings.pack_size_2}} Pack</h2>
+                <h2 class="h2">{{ section.settings.pack_size_2 }} Pack</h2>
                 <div class="pack-price">
-                  <span class="old-price" style="">${{section.settings.pack_old_price_2}}</span>
-                  <span class="new-price">${{section.settings.pack_new_price_2}}</span>
+                  <span class="old-price" style="">${{ section.settings.pack_old_price_2 }}</span>
+                  <span class="new-price">${{ section.settings.pack_new_price_2 }}</span>
                 </div>
               </div>
-              <p class="js-build-bundle build-bundle-link" data-picked-quantity="{{section.settings.pack_size_2}}">
+              <p class="js-build-bundle build-bundle-link" data-picked-quantity="{{ section.settings.pack_size_2 }}">
                 <span class="desktop-only-flex">
-                  {{section.settings.start_txt_desktop_2}}
+                  {{ section.settings.start_txt_desktop_2 }}
                   <i class="bundle-back bundle-forward" ecl="true"></i>
                 </span>
                 <span class="mobile-only-flex whitespace-no-wrap">
-                  {{section.settings.start_txt_mobile_2}}
+                  {{ section.settings.start_txt_mobile_2 }}
                   <i class="bundle-back bundle-forward" ecl="true"></i>
                 </span>
               </p>
@@ -80,21 +80,21 @@
                   {% if section.settings.show_must_popular_3 %}
                     <div class="pill red whitespace-no-wrap">Most popular</div>
                   {% endif %}
-                  <div class="pill yellow whitespace-no-wrap">ONLY ${{section.settings.pack_individual_price_3}} A PAIR</div>
+                  <div class="pill yellow whitespace-no-wrap">ONLY ${{ section.settings.pack_individual_price_3 }} A PAIR</div>
                 </div>
-                <h2 class="h2">{{section.settings.pack_size_3}} Pack</h2>
+                <h2 class="h2">{{ section.settings.pack_size_3 }} Pack</h2>
                 <div class="pack-price">
-                  <span class="old-price" style="">${{section.settings.pack_old_price_3}}</span>
-                  <span class="new-price">${{section.settings.pack_new_price_3}}</span>
+                  <span class="old-price" style="">${{ section.settings.pack_old_price_3 }}</span>
+                  <span class="new-price">${{ section.settings.pack_new_price_3 }}</span>
                 </div>
               </div>
-              <p class="js-build-bundle build-bundle-link" data-picked-quantity="{{section.settings.pack_size_3}}">
+              <p class="js-build-bundle build-bundle-link" data-picked-quantity="{{ section.settings.pack_size_3 }}">
                 <span class="desktop-only-flex">
-                  {{section.settings.start_txt_desktop_3}}
+                  {{ section.settings.start_txt_desktop_3 }}
                   <i class="bundle-back bundle-forward" ecl="true"></i>
                 </span>
                 <span class="mobile-only-flex whitespace-no-wrap">
-                  {{section.settings.start_txt_mobile_3}}
+                  {{ section.settings.start_txt_mobile_3 }}
                   <i class="bundle-back bundle-forward" ecl="true"></i>
                 </span>
               </p>
@@ -116,7 +116,7 @@
       <div class="bundle-gallery">
         {% assign feature_product_handle = section.settings.product %}
         {% assign product = all_products[feature_product_handle] %}
-        {% assign current_variant = product.selected_or_first_available_variant %}
+        
         <div class="content-gallery bottom">
           {% render 'bundle-images-slider', product: product %}
         </div>
@@ -154,15 +154,15 @@
      <div class="review-bundle">
 
         <div class="bundle-review-title bundle-title text-center">
-          <h1>{{section.settings.review_title}}</h1>
-          <div class="review-subtitle">{{section.settings.review_subtitle}}</div>
+          <h1>{{ section.settings.review_title }}</h1>
+          <div class="review-subtitle">{{ section.settings.review_subtitle }}</div>
         </div>
 
         <div class="bundle-review-info">
           <div class="review-item review-item-bottom js-review-item-bottom">
             <div class="review-item-details">
               <div class="review-item-picture bottom">
-                <img src="{{ 'bundle-mint-temp.png' | file_url}}" alt="Bottom Selection" />
+                <img src="{{ 'bundle-mint-temp.png' | file_url }}" alt="Bottom Selection" />
               </div>
               <div class="review-item-specific">
                 <h3 class="js-bottom-title bottom-title">Mint/Navy</h3>
@@ -300,27 +300,27 @@ document.addEventListener("DOMContentLoaded", () => {
   var previewItemEmptyTemplate = `<div class="bundle-item-empty"></div>`;
 
   function calculateSavings(quantity) {
-    var packOne = {{section.settings.pack_size_1}};
-    var packTwo = {{section.settings.pack_size_2}};
-    var packThree = {{section.settings.pack_size_3}};
+    var packOne = {{ section.settings.pack_size_1 }};
+    var packTwo = {{ section.settings.pack_size_2 }};
+    var packThree = {{ section.settings.pack_size_3 }};
     switch(quantity) {
       case packOne:
         return {
-          price : {{section.settings.pack_old_price_1 | times: 100}},
-          discount: {{section.settings.pack_new_price_1 | times: 100}},
-          individual: {{section.settings.pack_individual_price_1 | times: 100}},
+          price : {{ section.settings.pack_old_price_1 | times: 100 }},
+          discount: {{ section.settings.pack_new_price_1 | times: 100 }},
+          individual: {{ section.settings.pack_individual_price_1 | times: 100 }},
         }
       case packTwo:
         return {
-          price : {{section.settings.pack_old_price_2 | times: 100}},
-          discount: {{section.settings.pack_new_price_2 | times: 100}},
-          individual: {{section.settings.pack_individual_price_2 | times: 100}}
+          price : {{ section.settings.pack_old_price_2 | times: 100 }},
+          discount: {{ section.settings.pack_new_price_2 | times: 100 }},
+          individual: {{ section.settings.pack_individual_price_2 | times: 100 }}
         }
       case packThree:
         return {
-          price : {{section.settings.pack_old_price_3 | times: 100}},
-          discount: {{section.settings.pack_new_price_3 | times: 100}},
-          individual: {{section.settings.pack_individual_price_3 | times: 100}},
+          price : {{ section.settings.pack_old_price_3 | times: 100 }},
+          discount: {{ section.settings.pack_new_price_3 | times: 100 }},
+          individual: {{ section.settings.pack_individual_price_3 | times: 100 }},
         }
     }
   }
@@ -599,323 +599,321 @@ document.addEventListener("DOMContentLoaded", () => {
 
 {% schema %}
 {
-   "name":"Bundle Builder",
-   "settings":[
-      {
-         "type":"header",
-         "content":"Global"
-      },
-      {
-         "type":"textarea",
-         "id":"guarantee",
-         "label":"Guarantee",
-         "default":"Jambys has a 77-day no-question-guarantee on your first product."
-      },
-      {
-         "type":"text",
-         "id":"discount_value",
-         "label":"Discount Value"
-      },
-      {
-         "type":"text",
-         "id":"discount_label",
-         "label":"Discount Label"
-      },
-      {
-         "type":"header",
-         "content":"Start"
-      },
-      {
-         "type":"image_picker",
-         "id":"start_image",
-         "label":"Start Image"
-      },
-			{
-        "type": "color",
-        "id": "start_bg_color",
-        "label": "Background Color Gap",
-        "default": "#7983E2",
-        "info": "To fill gap from end of photo to footer"
-      },
-      {
-         "type":"textarea",
-         "id":"start_title",
-         "label":"Start Title",
-         "default":"Build Your Bundle"
-      },
-      {
-         "type":"textarea",
-         "id":"start_text",
-         "label":"Start Text",
-         "default":"Build your own Jambys bundle pack in 3, 5, or 7 pairs and get discount up to $70."
-      },
-      {
-        "type": "header",
-        "content": "Pack 1"
-      },
-      {
-        "type": "text",
-        "id": "pack_size_1",
-        "label": "Pack Size",
-        "default": "3",
-        "info": "Don't include the word Pack"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_must_popular",
-        "label": "Show most popular 1",
-        "default": false
-      },
-      {
-        "type": "text",
-        "id": "pack_old_price_1",
-        "label": "Pack Old Price 1",
-        "default": "105"
-      },
-      {
-        "type": "text",
-        "id": "pack_new_price_1",
-        "label": "Pack New Price 1",
-        "default": "89.25"
-      },
-      {
-        "type": "text",
-        "id": "pack_individual_price_1",
-        "label": "Pack Individual Price 1",
-        "default": "29.75"
-      },
-      {
-        "type": "text",
-        "id": "start_txt_desktop_1",
-        "label": "Desktop Start Building Text",
-        "default": "Build Your Bundle"
-      },
-      {
-        "type": "text",
-        "id": "start_txt_mobile_1",
-        "label": "Mobile Start Building Text",
-        "default": "Start Building"
-      },
-      {
-        "type": "header",
-        "content": "Pack 2"
-      },
-      {
-        "type": "text",
-        "id": "pack_size_2",
-        "label": "Pack Size 2",
-        "default": "5",
-        "info": "Don't include the word Pack"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_must_popular_2",
-        "label": "Show most popular 2",
-        "default": false
-      },
-      {
-        "type": "text",
-        "id": "pack_individual_price_2",
-        "label": "Pack Individual Price 2",
-        "default": "28"
-      },
-      {
-        "type": "text",
-        "id": "pack_old_price_2",
-        "label": "Pack Old Price 2",
-        "default": "175"
-      },
-      {
-        "type": "text",
-        "id": "pack_new_price_2",
-        "label": "Pack New Price 2",
-        "default": "140"
-      },
-      {
-        "type": "text",
-        "id": "start_txt_desktop_2",
-        "label": "Desktop Start Building Text 2",
-        "default": "Build Your Bundle"
-      },
-      {
-        "type": "text",
-        "id": "start_txt_mobile_2",
-        "label": "Mobile Start Building Text 2",
-        "default": "Start Building"
-      },
-      {
-        "type": "header",
-        "content": "Pack 3"
-      },
-      {
-        "type": "text",
-        "id": "pack_size_3",
-        "label": "Pack Size 3",
-        "default": "7",
-        "info": "Don't include the word Pack"
-      },
-      {
-        "type": "checkbox",
-        "id": "show_must_popular_3",
-        "label": "Show most popular 3",
-        "default": false
-      },
-      {
-        "type": "text",
-        "id": "pack_individual_price_3",
-        "label": "Pack Individual Price 3",
-        "default": "26.25"
-      },
-      {
-        "type": "text",
-        "id": "pack_old_price_3",
-        "label": "Pack Old Price 3",
-        "default": "245"
-      },
-      {
-        "type": "text",
-        "id": "pack_new_price_3",
-        "label": "Pack New Price 3",
-        "default": "183.75"
-      },
-      {
-        "type": "text",
-        "id": "start_txt_desktop_3",
-        "label": "Desktop Start Building Text 3",
-        "default": "Build Your Bundle"
-      },
-      {
-        "type": "text",
-        "id": "start_txt_mobile_3",
-        "label": "Mobile Start Building Text 3",
-        "default": "Start Building"
-      },
-      {
-         "type":"header",
-         "content":"Choose Pair"
-      },
-       {
-         "type":"product",
-         "id":"product",
-         "label":"Product"
-      },
-      {
-        "type": "collection",
-        "id": "collection",
-        "label": "Collection"
-      },
-      {
-        "type": "checkbox",
-        "id": "mobile_sticky_add",
-        "label": "Mobile Add Sticky",
-        "default": true
-      },
-      {
-         "type":"textarea",
-         "id":"top_text",
-         "label":"Text (short)"
-      },
-      {
-         "type":"textarea",
-         "id":"top_text_long",
-         "label":"Text (long)"
-      },
-
-
-      {
-         "type":"header",
-         "content":"Review"
-      },
-      {
-         "type":"textarea",
-         "id":"review_title",
-         "label":"Review Title"
-      },
-      {
-         "type":"textarea",
-         "id":"review_subtitle",
-         "label":"Review Subtitle"
-      },
-			{
-				"type": "header",
-				"content": "Size Guide"
-			},
-			{
-        "type": "richtext",
-        "id": "size_bottom_desktop",
-        "label": "Bottom sizing desktop",
-        "default": "<p>If you're in doubt between sizes, size down for a feel closer to boxers, and size up for a feel closer to shorts. Don't worry: we make exchanges super easy. Still not sure or gifting? Just <a href=\"mailto:hello@jambys.com\">email us</a>&nbsp;some more info or <a title=\"Jambys Instagram\" href=\"https://www.instagram.com/jambys/\" target=\"_blank\" rel=\"noopener\">DM us an Instagram screenshot</a>. Whatever works. We don't rest until you have the perfect Jambys.</p>"
-      },
-      {
-        "type": "richtext",
-        "id": "size_bottom_mobile",
-        "label": "Bottom sizing mobile",
-        "default": "<p>Still not sure or gifting? Just email us some more info or DM us an Instagram screenshot.</p>"
-      }
-   ],
-	 "blocks": [
-		{
-			"type": "tops-generic",
-			"name": "Tops Guide",
-			"settings": [
-				{
-					"type": "text",
-					"id": "col_1",
-					"label": "Column 1"
-				},
-				{
-					"type": "text",
-					"id": "col_2",
-					"label": "Column 2"
-				},
-				{
-					"type": "text",
-					"id": "col_3",
-					"label": "Column 3"
-				},
-				{
-					"type": "text",
-					"id": "col_4",
-					"label": "Column 4"
-				},
-				{
-					"type": "text",
-					"id": "col_5",
-					"label": "Column 5"
-				}
-			]
-		},
-		{
-			"type": "bottom-generic",
-			"name": "Bottoms Guid",
-			"settings": [
-				{
-					"type": "text",
-					"id": "col_1",
-					"label": "Column 1"
-				},
-				{
-					"type": "text",
-					"id": "col_2",
-					"label": "Column 2"
-				},
-				{
-					"type": "text",
-					"id": "col_3",
-					"label": "Column 3"
-				},
-				{
-					"type": "text",
-					"id": "col_4",
-					"label": "Column 4"
-				},
-				{
-					"type": "text",
-					"id": "col_5",
-					"label": "Column 5"
-				}
-			]
-		}
-	 ]
+  "name": "Bundle Builder",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Global"
+    },
+    {
+      "type": "textarea",
+      "id": "guarantee",
+      "label": "Guarantee",
+      "default": "Jambys has a 77-day no-question-guarantee on your first product."
+    },
+    {
+      "type": "text",
+      "id": "discount_value",
+      "label": "Discount Value"
+    },
+    {
+      "type": "text",
+      "id": "discount_label",
+      "label": "Discount Label"
+    },
+    {
+      "type": "header",
+      "content": "Start"
+    },
+    {
+      "type": "image_picker",
+      "id": "start_image",
+      "label": "Start Image"
+    },
+    {
+      "type": "color",
+      "id": "start_bg_color",
+      "label": "Background Color Gap",
+      "default": "#7983E2",
+      "info": "To fill gap from end of photo to footer"
+    },
+    {
+      "type": "textarea",
+      "id": "start_title",
+      "label": "Start Title",
+      "default": "Build Your Bundle"
+    },
+    {
+      "type": "textarea",
+      "id": "start_text",
+      "label": "Start Text",
+      "default": "Build your own Jambys bundle pack in 3, 5, or 7 pairs and get discount up to $70."
+    },
+    {
+      "type": "header",
+      "content": "Pack 1"
+    },
+    {
+      "type": "text",
+      "id": "pack_size_1",
+      "label": "Pack Size",
+      "default": "3",
+      "info": "Don't include the word Pack"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_must_popular",
+      "label": "Show most popular 1",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "pack_old_price_1",
+      "label": "Pack Old Price 1",
+      "default": "105"
+    },
+    {
+      "type": "text",
+      "id": "pack_new_price_1",
+      "label": "Pack New Price 1",
+      "default": "89.25"
+    },
+    {
+      "type": "text",
+      "id": "pack_individual_price_1",
+      "label": "Pack Individual Price 1",
+      "default": "29.75"
+    },
+    {
+      "type": "text",
+      "id": "start_txt_desktop_1",
+      "label": "Desktop Start Building Text",
+      "default": "Build Your Bundle"
+    },
+    {
+      "type": "text",
+      "id": "start_txt_mobile_1",
+      "label": "Mobile Start Building Text",
+      "default": "Start Building"
+    },
+    {
+      "type": "header",
+      "content": "Pack 2"
+    },
+    {
+      "type": "text",
+      "id": "pack_size_2",
+      "label": "Pack Size 2",
+      "default": "5",
+      "info": "Don't include the word Pack"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_must_popular_2",
+      "label": "Show most popular 2",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "pack_individual_price_2",
+      "label": "Pack Individual Price 2",
+      "default": "28"
+    },
+    {
+      "type": "text",
+      "id": "pack_old_price_2",
+      "label": "Pack Old Price 2",
+      "default": "175"
+    },
+    {
+      "type": "text",
+      "id": "pack_new_price_2",
+      "label": "Pack New Price 2",
+      "default": "140"
+    },
+    {
+      "type": "text",
+      "id": "start_txt_desktop_2",
+      "label": "Desktop Start Building Text 2",
+      "default": "Build Your Bundle"
+    },
+    {
+      "type": "text",
+      "id": "start_txt_mobile_2",
+      "label": "Mobile Start Building Text 2",
+      "default": "Start Building"
+    },
+    {
+      "type": "header",
+      "content": "Pack 3"
+    },
+    {
+      "type": "text",
+      "id": "pack_size_3",
+      "label": "Pack Size 3",
+      "default": "7",
+      "info": "Don't include the word Pack"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_must_popular_3",
+      "label": "Show most popular 3",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "pack_individual_price_3",
+      "label": "Pack Individual Price 3",
+      "default": "26.25"
+    },
+    {
+      "type": "text",
+      "id": "pack_old_price_3",
+      "label": "Pack Old Price 3",
+      "default": "245"
+    },
+    {
+      "type": "text",
+      "id": "pack_new_price_3",
+      "label": "Pack New Price 3",
+      "default": "183.75"
+    },
+    {
+      "type": "text",
+      "id": "start_txt_desktop_3",
+      "label": "Desktop Start Building Text 3",
+      "default": "Build Your Bundle"
+    },
+    {
+      "type": "text",
+      "id": "start_txt_mobile_3",
+      "label": "Mobile Start Building Text 3",
+      "default": "Start Building"
+    },
+    {
+      "type": "header",
+      "content": "Choose Pair"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_sticky_add",
+      "label": "Mobile Add Sticky",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "top_text",
+      "label": "Text (short)"
+    },
+    {
+      "type": "textarea",
+      "id": "top_text_long",
+      "label": "Text (long)"
+    },
+    {
+      "type": "header",
+      "content": "Review"
+    },
+    {
+      "type": "textarea",
+      "id": "review_title",
+      "label": "Review Title"
+    },
+    {
+      "type": "textarea",
+      "id": "review_subtitle",
+      "label": "Review Subtitle"
+    },
+    {
+      "type": "header",
+      "content": "Size Guide"
+    },
+    {
+      "type": "richtext",
+      "id": "size_bottom_desktop",
+      "label": "Bottom sizing desktop",
+      "default": "<p>If you're in doubt between sizes, size down for a feel closer to boxers, and size up for a feel closer to shorts. Don't worry: we make exchanges super easy. Still not sure or gifting? Just <a href=\"mailto:hello@jambys.com\">email us</a>&nbsp;some more info or <a title=\"Jambys Instagram\" href=\"https://www.instagram.com/jambys/\" target=\"_blank\" rel=\"noopener\">DM us an Instagram screenshot</a>. Whatever works. We don't rest until you have the perfect Jambys.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "size_bottom_mobile",
+      "label": "Bottom sizing mobile",
+      "default": "<p>Still not sure or gifting? Just email us some more info or DM us an Instagram screenshot.</p>"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tops-generic",
+      "name": "Tops Guide",
+      "settings": [
+        {
+          "type": "text",
+          "id": "col_1",
+          "label": "Column 1"
+        },
+        {
+          "type": "text",
+          "id": "col_2",
+          "label": "Column 2"
+        },
+        {
+          "type": "text",
+          "id": "col_3",
+          "label": "Column 3"
+        },
+        {
+          "type": "text",
+          "id": "col_4",
+          "label": "Column 4"
+        },
+        {
+          "type": "text",
+          "id": "col_5",
+          "label": "Column 5"
+        }
+      ]
+    },
+    {
+      "type": "bottom-generic",
+      "name": "Bottoms Guid",
+      "settings": [
+        {
+          "type": "text",
+          "id": "col_1",
+          "label": "Column 1"
+        },
+        {
+          "type": "text",
+          "id": "col_2",
+          "label": "Column 2"
+        },
+        {
+          "type": "text",
+          "id": "col_3",
+          "label": "Column 3"
+        },
+        {
+          "type": "text",
+          "id": "col_4",
+          "label": "Column 4"
+        },
+        {
+          "type": "text",
+          "id": "col_5",
+          "label": "Column 5"
+        }
+      ]
+    }
+  ]
 }
 {% endschema %}
