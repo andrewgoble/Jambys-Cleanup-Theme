@@ -307,7 +307,7 @@
       window.related = {
       pdp_products:{
       {% for upsell_product in product.metafields.custom.related_products.value %}
-        p_{{ upsell_product.handle | replace: "5to9" "to9" | replace: "-jambys" "" | replace: "-" "_" }}:{
+        p_{{ upsell_product.handle | replace: "5to9" | replace: "-jambys" | replace: "-" }}:{
         prod_id: {{ upsell_product.id }},
         prod_price: {{ upsell_product.price }},
         prod_title: "{{ upsell_product.title }}",
@@ -346,7 +346,7 @@
 
                jambys:{
       {% for product in collections["jambys"].products %}
-        p_{{ product.handle | replace: "5to9" "to9" | replace: "-jambys" "" | replace: "-" "_" }}:{
+        p_{{ product.handle | replace: "5to9" | replace: "-jambys" | replace: "-" }}:{
         prod_id: {{ product.id }},
         prod_price: {{ product.price }},
         prod_title: "{{ product.title }}",
@@ -381,7 +381,7 @@
       },
       long_jambys:{
       {% for product in collections["long-jambys"].products %}
-        p_{{ product.handle | replace: "-long-jambys" "" | replace: "-" "_" }}:{
+        p_{{ product.handle | replace: "-long-jambys" | replace: "-" }}:{
         prod_id: {{ product.id }},
         prod_price: {{ product.price }},
         prod_title: "{{ product.title }}",
@@ -416,7 +416,7 @@
       },
       house_hoodie:{
       {% for product in collections["house-hoodies"].products %}
-        p_{{ product.handle | replace: "-house-hoodie" "" | replace: "-" "_" }}:{
+        p_{{ product.handle | replace: "-house-hoodie" | replace: "-" }}:{
         prod_id: {{ product.id }},
         prod_price: {{ product.price }},
         prod_title: "{{ product.title }}",
@@ -914,3 +914,25 @@
     src="https://api.kimonix.com/kimonix_elements.js?shop=jambys-chillwear.myshopify.com"
   ></script>
 {% endif %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: '{{ upsell_product.handle | replace: "5to9" "to9" | replace: "-jambys" ""
+    | replace: "-" "_" }}'
+  to: '{{ upsell_product.handle | replace: "5to9" | replace: "-jambys" | replace:
+    "-" }}'
+  position: 13556..13637
+- from: '{{ product.handle | replace: "5to9" "to9" | replace: "-jambys" "" | replace:
+    "-" "_" }}'
+  to: '{{ product.handle | replace: "5to9" | replace: "-jambys" | replace: "-" }}'
+  position: 15251..15325
+- from: '{{ product.handle | replace: "-long-jambys" "" | replace: "-" "_" }}'
+  to: '{{ product.handle | replace: "-long-jambys" | replace: "-" }}'
+  position: 16748..16809
+- from: '{{ product.handle | replace: "-house-hoodie" "" | replace: "-" "_" }}'
+  to: '{{ product.handle | replace: "-house-hoodie" | replace: "-" }}'
+  position: 18235..18297
+{% endcomment %}

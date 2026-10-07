@@ -7,7 +7,7 @@ https://www.shopify.com/partners/blog/shopify-alternate-templates
 {
     "related_products":{
     {% for upsell_product in product.metafields.custom.related_products.value %}
-        "p_{{ upsell_product.handle | replace: "5to9" "to9" | replace: "-jambys" "" | replace: "-" "_" }}":{
+        "p_{{ upsell_product.handle | replace: "5to9" | replace: "-jambys" | replace: "-" }}":{
           "prod_id": {{ upsell_product.id }},
           "prod_price": "{{ upsell_product.price }}",
           "prod_title": "{{ upsell_product.title }}",
@@ -26,4 +26,15 @@ https://www.shopify.com/partners/blog/shopify-alternate-templates
   }
 }
 
-{{ product.metafields[0].id }}
+{{ product.metafields[0].id }}{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: '{{ upsell_product.handle | replace: "5to9" "to9" | replace: "-jambys" ""
+    | replace: "-" "_" }}'
+  to: '{{ upsell_product.handle | replace: "5to9" | replace: "-jambys" | replace:
+    "-" }}'
+  position: 336..417
+{%- endcomment -%}

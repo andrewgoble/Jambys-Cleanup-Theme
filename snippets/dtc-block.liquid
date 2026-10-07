@@ -38,10 +38,10 @@ endfor
         data-variant-id="{{ current_variant.id }}">
 
         {% if current_variant.compare_at_price > current_variant.price %}
-          <span class="was-price theme-money">{%- render "price", price: current_variant.compare_at_price | money_without_trailing_zeros -%}</span>
+          <span class="was-price theme-money">{%- render "price", price: current_variant.compare_at_price -%}</span>
         {% endif %}
 
-        <div class="price theme-money">{%- render "price", price: current_variant.price | money_without_trailing_zeros -%}</div>
+        <div class="price theme-money">{%- render "price", price: current_variant.price -%}</div>
 
         {% render 'unit-price', variant: current_variant %}
       </div>
@@ -54,10 +54,10 @@ endfor
           data-variant-id="{{ current_variant.id }}">
 
           {% if current_variant.compare_at_price > current_variant.price %}
-            <span class="was-price theme-money">{%- render "price", price: current_variant.compare_at_price | money_without_trailing_zeros -%}</span>
+            <span class="was-price theme-money">{%- render "price", price: current_variant.compare_at_price -%}</span>
           {% endif %}
 
-          <div class="price theme-money">{%- render "price", price: current_variant.price | money_without_trailing_zeros -%}</div>
+          <div class="price theme-money">{%- render "price", price: current_variant.price -%}</div>
 
           {% render 'unit-price', variant: current_variant %}
         </div>
@@ -158,4 +158,26 @@ endfor
     </div>
 
   </div>
-</div>
+</div>{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: '{%- render "price", price: current_variant.compare_at_price | money_without_trailing_zeros
+    -%}'
+  to: '{%- render "price", price: current_variant.compare_at_price -%}'
+  position: 1627..1690
+- from: '{%- render "price", price: current_variant.price | money_without_trailing_zeros
+    -%}'
+  to: '{%- render "price", price: current_variant.price -%}'
+  position: 1758..1810
+- from: '{%- render "price", price: current_variant.compare_at_price | money_without_trailing_zeros
+    -%}'
+  to: '{%- render "price", price: current_variant.compare_at_price -%}'
+  position: 2287..2350
+- from: '{%- render "price", price: current_variant.price | money_without_trailing_zeros
+    -%}'
+  to: '{%- render "price", price: current_variant.price -%}'
+  position: 2422..2474
+{%- endcomment -%}

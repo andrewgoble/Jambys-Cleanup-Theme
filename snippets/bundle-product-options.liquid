@@ -38,15 +38,7 @@
             {% assign id = value | handleize | append: '-' | append: product.id %}
             {% assign newName = option.name | append: '-' | append: product.id %}
 
-            {%
-              render 'builder-component-radio' with
-              id: id,
-              label: label,
-              value: value,
-              name: newName,
-              checked: checked,
-              disabled: disabled
-            %}
+            {% render 'builder-component-radio' with id, id: id, label: label, value: value, name: newName, checked: checked, disabled: disabled %}
           {% endfor %}
 
           
@@ -59,4 +51,23 @@
     {% endfor %}
   {% endunless %}
 
-</div>
+</div>{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {%
+                  render 'builder-component-radio' with
+                  id: id,
+                  label: label,
+                  value: value,
+                  name: newName,
+                  checked: checked,
+                  disabled: disabled
+                %}
+  to: "{% render 'builder-component-radio' with id, id: id, label: label, value: value,
+    name: newName, checked: checked, disabled: disabled %}"
+  position: 1539..1674
+{%- endcomment -%}

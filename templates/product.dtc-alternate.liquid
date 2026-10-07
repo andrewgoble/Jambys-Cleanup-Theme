@@ -1,2 +1,11 @@
 {% layout none %}
-{% render 'dtc-block' with related_product: product %}
+{% render 'dtc-block' with related_product, related_product: product %}{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% render 'dtc-block' with related_product: product %}"
+  to: "{% render 'dtc-block' with related_product, related_product: product %}"
+  position: 18..89
+{%- endcomment -%}
