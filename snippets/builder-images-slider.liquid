@@ -32,23 +32,9 @@
                   (max-width: 1000px) calc(100vw - 344px),
                   784px"
                 {% endcapture %}
-                {% render 'responsive-image' with
-                  image: image,
-                  image_class: classname,
-                  cover: true,
-                  key: 'carousel',
-                  max_width: 900,
-                  no_lazyload: true,
-                  image_attributes: image_attr
-                %}
+                {% render 'responsive-image' with image, image: image, image_class: classname, cover: true, key: 'carousel', max_width: 900, no_lazyload: true, image_attributes: image_attr %}
               {% else %}
-              {% render 'responsive-image' with
-                image: image,
-                image_class: classname,
-                cover: true,
-                key: 'carousel',
-                max_width: 900
-              %}
+              {% render 'responsive-image' with image, image: image, image_class: classname, cover: true, key: 'carousel', max_width: 900 %}
               {% endif %}
             </div>
             </div>
@@ -84,4 +70,35 @@
       </div>
     </div>
   </div>
-</div>
+</div>{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: |-
+    {% render 'responsive-image' with
+                      image: image,
+                      image_class: classname,
+                      cover: true,
+                      key: 'carousel',
+                      max_width: 900,
+                      no_lazyload: true,
+                      image_attributes: image_attr
+                    %}
+  to: "{% render 'responsive-image' with image, image: image, image_class: classname,
+    cover: true, key: 'carousel', max_width: 900, no_lazyload: true, image_attributes:
+    image_attr %}"
+  position: 1822..1997
+- from: |-
+    {% render 'responsive-image' with
+                    image: image,
+                    image_class: classname,
+                    cover: true,
+                    key: 'carousel',
+                    max_width: 900
+                  %}
+  to: "{% render 'responsive-image' with image, image: image, image_class: classname,
+    cover: true, key: 'carousel', max_width: 900 %}"
+  position: 2037..2163
+{%- endcomment -%}

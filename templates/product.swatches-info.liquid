@@ -1,2 +1,11 @@
 {% layout none %}
-{% render 'product-block-dtc' with product: product %}
+{% render 'product-block-dtc' with product, product: product %}{%- comment -%}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{% render 'product-block-dtc' with product: product %}"
+  to: "{% render 'product-block-dtc' with product, product: product %}"
+  position: 18..81
+{%- endcomment -%}

@@ -251,10 +251,10 @@
           {{ block.shopify_attributes }}>
           
           {% if current_variant.compare_at_price > current_variant.price %}
-            <span class="was-price theme-money">{%- render "price", price: current_variant.compare_at_price | money_without_trailing_zeros -%}</span>
+            <span class="was-price theme-money">{%- render "price", price: current_variant.compare_at_price -%}</span>
           {% endif %}
             
-          <div class="price theme-money">{%- render "price", price: current_variant.price | money_without_trailing_zeros -%}</div>
+          <div class="price theme-money">{%- render "price", price: current_variant.price -%}</div>
             
           {% render 'unit-price', variant: current_variant %}
         </div>
@@ -788,10 +788,10 @@
                       data-variant-id="{{ current_variant.id }}"
                       {{ block.shopify_attributes }}>
                       {% if current_variant.compare_at_price > current_variant.price %}
-                        <span class="was-price theme-money">{%- render "price", price: current_variant.compare_at_price | money_without_trailing_zeros -%}</span>
+                        <span class="was-price theme-money">{%- render "price", price: current_variant.compare_at_price -%}</span>
                       {% endif %}
                         
-                      <div class="price theme-money">{%- render "price", price: current_variant.price | money_without_trailing_zeros -%}</div>
+                      <div class="price theme-money">{%- render "price", price: current_variant.price -%}</div>
                         
                       {% render 'unit-price', variant: current_variant %}
                     </div>
@@ -3789,3 +3789,26 @@ document.getElementById("why-we-made-id-acc").addEventListener('click',
   ]
 }
 {% endschema %}
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: '{%- render "price", price: current_variant.compare_at_price | money_without_trailing_zeros
+    -%}'
+  to: '{%- render "price", price: current_variant.compare_at_price -%}'
+  position: 10587..10650
+- from: '{%- render "price", price: current_variant.price | money_without_trailing_zeros
+    -%}'
+  to: '{%- render "price", price: current_variant.price -%}'
+  position: 10734..10786
+- from: '{%- render "price", price: current_variant.compare_at_price | money_without_trailing_zeros
+    -%}'
+  to: '{%- render "price", price: current_variant.compare_at_price -%}'
+  position: 39460..39523
+- from: '{%- render "price", price: current_variant.price | money_without_trailing_zeros
+    -%}'
+  to: '{%- render "price", price: current_variant.price -%}'
+  position: 39643..39695
+{% endcomment %}
